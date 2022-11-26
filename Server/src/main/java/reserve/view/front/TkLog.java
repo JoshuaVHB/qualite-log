@@ -1,4 +1,4 @@
-package reserve.front;
+package reserve.view.front;
 
 import org.takes.Request;
 import org.takes.Response;

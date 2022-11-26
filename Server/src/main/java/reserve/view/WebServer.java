@@ -1,4 +1,4 @@
-package reserve;
+package reserve.view;
 
 import java.io.IOException;
 
@@ -10,10 +10,11 @@ import org.takes.http.FtBasic;
 import org.takes.tk.TkClasspath;
 import org.takes.tk.TkRedirect;
 
-import reserve.front.TkLog;
-import reserve.front.TkSpecificResource;
+import reserve.controller.AppController;
 import reserve.util.AnsiLogger;
 import reserve.util.Logger;
+import reserve.view.front.TkLog;
+import reserve.view.front.TkSpecificResource;
 
 public class WebServer {
 	
@@ -21,7 +22,11 @@ public class WebServer {
 	
 	private static final Logger logger = getLogger("web-server", Logger.LEVEL_INFO);
 
-	public static void main(String[] args) {
+	/**
+	 * Opens the web server, this method does not return.
+	 * Once opened users can access the web interface.
+	 */
+	public void open(AppController controller) {
 		try {
 			logger.info("Opening server on localhost:"+PORT);
 			new FtBasic(new TkLog(getLogger("route", Logger.LEVEL_DEBUG),

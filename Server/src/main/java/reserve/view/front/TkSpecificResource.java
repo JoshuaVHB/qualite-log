@@ -1,4 +1,4 @@
-package reserve.front;
+package reserve.view.front;
 
 import java.io.IOException;
 import java.io.InputStream;
