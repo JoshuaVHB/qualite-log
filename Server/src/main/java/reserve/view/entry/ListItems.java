@@ -1,5 +1,8 @@
 package reserve.view.entry;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.takes.Request;
 import org.takes.Response;
 import org.takes.Take;
@@ -10,6 +13,8 @@ import reserve.model.MaterialType;
 import reserve.model.OperatingSystem;
 import reserve.util.AnsiLogger;
 import reserve.util.Logger;
+import reserve.controller.MaterialController;
+import reserve.model.Material;
 
 public class ListItems implements Take {
 	
@@ -25,8 +30,11 @@ public class ListItems implements Take {
 		//System.err.println(type + " " + truc);
 		MaterialType type = FormUtils.getParamEnum(href, "type", MaterialType.class, true);
 		OperatingSystem os = FormUtils.getParamEnum(href, "OS", OperatingSystem.class, true);
-		//String keyword = FormUtils.getParamString(href, "key", , false)
-
+		String keyword = FormUtils.getParamString(href, "key",MaterialController.KEYWORD_FILTER, true);
+		
+		List<Material> res = new ArrayList<>();
+		res = MaterialController.filterByOS(os);
+		MaterialController.filterByType(res, type);
 		
 		throw new Exception("not implemented");
 	}
