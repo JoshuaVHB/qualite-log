@@ -50,6 +50,11 @@ public class MaterialController {
         }
 
     }
+    /**
+     * @brief Filter for the first time the list of materials
+     * @param os, operating system chosen
+     * @return a new list, with the material corresponding to the filter
+     */
     static List<Material> filterByOS( OperatingSystem os ) {//on va faire une classe enum pour trier , voir si champs = enum param, 
     	List<Material> res = new ArrayList<>();
 		for(Material mat :materials) {
@@ -59,7 +64,11 @@ public class MaterialController {
 		}
 		return res;
     }
-
+    /**
+     * @brief Filter the list once more by type
+     * @param alreadyFiltered,
+     * @param type, type of material chosen
+     */
     static void filterByType(List<Material> alreadyFiltered, MaterialType type ) {//on va faire une classe enum pour trier , voir si champs = enum param, 
 		for(Material mat :alreadyFiltered) {
 			if(!mat.getType().equals(type)) {
@@ -67,12 +76,27 @@ public class MaterialController {
 			}
 		}
     }
-
-    static void filterByName(List<Material> alreadyFiltered, String name ) {//on va faire une classe enum pour trier , voir si champs = enum param, 
+    /**
+     * @brief Filter the list by the presence of a key word in the material's name
+     * @param alreadyFiltered,
+     * @param keyword, keyword chosen
+     */
+    static void filterByName(List<Material> alreadyFiltered, String keyword ) {//on va faire une classe enum pour trier , voir si champs = enum param, 
 		for(Material mat :alreadyFiltered) {
-			if(!mat.getName().contains(name)) {
+			if(!mat.getName().contains(keyword)) {
 				alreadyFiltered.remove(mat);
 			}
 		}
+    }
+    /**
+     * @brief Filter the list once more by availability, only keeps materials where there is no current reservation
+     * @param alreadyFiltered,
+     */
+    static void filterByAvailability(List<Material> alreadyFiltered) {
+    	for(Material mat : alreadyFiltered) {
+    		if (!mat.getReservation().equals(null)) {
+    			alreadyFiltered.remove(mat);
+    		}
+    	}
     }
 }
