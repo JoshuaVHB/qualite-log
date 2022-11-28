@@ -1,0 +1,66 @@
+body {
+  margin: 0;
+}
+
+#user-tab {
+  text-align: right;
+}
+
+#user-tab > span {
+  padding: 15px;
+  font-size: x-large;
+  background-color: #f1f1f1;
+  border-bottom-left-radius: 15px;
+}
+
+.material-symbols-outlined {
+  /* color: white; */
+  vertical-align: middle;
+}
+
+#page-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20vh;
+}
+
+#page-content > * {
+  margin: 10px;
+  width: 50vw;
+}
+
+#material-filter {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+#material-filter > label {
+  padding: 10px;
+  margin: 10px;
+  border-radius: 5px;
+  background-color: #fcfcfc;
+}
+
+#materials-table {
+  margin-top: 20px;
+  width: 100%;
+}
+
+#materials-table,
+#materials-table * {
+  column-gap: 0;
+  column-width: 0;
+}
+
+#materials-table tr:nth-child(even) {
+  background-color: #f1f1f1;
+}
+
+#materials-table td:nth-child(1),
+#materials-table td:nth-child(2),
+#materials-table td:nth-child(3),
+#materials-table td:nth-child(5) {
+  text-align: center;
+}
