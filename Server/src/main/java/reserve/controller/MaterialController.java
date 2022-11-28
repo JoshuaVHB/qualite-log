@@ -12,7 +12,11 @@ import java.util.Objects;
 public class MaterialController {
 
     private static List<Material> materials;
-
+    public enum filterType{
+    	BY_OS,
+    	BY_TYPE,
+    	BY_NAME,
+    }
 
     // ------------------------------------------------------------------------------------------- //
 
@@ -48,6 +52,21 @@ public class MaterialController {
 
         }
 
+    }
+    static List<Material> filterBy(List<Material> alreadyFilter, filterType filter, String param) {//on va faire une classe enum pour trier , voir si champs = enum param, 
+    	List<Material> res = null;
+    		switch(filter){
+        	case BY_OS : 
+        		for(Material mat :materials) {
+        			if(mat.getOs()==param) {
+        				res.add(mat);
+        			}
+        		}
+        	case BY_TYPE :
+        	case BY_NAME : 
+        	}
+    	
+		return res;
     }
 
 
