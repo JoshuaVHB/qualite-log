@@ -1,13 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <link href="index.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion</title>
+    <link href="index.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
 </head>
 <body>
-  CONNEXION
+    <div class="form">
+        <h2>Connexion</h2>
+        <form method="POST" action="">
+            <div class="inputBx">
+                <span><i class="fas fa-user-circle"></i> Matricule</span>
+                <input type="text" name="mailconnect" placeholder="votre matricule" required ="required">
+
+                
+            </div>
+            <div class="inputBx password">
+                <span><i class="fas fa-key"></i> Mot de passe </span>
+                <input id="password" type="password" name="mdpconnect" placeholder="Votre mot de passe" required="required">
+
+                <a href="#" class="password-control" onclick="return show_hide_password(this);">logo3</i></a>
+                
+            </div>
+            <div class="inputBx">
+                <input type="submit" class="btn" name="formconnexion" value="Connecter">
+            </div>
+        </form>
+        <p> Vous avez oublié votre mot de passe ? Envoyez un mail à l'admin</p>
+    </div>
 </body>
 </html>
+<script>
+    function show_hide_password(target) {
+        var input = document.getElementById('password');
+        if (input.getAttribute('type') == 'password') {
+            target.classList.add('view');
+            input.setAttribute('type', 'text');
+        } else {
+            target.classList.remove('view');
+            input.setAttribute('type', 'password');
+        }
+        return false;
+    }
+</script>
