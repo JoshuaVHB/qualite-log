@@ -34,6 +34,13 @@ public class UserController {
         // Serialize
 
     }
+    public static User getById(String id) {
+    	for (User u:users) {
+    		if (u.getId() == id) return u;
+    	}
+    	return null;
+    }
+    
 
     static void removeUser(User toRemove) {
 
