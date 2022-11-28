@@ -1,17 +1,19 @@
 package reserve.controller;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 import reserve.model.*;
 
 
+
 // TODO : Serialize everything
 public class ReservationController {
 
-    static List<Reservation> incoming;
-    static List<Reservation> current;
+    static List<Reservation> incoming = new ArrayList<Reservation>();
+    static List<Reservation> current = new ArrayList<Reservation>();
 
     // ------------------------------------------------------------------------------------------- //
 
