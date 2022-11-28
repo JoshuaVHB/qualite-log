@@ -7,6 +7,73 @@
     <script src="https://kit.fontawesome.com/02544ac723.js" crossorigin="anonymous"></script>
 </head>
 <body>
+    <h1 class="title">Inscription d'un utilisateur</h1>
+    <div>
+        <form class="forminscription" method="GET" id="addUser">
+            <label for="genre">
+                Role utilisateur <select name="genre" id="genre" required>
+                    <option value="user">Utilisateur</option>
+                    <option value="admin">Admin</option>
+                </select>
+            </label><br />
+            <label for="First-name">
+                Matricule <input class="inputinscription" type="text" name="matricule" id="nom" placeholder="Matricule" pattern="[0-9]{7}" required><br>
+            </label>
+            <label for="Last-name">
+                Prenom <input class="inputinscription" type="text" name="prenom" id="prenom" placeholder="Prenom" pattern="{1,30}" required><br>
+            </label>
+            <label for="First-name">
+                Nom <input class="inputinscription" type="text" name="nom" id="nom" placeholder="Nom" pattern="{1,30}" required><br>
+            </label>
+
+            <label for="email">
+                Email <input class="inputinscription" type="email" name="email" id="email" placeholder="Email" required><br>
+            </label>
+
+            <label for="password">
+                Mot de passe <input class="inputinscription" type="password" name="mdp" placeholder="Mot de passe" id="mdp" onchange='check_pass();' required><br>
+            </label>
+            <label>
+                Confirmer le mot de passe <label class="labelinscription" for="cmdp"></label>
+                <input class="inputinscription" type="password" placeholder="Confirmation le mot de passe" name="cmdp" id="cmdp" onchange='check_pass();' required><br>
+            </label>
+
+            <button type="submit" name="submit" value="registration" id="submit" oneclick="addUser();">
+                Valider
+            </button>
+
+        </form>
+
+    </div>
 
 </body>
 </html>
+<script>
+    function check_pass() {
+        if (document.getElementById('mdp').value ==
+            document.getElementById('cmdp').value) {
+            document.getElementById('submit').disabled = false;
+        } else {
+            document.getElementById('submit').disabled = true;
+        }
+    }
+    function addUser() {
+        var user = new FormData(document.getElementById("addUser"));
+
+        let url = 'D:\Ellyn\Documents\Web\www\qualite_log_test/api/CreateUser';
+        let params = user;
+        let xhr = new XMLHttpRequest();
+        xhr.open('GET', url, true);
+        xhr.send(params);
+        xhr.onload = () => {
+            if (xhr.status == 200) {
+                console.log("Response =", xhr.responseText);
+                // do something with the data
+            } else {
+                throw new Error("Could not fetch ");
+            }
+        };
+        
+    }
+
+</script>
