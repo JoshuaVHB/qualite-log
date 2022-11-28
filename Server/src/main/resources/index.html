@@ -5,10 +5,123 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+  <link rel="stylesheet" href="index.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
 </head>
 <body>
-  <div>
-    TODO
+  <header>
+    <div id="user-tab">
+      <span>
+        <a href="/connexion">connect</a>
+        <span class="material-symbols-outlined">account_circle</span>
+      </span>
+    </div>
+  </header>
+
+  <div id="page-content">
+    <div>
+      <div id="material-filter">
+        <label>
+          Type :
+          <select>
+            <option>Tous</option>
+            <!-- Populated: material_types -->
+          </select>
+        </label>
+        <label>
+          OS :
+          <select>
+            <option>Tous</option>
+            <!-- Populated: os_types -->
+          </select>
+        </label>
+        <label>
+          Nom :
+          <input type="text">
+        </label>
+        <br>
+        <label>
+          Afficher les appareils réservés :
+          <input type="checkbox">
+        </label>
+        <label>
+          <button id="reserve-submit-btn" disabled>Reserver</button>
+        </label>
+      </div>
+
+      <table id="materials-table">
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>Type</th>
+            <th>OS</th>
+            <th>Réservé</th>
+            <th>
+              Réserver
+              <input type="checkbox" id="select-all">
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Populated: devices -->
+          <tr>
+            <td>1</td>
+            <td>PC</td>
+            <td>Windows</td>
+            <td></td>
+            <td>
+              <input type="checkbox">
+            </td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>PC</td>
+            <td>Windows</td>
+            <td>John Doe<br>25-30-22</td>
+            <td>
+              <input type="checkbox">
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
+  <script>
+
+const table = document.getElementById('materials-table');
+const selectAllBtn = document.getElementById('select-all');
+const checkboxes = Array.from(table.querySelectorAll('td input[type="checkbox"]'));
+const reserveBtn = document.getElementById('reserve-submit-btn');
+
+selectAllBtn.addEventListener('change', (e) => {
+  checkboxes.forEach((checkbox) => {
+    checkbox.checked = e.target.checked;
+    reserveBtn.disabled = !e.target.checked;
+  });
+});
+
+checkboxes.forEach((checkbox) => {
+  checkbox.addEventListener('change', (e) => {
+    refreshCheckboxAll();
+  });
+});
+
+function refreshCheckboxAll() {
+  const allChecked = Array.from(checkboxes).every((checkbox) => checkbox.checked);
+  const anyChecked = Array.from(checkboxes).some((checkbox) => checkbox.checked);
+  if(allChecked) {
+    selectAllBtn.checked = true;
+    selectAllBtn.indeterminate = false;
+  } else if(anyChecked) {
+    selectAllBtn.checked = false;
+    selectAllBtn.indeterminate = true;
+  } else {
+    selectAllBtn.checked = false;
+    selectAllBtn.indeterminate = false;
+  }
+  reserveBtn.disabled = !anyChecked;
+}
+
+  </script>
 </body>
 </html>

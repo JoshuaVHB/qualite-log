@@ -4,6 +4,7 @@ import reserve.model.Material;
 import reserve.model.MaterialType;
 import reserve.model.OperatingSystem;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -12,11 +13,7 @@ import java.util.Objects;
 public class MaterialController {
 
     private static List<Material> materials;
-    public enum filterType{
-    	BY_OS,
-    	BY_TYPE,
-    	BY_NAME,
-    }
+
 
     // ------------------------------------------------------------------------------------------- //
 
@@ -53,21 +50,29 @@ public class MaterialController {
         }
 
     }
-    static List<Material> filterBy(List<Material> alreadyFilter, filterType filter, String param) {//on va faire une classe enum pour trier , voir si champs = enum param, 
-    	List<Material> res = null;
-    		switch(filter){
-        	case BY_OS : 
-        		for(Material mat :materials) {
-        			if(mat.getOs()==param) {
-        				res.add(mat);
-        			}
-        		}
-        	case BY_TYPE :
-        	case BY_NAME : 
-        	}
-    	
+    static List<Material> filterByOS( OperatingSystem os ) {//on va faire une classe enum pour trier , voir si champs = enum param, 
+    	List<Material> res = new ArrayList<>();
+		for(Material mat :materials) {
+			if(mat.getOs().equals(os)) {
+				res.add(mat);
+			}
+		}
 		return res;
     }
 
+    static void filterByType(List<Material> alreadyFiltered, MaterialType type ) {//on va faire une classe enum pour trier , voir si champs = enum param, 
+		for(Material mat :alreadyFiltered) {
+			if(!mat.getType().equals(type)) {
+				alreadyFiltered.remove(mat);
+			}
+		}
+    }
 
+    static void filterByName(List<Material> alreadyFiltered, String name ) {//on va faire une classe enum pour trier , voir si champs = enum param, 
+		for(Material mat :alreadyFiltered) {
+			if(!mat.getName().contains(name)) {
+				alreadyFiltered.remove(mat);
+			}
+		}
+    }
 }
