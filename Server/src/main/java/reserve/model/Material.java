@@ -10,7 +10,7 @@ public class Material
     private MaterialType    type;
     private String          name;
     private String          version; // V0.8 ex
-    private Integer         numRef; // INT(10)
+    private Integer         numRef; // INT(10) // TODO why not an int?
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 

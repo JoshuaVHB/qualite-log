@@ -1,6 +1,8 @@
 package reserve.view.entry;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.Iterator;
 
 import org.takes.misc.Href;
@@ -80,6 +82,25 @@ public class FormUtils {
 	
 	public static boolean hasParam(RqForm form, String param) throws IOException {
 		return getSingleParamValue(form.param(param), param, true) != null;
+	}
+	
+	private static LocalDate getParamDate(Iterable<String> values, String param, boolean nullable) throws IllegalArgumentException {
+		String value = getSingleParamValue(values, param, nullable);
+		if(value == null)
+			return null;
+		try {
+			return LocalDate.parse(value);
+		} catch (DateTimeParseException e) {
+			throw new IllegalArgumentException("Invalid date format for '" + param + "'");
+		}
+	}
+	
+	public static LocalDate getParamDate(Href href, String param, boolean nullable) throws IllegalArgumentException {
+		return getParamDate(href.param(param), param, nullable);
+	}
+	
+	public static LocalDate getParamDate(RqForm form, String param, boolean nullable) throws IllegalArgumentException, IOException {
+		return getParamDate(form.param(param), param, nullable);
 	}
 	
 }

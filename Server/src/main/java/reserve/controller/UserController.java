@@ -7,8 +7,10 @@ import java.util.Objects;
 
 import reserve.model.User;
 
-// TODO : Serialize everything
 public class UserController {
+	
+	// FIX make controllers non-static, use a singleton instead
+	// that way UTs and dev tests can use mocks
 
 	public static final String USER_NAME_FORMAT = "[a-zA-Z]+"; // TODO change regexes to match specs
 	public static final String PASSWORD_FORMAT = "[a-zA-Z]+";

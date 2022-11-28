@@ -24,7 +24,7 @@ import org.takes.tk.TkRedirect;
 import reserve.Main;
 import reserve.controller.AppController;
 import reserve.util.Logger;
-import reserve.view.entry.ListItems;
+import reserve.view.entry.TkListItems;
 import reserve.view.entry.PsAuth;
 import reserve.view.entry.TkReserverItem;
 import reserve.view.front.TkLog;
@@ -48,7 +48,7 @@ public class WebServer {
 					new TkLog(Main.getLogger("route", Logger.LEVEL_DEBUG),
 						new TkFork(
 							new FkRegex("/media/.*", new TkClasspath()),
-							new FkRegex("/api/list_items", new ListItems()),
+							new FkRegex("/api/list_items", new TkListItems()),
 							new FkRegex("/api/reserve_item", new TkReserverItem()),
 							new FkRegex("/connexion.*",
 								new TkFork(

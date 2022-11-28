@@ -8,18 +8,21 @@ import java.util.Objects;
 import reserve.model.*;
 
 
-
-// TODO : Serialize everything
 public class ReservationController {
+	
+	// FIX make controllers non-static, use a singleton instead
+	// that way UTs and dev tests can use mocks
 
-    static List<Reservation> incoming = new ArrayList<Reservation>();
-    static List<Reservation> current = new ArrayList<Reservation>();
+    private static List<Reservation> incoming = new ArrayList<Reservation>();
+    private static List<Reservation> current = new ArrayList<Reservation>();
 
     // ------------------------------------------------------------------------------------------- //
 
     /**
      * @brief Creates a new Reservation.
      * This method makes sure that the dates are coherent, and stores it in the right list.
+     * 
+     * FUTURE these  vvv  may be replaced by "throws a npe unless otherwise specified"
      * @throws NullPointerException {@code owner} is null
      * @throws NullPointerException {@code owner} is null
      * @throws NullPointerException {@code to} is before current day
@@ -41,14 +44,18 @@ public class ReservationController {
         // Makes sure the reservation end date is coherent
         if (to.compareTo(today) < 0) {
             System.out.println("Reservation end date is before current day !");
-            return;
+            return; // TODO throw an error instead of printing one
         }
+        
+        // TODO check if from>to
+        // TODO check that the reservation does not overlap with another
 
         // ------ CODE ------- //
 
         Reservation reservation = new Reservation(owner, owned, from, to);
 
         if (from.compareTo(today) <= 0) { // Means that the start day is before or today -> store in current reservation
+        	// TODO set owned.reservation 
             current.add(reservation);
         } else {
             incoming.add(reservation);
