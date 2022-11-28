@@ -3,7 +3,9 @@ package reserve.controller;
 import reserve.model.Material;
 import reserve.model.MaterialType;
 import reserve.model.OperatingSystem;
+import reserve.model.Reservation;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -11,7 +13,7 @@ import java.util.Objects;
 // TODO : Serialize everything
 public class MaterialController {
 
-    private static List<Material> materials;
+    private static List<Material> materials = new ArrayList<Material>();
 
 
     // ------------------------------------------------------------------------------------------- //

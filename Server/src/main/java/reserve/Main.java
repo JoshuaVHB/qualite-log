@@ -7,7 +7,7 @@ import reserve.view.WebServer;
 
 public class Main {
 	
-	public Main() {
+	public static void main(String[] args) {
 		WebServer server = new WebServer();
 		AppStorage storage = new FileStorage();
 		AppController controler = new AppController(storage);
