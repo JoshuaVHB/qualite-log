@@ -25,7 +25,7 @@ public class ListItems implements Take {
 		//System.err.println(type + " " + truc);
 		MaterialType type = FormUtils.getParamEnum(href, "type", MaterialType.class, true);
 		OperatingSystem os = FormUtils.getParamEnum(href, "OS", OperatingSystem.class, true);
-		String keyword = FormUtils.getParamString(href, "key", , false)
+		//String keyword = FormUtils.getParamString(href, "key", , false)
 
 		
 		throw new Exception("not implemented");
