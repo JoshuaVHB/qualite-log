@@ -3,6 +3,7 @@ package reserve.controller;
 import reserve.model.Material;
 import reserve.model.MaterialType;
 import reserve.model.OperatingSystem;
+import reserve.model.Reservation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +15,6 @@ public class MaterialController {
 
     public static final String KEYWORD_FILTER = ".*";
     private static List<Material> materials;
-
     // ------------------------------------------------------------------------------------------- //
 
     /**
@@ -25,17 +25,26 @@ public class MaterialController {
      * @param version
      * @param numRef
      */
-    static void addMaterial(OperatingSystem os, MaterialType type, String name, String version, Integer numRef) {
+    public static void addMaterial(OperatingSystem os, MaterialType type, String name, String version, Integer numRef) {
 
         materials.add(new Material(os,type,name,version,numRef));
         // Log new material
+    }
+    
+    public static Material getByNameAndRef(String name, Integer numRef) {
+    	for (Material m:materials) {
+    		if (m.getName() == name && m.getNumRef() == numRef) {
+    			return m;
+    		}
+    	}
+    	return null;
     }
 
     /**
      * @brief Removes a certain material if it's present in the list, does nothing otherwise.
      * @param toRemove
      */
-    static void removeMaterial(Material toRemove) {
+    public static void removeMaterial(Material toRemove) {
 
         Objects.requireNonNull(toRemove); // Make sur the user is coherent
 

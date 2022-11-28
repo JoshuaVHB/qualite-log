@@ -1,17 +1,19 @@
 package reserve.controller;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 import reserve.model.*;
 
 
+
 // TODO : Serialize everything
 public class ReservationController {
 
-    static List<Reservation> incoming;
-    static List<Reservation> current;
+    static List<Reservation> incoming = new ArrayList<Reservation>();
+    static List<Reservation> current = new ArrayList<Reservation>();
 
     // ------------------------------------------------------------------------------------------- //
 
@@ -22,7 +24,7 @@ public class ReservationController {
      * @throws NullPointerException {@code owner} is null
      * @throws NullPointerException {@code to} is before current day
      */
-    static void makeReservation(User owner, Material owned, LocalDate from, LocalDate to)  {
+    public static void makeReservation(User owner, Material owned, LocalDate from, LocalDate to)  {
 
 
         // ------ ERROR CHECKING ------ //
@@ -57,7 +59,7 @@ public class ReservationController {
      * @brief Checks that the incoming reservations have not started yet.
      * This method has to be called before any operations on reservations.
      */
-    static void recalculateReservations()
+    public static void recalculateReservations()
     {
         // Loop through incoming reservation and compare to today's date.
         for (Reservation reservation : incoming) {

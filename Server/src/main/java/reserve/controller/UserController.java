@@ -3,13 +3,14 @@ package reserve.controller;
 import reserve.model.User;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 // TODO : Serialize everything
 public class UserController {
 
-    private static List<User> users;
+    private static List<User> users = new ArrayList<User>();
 
 
     // ------------------------------------------------------------------------------------------- //
@@ -20,13 +21,26 @@ public class UserController {
      * @param phone
      * @param id
      * @param email
+     * @throws NullPointerException {@code name, phone, id or email} is null
      */
     public static void createUser(String name, String phone, String id, String email){
+
+        Objects.requireNonNull(name);
+        Objects.requireNonNull(phone);
+        Objects.requireNonNull(id);
+        Objects.requireNonNull(email);
 
         users.add(new User(false, name, phone, id, email));
         // Serialize
 
     }
+    public static User getById(String id) {
+    	for (User u:users) {
+    		if (u.getId() == id) return u;
+    	}
+    	return null;
+    }
+    
 
     static void removeUser(User toRemove) {
 
