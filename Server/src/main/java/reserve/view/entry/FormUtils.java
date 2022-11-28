@@ -5,7 +5,9 @@ import java.util.Iterator;
 import org.takes.misc.Href;
 
 public class FormUtils {
-
+	
+	public static final String IDENTITY_PROP_USER_ID_KEY = "userId";
+	
 	public static String getSingleParamValue(Href href, String param, boolean nullable) {
 		Iterator<String> values = href.param(param).iterator();
 		if(!values.hasNext()) {
@@ -44,6 +46,10 @@ public class FormUtils {
 		if(value == null)
 			return null;
 		return Enum.valueOf(enumClass, value);
+	}
+	
+	public static boolean hasParam(Href href, String param) {
+		return getSingleParamValue(href, param, true) != null;
 	}
 	
 }

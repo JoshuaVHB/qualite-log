@@ -4,6 +4,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.takes.facets.auth.PsChain;
+import org.takes.facets.auth.PsCookie;
+import org.takes.facets.auth.TkAuth;
+import org.takes.facets.auth.codecs.CcCompact;
+import org.takes.facets.auth.codecs.CcHex;
+import org.takes.facets.auth.codecs.CcSafe;
+import org.takes.facets.auth.codecs.CcXor;
 import org.takes.facets.fork.FkRegex;
 import org.takes.facets.fork.Fork;
 import org.takes.facets.fork.TkFork;
@@ -12,10 +19,12 @@ import org.takes.http.FtBasic;
 import org.takes.tk.TkClasspath;
 import org.takes.tk.TkRedirect;
 
+import reserve.Main;
 import reserve.controller.AppController;
-import reserve.util.AnsiLogger;
 import reserve.util.Logger;
 import reserve.view.entry.ListItems;
+import reserve.view.entry.PsAuth;
+import reserve.view.entry.TkReserverItem;
 import reserve.view.front.TkLog;
 import reserve.view.front.TkSpecificResource;
 
@@ -23,7 +32,7 @@ public class WebServer {
 	
 	private static final int PORT = 8080;
 	
-	private static final Logger logger = getLogger("web-server", Logger.LEVEL_INFO);
+	private static final Logger logger = Main.getLogger("web-server", Logger.LEVEL_INFO);
 
 	/**
 	 * Opens the web server, this method does not return.
@@ -32,25 +41,30 @@ public class WebServer {
 	public void open(AppController controller) {
 		try {
 			logger.info("Opening server on localhost:"+PORT);
-			new FtBasic(new TkLog(getLogger("route", Logger.LEVEL_DEBUG),
-				new TkFork(
-					new FkRegex("/media/.*", new TkClasspath()),     // media files (images...)
-					new FkRegex("/api/list_items", new ListItems()), // the "list-items" entry point
-					indexPage("/connexion"),                         // connection page
-					indexPage("/")                                   // main page (index)
-			)), PORT).start(Exit.NEVER);
+			new FtBasic(
+				new TkAuth(
+					new TkLog(Main.getLogger("route", Logger.LEVEL_DEBUG),
+						new TkFork(
+							new FkRegex("/media/.*", new TkClasspath()),
+							new FkRegex("/api/list_items", new ListItems()),
+							new FkRegex("/api/reserve_item", new TkReserverItem()),
+							indexPage("/connexion"),
+							indexPage("/")
+						)
+					),
+					new PsChain(
+						new PsAuth(),
+						new PsCookie(new CcSafe(new CcHex(new CcXor(new CcCompact(), "secret-code"))))
+				    )
+				), PORT).start(Exit.NEVER);
 		} catch (IOException e) {
 			logger.merr(e, "Could not open server");
 		}
 	}
 	
-	// TODO change to a factory
-	private static Logger getLogger(String name, int logLevel) {
-		return new AnsiLogger(name, logLevel);
-	}
-	
 	private static Fork indexPage(String staticUrlPath) {
 		List<Fork> forks = new ArrayList<>();
+		String dirRegex;
 		
 		if(!staticUrlPath.equals("/")) {
 			// redirect '/connexion' to '/connexion/'
@@ -58,16 +72,17 @@ public class WebServer {
 			// upon '/connexion', send '/connexion/index.html'
 			forks.add(new FkRegex(staticUrlPath+"/", new TkSpecificResource(staticUrlPath + "/index.html")).setRemoveTrailingSlash(false));
 			// send any other file in the directory directly
-			forks.add(new FkRegex(staticUrlPath+"/[^/]*", new TkClasspath()));
+			forks.add(new FkRegex(staticUrlPath+"/\\w+\\.\\w+", new TkClasspath()));
+			dirRegex = staticUrlPath+"(/\\w+\\.\\w+|)";
 		} else {
 			forks.add(new FkRegex("/", new TkSpecificResource("/index.html")));
-			forks.add(new FkRegex("/[^/]*", new TkClasspath()));
+			forks.add(new FkRegex("/\\w+\\.\\w+", new TkClasspath()));
+			dirRegex = "/(\\w+\\.\\w+|)";
 		}
-		
 		// match all paths that begin with the static part
-		return new FkRegex(staticUrlPath+".*",
+		return new FkRegex(dirRegex,
 			// log requests to this path
-			new TkLog(getLogger("path-"+staticUrlPath, Logger.LEVEL_DEBUG), new TkFork(forks.toArray(Fork[]::new))));
+			new TkLog(Main.getLogger("path-"+staticUrlPath, Logger.LEVEL_DEBUG), new TkFork(forks.toArray(Fork[]::new))));
 	}
 	
 }

@@ -1,17 +1,19 @@
 package reserve.controller;
 
-import reserve.model.User;
-
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Objects;
+
+import reserve.model.User;
 
 // TODO : Serialize everything
 public class UserController {
 
-    private static List<User> users = new ArrayList<User>();
-
+	public static final String USER_NAME_FORMAT = "[a-zA-Z]+"; // TODO change regexes to match specs
+	public static final String PASSWORD_FORMAT = "[a-zA-Z]+";
+	
+    private static List<User> users = new ArrayList<>();
 
     // ------------------------------------------------------------------------------------------- //
 
@@ -56,6 +58,17 @@ public class UserController {
 
         }
 
+    }
+    
+    public static User authentifyUser(String userName, String password) {
+    	if("password".equals(password))
+    		return new User(false, "name", "phone", "id", "email"); // TODO mock better
+    	return null;
+    }
+    
+    public static User getUserById(String id) throws NoSuchElementException {
+		return new User(false, "name", "phone", "id", "email"); // TODO mock better
+//    	return users.stream().filter(u -> u.getId().equals(id)).findFirst().get();
     }
 
 

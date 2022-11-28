@@ -9,16 +9,16 @@ import org.takes.Take;
 import org.takes.misc.Href;
 import org.takes.rq.RqHref;
 
-import reserve.model.MaterialType;
-import reserve.model.OperatingSystem;
-import reserve.util.AnsiLogger;
-import reserve.util.Logger;
+import reserve.Main;
 import reserve.controller.MaterialController;
 import reserve.model.Material;
+import reserve.model.MaterialType;
+import reserve.model.OperatingSystem;
+import reserve.util.Logger;
 
 public class ListItems implements Take {
 	
-	private static final Logger logger = new AnsiLogger("list-items");
+	private static final Logger logger = Main.getLogger("list-items", Logger.LEVEL_INFO);
 
 	@Override
 	public Response act(Request req) throws Exception {

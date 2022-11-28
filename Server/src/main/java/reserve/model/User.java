@@ -5,7 +5,7 @@ public class User {
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 
     private boolean isAdmin;
-    private String nom;
+    private String nom; // FIX translate to english
     private String phone;
     private String id;
     private String email;
@@ -37,5 +37,10 @@ public class User {
     public User setPhone(String phone)  { this.phone = phone;   return this;}
     public User setId(String id)  { this.id = id;   return this;}
     public User setEmail(String email)          { this.email = email;           return this;}
+    
+    @Override
+    public String toString() {
+    	return String.format("User(id=%s name=%s%s)", id, nom, isAdmin ? " admin" : "");
+    }
 
 }
