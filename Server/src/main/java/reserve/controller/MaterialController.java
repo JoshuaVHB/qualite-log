@@ -7,16 +7,33 @@ import reserve.model.OperatingSystem;
 import java.util.List;
 import java.util.Objects;
 
+
+// TODO : Serialize everything
 public class MaterialController {
 
     private static List<Material> materials;
 
+
+    // ------------------------------------------------------------------------------------------- //
+
+    /**
+     * @brief Adds a new material instance to the whole material list.
+     * @param os
+     * @param type
+     * @param name
+     * @param version
+     * @param numRef
+     */
     static void addMaterial(OperatingSystem os, MaterialType type, String name, String version, Integer numRef) {
 
         materials.add(new Material(os,type,name,version,numRef));
         // Log new material
     }
 
+    /**
+     * @brief Removes a certain material if it's present in the list, does nothing otherwise.
+     * @param toRemove
+     */
     static void removeMaterial(Material toRemove) {
 
         Objects.requireNonNull(toRemove); // Make sur the user is coherent

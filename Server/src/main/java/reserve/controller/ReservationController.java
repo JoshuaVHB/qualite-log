@@ -7,6 +7,7 @@ import java.util.Objects;
 import reserve.model.*;
 
 
+// TODO : Serialize everything
 public class ReservationController {
 
     static List<Reservation> incoming;
