@@ -23,7 +23,7 @@ public class TkLog implements Take {
 	public Response act(Request req) throws Exception {
 		String url = new RqHref.Base(req).href().path();
 		Identity identity = new RqAuth(req).identity();
-		logger.debug("req static=" + url + " identified=" + (identity!=Identity.ANONYMOUS));
+		logger.debug(String.format("req static=%s %s", url, (identity!=Identity.ANONYMOUS ? "identified" : "")));
 		return actor.act(req);
 	}
 	

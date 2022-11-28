@@ -11,6 +11,8 @@ import org.takes.facets.auth.codecs.CcCompact;
 import org.takes.facets.auth.codecs.CcHex;
 import org.takes.facets.auth.codecs.CcSafe;
 import org.takes.facets.auth.codecs.CcXor;
+import org.takes.facets.fork.FkAnonymous;
+import org.takes.facets.fork.FkAuthenticated;
 import org.takes.facets.fork.FkRegex;
 import org.takes.facets.fork.Fork;
 import org.takes.facets.fork.TkFork;
@@ -48,13 +50,19 @@ public class WebServer {
 							new FkRegex("/media/.*", new TkClasspath()),
 							new FkRegex("/api/list_items", new ListItems()),
 							new FkRegex("/api/reserve_item", new TkReserverItem()),
+							new FkRegex("/connexion.*",
+								new TkFork(
+									new FkAuthenticated(new TkRedirect("/")),
+									new FkAnonymous(new TkFork(indexPage("/connexion")))
+								)
+							),
 							indexPage("/connexion"),
 							indexPage("/")
 						)
 					),
 					new PsChain(
-						new PsAuth(),
-						new PsCookie(new CcSafe(new CcHex(new CcXor(new CcCompact(), "secret-code"))))
+						new PsCookie(new CcSafe(new CcHex(new CcXor(new CcCompact(), "secret-code")))),
+						new PsAuth()
 				    )
 				), PORT).start(Exit.NEVER);
 		} catch (IOException e) {
