@@ -15,7 +15,7 @@ public class UserController {
 	public static final String USER_NAME_FORMAT = "[a-zA-Z]+"; // TODO change regexes to match specs
 	public static final String PASSWORD_FORMAT = "[a-zA-Z]+";
 	
-    private static List<User> users = new ArrayList<>();
+    private static List<User> users = new ArrayList<User>();
 
     // ------------------------------------------------------------------------------------------- //
 
@@ -25,28 +25,39 @@ public class UserController {
      * @param phone
      * @param id
      * @param email
+     * @return The user that was added
      * @throws NullPointerException {@code name, phone, id or email} is null
      */
-    public static void createUser(String name, String phone, String id, String email){
+    public static User createUser(String name, String phone, String id, String email){
 
         Objects.requireNonNull(name);
         Objects.requireNonNull(phone);
         Objects.requireNonNull(id);
         Objects.requireNonNull(email);
 
-        users.add(new User(false, name, phone, id, email));
+        User added = new User(false, name, phone, id, email);
+        users.add(added);
         // Serialize
 
+        return added;
+
     }
+
+    /**
+     * Gets the user with the desired ID.
+     * @param id : String
+     * @return User if the id is found, null otherwise.
+     */
     public static User getById(String id) {
-    	for (User u:users) {
-    		if (u.getId() == id) return u;
-    	}
-    	return null;
+        User result = users.stream()
+                        .filter(u -> u.getId() == id)
+                        .findAny()
+                        .orElse(null);
+    	return result;
     }
     
 
-    static void removeUser(User toRemove) {
+    public static void removeUser(User toRemove) {
 
         Objects.requireNonNull(toRemove); // Make sur the user is coherent
 

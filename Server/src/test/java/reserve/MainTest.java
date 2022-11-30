@@ -1,10 +1,13 @@
 package reserve;
 
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 import reserve.controller.AppController;
 import reserve.controller.io.AppStorage;
 import reserve.controller.io.InMemoryStorage;
 import reserve.view.WebServer;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
 
 /**
  * PENSEZ A RAJOUTER UNE RUN CONFIGURATION DE TEST JUNIT AVEC MAINTEST EN MAIN !!
@@ -16,10 +19,13 @@ public class MainTest {
 
 
 	public static void main(String[] args) {
+
 		WebServer server = new WebServer();
 		AppStorage storage = new InMemoryStorage();
 		AppController controler = new AppController(storage);
 		server.open(controler);
+
+
 
 
 	}

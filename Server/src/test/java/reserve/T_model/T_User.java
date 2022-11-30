@@ -1,38 +1,62 @@
 package reserve.T_model;
 
+import org.junit.After;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import reserve.controller.UserController;
+import reserve.model.User;
 
 public class T_User {
+
+
+
+
 
     @Test
     public void should_throw_exception_when_user_added_with_null_field_name() {
 
-        NullPointerException thrown = Assertions.assertThrows(NullPointerException.class, () -> {
+       Assertions.assertThrows(NullPointerException.class, () -> {
             UserController.createUser(null, "na", "na", "na");
         });
     }
     @Test
     public void should_throw_exception_when_user_added_with_null_field_phone() {
 
-        NullPointerException thrown = Assertions.assertThrows(NullPointerException.class, () -> {
+        Assertions.assertThrows(NullPointerException.class, () -> {
             UserController.createUser("na", null, "na", "na");
         });
     }
     @Test
     public void should_throw_exception_when_user_added_with_null_field_id() {
 
-        NullPointerException thrown = Assertions.assertThrows(NullPointerException.class, () -> {
+        Assertions.assertThrows(NullPointerException.class, () -> {
             UserController.createUser("na", "na", null, "na");
         });
     }
     @Test
     public void should_throw_exception_when_user_added_with_null_field_email() {
 
-        NullPointerException thrown = Assertions.assertThrows(NullPointerException.class, () -> {
+        Assertions.assertThrows(NullPointerException.class, () -> {
             UserController.createUser("na", "na", "na", null);
         });
+    }
+
+    @Test
+    public void should_return_null_when_user_asked_with_id_is_not_in_users() {
+        Assertions.assertNull(UserController.getById("notAnId"));
+    }
+
+    @Test
+    public void should_return_user_when_asked_id_is_valid_and_user_exists() {
+        // -- Setup
+        User testUser = UserController.createUser("name", "phone","itExists", "email");
+
+        // -- Test
+        Assertions.assertNotNull(UserController.getById("itExists"));
+
+        // -- Cleanup
+        UserController.removeUser(testUser);
+
     }
 
 
