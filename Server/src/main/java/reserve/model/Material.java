@@ -1,5 +1,7 @@
 package reserve.model;
 
+import java.util.UUID;
+
 public class Material
 {
 
@@ -11,6 +13,7 @@ public class Material
     private String          name;
     private String          version; // V0.8 ex
     private Integer         numRef; // INT(10) // TODO why not an int?
+    private UUID            id;
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 
@@ -21,6 +24,7 @@ public class Material
         this.name = "N/A";
         this.version = "N/A";
         this.numRef = 0;
+        this.id = UUID.randomUUID();
     }
 
     public Material(OperatingSystem os, MaterialType type, String name, String version, Integer numRef) {
@@ -29,6 +33,7 @@ public class Material
         this.name = name;
         this.version = version;
         this.numRef = numRef;
+        this.id = UUID.randomUUID();
     }
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
@@ -41,6 +46,7 @@ public class Material
     public MaterialType getType()               { return type;          }
     public String getVersion()                  { return version;       }
     public Integer getNumRef()                  { return numRef;        }
+    public UUID getId()                         { return this.id;       }
 
     // -- Setters
 

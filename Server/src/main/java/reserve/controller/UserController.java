@@ -12,6 +12,7 @@ public class UserController {
 	// FIX make controllers non-static, use a singleton instead
 	// that way UTs and dev tests can use mocks
 
+    // TODO TEST THIS
 	public static final String USER_NAME_FORMAT = "[a-zA-Z]+"; // TODO change regexes to match specs
 	public static final String PASSWORD_FORMAT = "[a-zA-Z]+";
 	
@@ -57,21 +58,26 @@ public class UserController {
     }
     
 
-    public static void removeUser(User toRemove) {
+    public static boolean removeUser(User toRemove) {
 
-        Objects.requireNonNull(toRemove); // Make sur the user is coherent
+        Objects.requireNonNull(toRemove); // Make sure the user is coherent
 
         if (users.remove(toRemove)) {
 
             // Log sucessful
+            return true;
 
         } else {
 
             // Log
 
+            return false;
+
         }
 
     }
+
+    // How do i test this
     
     public static User authentifyUser(String userName, String password) {
     	if("password".equals(password))

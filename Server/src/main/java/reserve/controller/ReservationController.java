@@ -11,7 +11,7 @@ import reserve.model.*;
 public class ReservationController {
 	
 	// FIX make controllers non-static, use a singleton instead
-	// that way UTs and dev tests can use mocks
+	// that way UTs and dev tests can use mocks // how ??? whats the diff
 
     private static List<Reservation> incoming = new ArrayList<Reservation>();
     private static List<Reservation> current = new ArrayList<Reservation>();
@@ -27,7 +27,8 @@ public class ReservationController {
      * @throws NullPointerException {@code owner} is null
      * @throws NullPointerException {@code to} is before current day
      */
-    public static void makeReservation(User owner, Material owned, LocalDate from, LocalDate to)  {
+    public static void makeReservation(User owner, Material owned, LocalDate from, LocalDate to)
+            throws RuntimeException, NullPointerException {
 
 
         // ------ ERROR CHECKING ------ //
@@ -43,19 +44,23 @@ public class ReservationController {
 
         // Makes sure the reservation end date is coherent
         if (to.compareTo(today) < 0) {
-            System.out.println("Reservation end date is before current day !");
-            return; // TODO throw an error instead of printing one
+            throw new RuntimeException("Reservation end date is before current day !");
         }
-        
-        // TODO check if from>to
-        // TODO check that the reservation does not overlap with another
+
+        if ( from.compareTo(to) > 0){ // reservation starts after or at the end ...
+            throw new RuntimeException("The reservation starting date must be before the ending date !");
+        }
+
+        if (!Objects.isNull(owned.getReservation())) { // The object is already owned
+            throw new RuntimeException("The material asked for is already owned.");
+        }
 
         // ------ CODE ------- //
 
         Reservation reservation = new Reservation(owner, owned, from, to);
 
         if (from.compareTo(today) <= 0) { // Means that the start day is before or today -> store in current reservation
-        	// TODO set owned.reservation 
+            owned.setReservation(reservation);
             current.add(reservation);
         } else {
             incoming.add(reservation);
@@ -78,6 +83,13 @@ public class ReservationController {
                 incoming.remove(reservation);
             }
         }
+    }
+
+    // TODO finish this
+    public static void closeReservation(User admin, Reservation reservation) {
+
+        if (!admin.isAdmin()) throw new RuntimeException("The user is not an admin");
+
     }
 
 }

@@ -79,7 +79,7 @@ public class FileStorage implements AppStorage {
 		MaterialType type = MaterialType.valueOf(strType);		//convert strings from JSON into the right type
 		Integer numRef = Integer.decode(strNumRef);
 		
-		MaterialController.addMaterial(os, type, name, version, numRef);		//generate a user object in the memory
+		MaterialController.addMaterial(new Material(os, type, name, version, numRef));		//generate a user object in the memory
 		
 	}
 	
@@ -94,6 +94,7 @@ public class FileStorage implements AppStorage {
 		String strTo = (String) reservationObject.get("email");
 		
 		User owner = UserController.getById(ownerId);
+		// TODO : use the MaterialController.getById() method
 		Material owned = MaterialController.getByNameAndRef(nameMaterial, refMaterial);	   //convert strings from JSON into the right type
 		LocalDate from = LocalDate.parse(strFrom);
 		LocalDate to = LocalDate.parse(strTo);

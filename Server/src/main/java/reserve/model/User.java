@@ -12,6 +12,9 @@ public class User {
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 
+    public User() {
+        this(false, "na", "na", "na", "na");
+    }
     public User(boolean isAdmin, String name, String phone, String id, String email) {
         this.isAdmin = isAdmin;
         this.name = name;

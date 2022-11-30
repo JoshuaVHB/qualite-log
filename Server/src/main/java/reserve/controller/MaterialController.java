@@ -3,10 +3,13 @@ package reserve.controller;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 import reserve.model.Material;
 import reserve.model.MaterialType;
 import reserve.model.OperatingSystem;
+
+// TODO LOG EVERYTHING
 
 public class MaterialController {
 	
@@ -20,20 +23,30 @@ public class MaterialController {
     // ------------------------------------------------------------------------------------------- //
 
     /**
-     * @brief Adds a new material instance to the whole material list.
-     * @param os
-     * @param type
-     * @param name
-     * @param version
-     * @param numRef
+     * @brief Adds a material instance to the whole material list.
+     * @params material : Material to be added
+     * @throws IllegalArgumentException : {@code material is already in the list}
      */
-    public static void addMaterial(OperatingSystem os, MaterialType type, String name, String version, Integer numRef) { // TODO is that necessary? why not addMaterial(Material)
-    	// TODO check for duplicate ids
-        materials.add(new Material(os,type,name,version,numRef));
-        // Log new material
+    public static void addMaterial(Material material)
+            throws IllegalArgumentException {
+
+        // this should work i guess, i have to do tests
+
+        // ------ Error checking ----- //
+        boolean exists = materials  .stream()
+                                    .filter(m -> m.getName() == material.getName())
+                                    .anyMatch(m -> m.getNumRef() == material.getNumRef());
+
+        if (exists) throw new IllegalArgumentException("The material is already present in the list");
+
+        // -------------------------//
+
+        materials.add(material);
+        // Log
     }
-    
-    public static Material getByNameAndRef(String name, Integer numRef) { // TODO get by id only
+
+    // TODO : delete this and use the method below
+    public static Material getByNameAndRef(String name, Integer numRef) {
     	for (Material m : materials) {
     		if (m.getName() == name && m.getNumRef() == numRef) {
     			return m;
@@ -43,21 +56,33 @@ public class MaterialController {
     }
 
     /**
+     * @brief Returns the material associated to the parameter ID, null otherwise.
+     * @throws NullPointerException {@code id is null}
+     */
+    public static Material getMaterialById(UUID id) {
+        Objects.requireNonNull(id);
+        return materials.stream().filter(m -> m.getId() == id).findAny().orElse(null);
+    }
+
+    /**
      * @brief Removes a certain material if it's present in the list, does nothing otherwise.
      * @param toRemove
+     * @return True if the material was removed successfully, false otherwise.
+     * @throws NullPointerException : {@code toRemove is null}
      */
-    public static void removeMaterial(Material toRemove) {
+    public static boolean removeMaterial(Material toRemove) {
 
         Objects.requireNonNull(toRemove); // Make sur the user is coherent
 
         if (materials.remove(toRemove)) {
 
             // Log sucessful
+            return true;
 
         } else {
 
             // Log
-
+            return false;
         }
 
     }
@@ -76,7 +101,6 @@ public class MaterialController {
 
     /**
      * @brief Filter the list once more by type
-     * @param alreadyFiltered
      * @param type type of material chosen
      */
     public static void filterByType(List<Material> materials, MaterialType type) {//on va faire une classe enum pour trier , voir si champs = enum param, 
