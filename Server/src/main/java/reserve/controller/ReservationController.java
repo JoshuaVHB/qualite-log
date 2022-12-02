@@ -26,8 +26,9 @@ public class ReservationController {
      * @throws NullPointerException {@code owner} is null
      * @throws NullPointerException {@code owner} is null
      * @throws NullPointerException {@code to} is before current day
+     * @returns The newly created reservation
      */
-    public static void makeReservation(User owner, Material owned, LocalDate from, LocalDate to)
+    public static Reservation makeReservation(User owner, Material owned, LocalDate from, LocalDate to)
             throws RuntimeException, NullPointerException {
 
 
@@ -65,6 +66,8 @@ public class ReservationController {
         } else {
             incoming.add(reservation);
         }
+
+        return reservation;
     }
 
     /**
@@ -80,16 +83,57 @@ public class ReservationController {
             {
                 // Move the reservation to the current
                 current.add(reservation);
-                incoming.remove(reservation);
             }
         }
+
+        // Remove all the reservations from incoming
+        for (Reservation reservation : current) {
+            incoming.remove(reservation);
+        }
+
     }
 
-    // TODO finish this
-    public static void closeReservation(User admin, Reservation reservation) {
+    /**
+     * @brief This method is to be called by an admin to close a reservation.
+     * @param admin
+     * @param reservation
+     * @throws RuntimeException {@code user is not admin OR reservation is not in the lists}
+     * @throws NullPointerException {@code admin or reservation is null}
+     */
+    public static boolean closeReservation(User admin, Reservation reservation)
+            throws RuntimeException {
+
+        // -- Error checking
+
+        Objects.requireNonNull(admin);
+        Objects.requireNonNull(reservation);
 
         if (!admin.isAdmin()) throw new RuntimeException("The user is not an admin");
 
+        if (!current.contains(reservation) && !incoming.contains(reservation) ) {
+            throw new RuntimeException("How could this possibly happen ?");
+        }
+
+        // ------------- //
+
+        reservation.getMaterial().setReservation(null); // Detach the object from the reservation
+
+        if (current.remove(reservation) || incoming.remove(reservation))  {
+
+            // Log admin ... deleted reservation ....
+            return true;
+        } else {
+
+            // Log erreur
+            return false;
+
+        }
+
+
     }
+
+
+    public static List<Reservation> getIncomingReservation() {return incoming;}
+    public static List<Reservation> getCurrentReservation() {return current;}
 
 }

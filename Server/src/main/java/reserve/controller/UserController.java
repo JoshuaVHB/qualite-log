@@ -16,16 +16,16 @@ public class UserController {
 	public static final String USER_NAME_FORMAT = "[a-zA-Z]+"; // TODO change regexes to match specs
 	public static final String PASSWORD_FORMAT = "[a-zA-Z]+";
 	
-    private static List<User> users = new ArrayList<User>();
+    private final static List<User> users = new ArrayList<>();
 
     // ------------------------------------------------------------------------------------------- //
 
     /**
-     * @brief Adds a new user to the list.
-     * @param name
-     * @param phone
-     * @param id
-     * @param email
+     * Adds a new user to the list.
+     * @param name : String
+     * @param phone : String
+     * @param id : String
+     * @param email : String
      * @return The user that was added
      * @throws NullPointerException {@code name, phone, id or email} is null
      */
@@ -50,11 +50,10 @@ public class UserController {
      * @return User if the id is found, null otherwise.
      */
     public static User getById(String id) {
-        User result = users.stream()
-                        .filter(u -> u.getId() == id)
-                        .findAny()
-                        .orElse(null);
-    	return result;
+        return users.stream()
+                    .filter(u -> u.getId().equals(id))
+                    .findAny()
+                    .orElse(null);
     }
     
 
@@ -64,7 +63,7 @@ public class UserController {
 
         if (users.remove(toRemove)) {
 
-            // Log sucessful
+            // Log successful
             return true;
 
         } else {
@@ -77,7 +76,7 @@ public class UserController {
 
     }
 
-    // How do i test this
+    // How do I test this
     
     public static User authentifyUser(String userName, String password) {
     	if("password".equals(password))
