@@ -1,5 +1,7 @@
 package reserve.model;
 
+import java.util.Objects;
+
 public class User {
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
@@ -17,10 +19,10 @@ public class User {
     }
     public User(boolean isAdmin, String name, String phone, String id, String email) {
         this.isAdmin = isAdmin;
-        this.name = name;
-        this.phone = phone;
-        this.id = id;
-        this.email = email;
+        this.name = Objects.requireNonNull(name);
+        this.phone = Objects.requireNonNull(phone);
+        this.id = Objects.requireNonNull(id);
+        this.email = Objects.requireNonNull(email);
     }
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
@@ -44,6 +46,16 @@ public class User {
     @Override
     public String toString() {
     	return String.format("User(id=%s name=%s%s)", id, name, isAdmin ? " admin" : "");
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+    	return o instanceof User && ((User) o).id.equals(id);
+    }
+    
+    @Override
+    public int hashCode() {
+    	return id.hashCode();
     }
 
 }

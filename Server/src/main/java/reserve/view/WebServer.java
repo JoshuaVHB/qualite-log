@@ -36,11 +36,17 @@ public class WebServer {
 	
 	private static final Logger logger = Main.LOGGER_FACTORY.getLogger("web-server", Logger.LEVEL_INFO);
 
+	private final AppController application;
+	
+	public WebServer(AppController application) {
+		this.application = application;
+	}
+	
 	/**
 	 * Opens the web server, this method does not return.
 	 * Once opened users can access the web interface.
 	 */
-	public void open(AppController controller) {
+	public void open() {
 		try {
 			logger.info("Opening server on localhost:"+PORT);
 			new FtBasic(
@@ -48,8 +54,8 @@ public class WebServer {
 					new TkLog(Main.LOGGER_FACTORY.getLogger("route", Logger.LEVEL_DEBUG),
 						new TkFork(
 							new FkRegex("/media/.*", new TkClasspath()),
-							new FkRegex("/api/list_items", new TkListItems()),
-							new FkRegex("/api/reserve_item", new TkReserverItem()),
+							new FkRegex("/api/list_items", new TkListItems(application.getMaterials())),
+							new FkRegex("/api/reserve_item", new TkReserverItem(application)),
 							new FkRegex("/connexion.*",
 								new TkFork(
 									new FkAuthenticated(new TkRedirect("/")),
@@ -62,7 +68,7 @@ public class WebServer {
 					),
 					new PsChain(
 						new PsCookie(new CcSafe(new CcHex(new CcXor(new CcCompact(), "secret-code")))),
-						new PsAuth()
+						new PsAuth(application.getUsers())
 				    )
 				), PORT).start(Exit.NEVER);
 		} catch (IOException e) {

@@ -13,9 +13,6 @@ import reserve.model.OperatingSystem;
 
 public class MaterialController {
 	
-	// FIX make controllers non-static, use a singleton instead
-	// that way UTs and dev tests can use mocks
-
     public static final String KEYWORD_FILTER_PATTERN = ".*";
     
     private static List<Material> materials;
@@ -23,18 +20,17 @@ public class MaterialController {
     // ------------------------------------------------------------------------------------------- //
 
     /**
-     * @brief Adds a material instance to the whole material list.
-     * @params material : Material to be added
-     * @throws IllegalArgumentException : {@code material is already in the list}
+     * @brief Adds a material instance to the whole material list
+     * @params material Material to be added
+     * @throws IllegalArgumentException {@code material} is already in the list
      */
-    public static void addMaterial(Material material)
-            throws IllegalArgumentException {
+    public void addMaterial(Material material) throws IllegalArgumentException {
 
         // this should work i guess, i have to do tests
 
         // ------ Error checking ----- //
         boolean exists = materials  .stream()
-                                    .filter(m -> m.getName() == material.getName())
+                                    .filter(m -> m.getName().equals(material.getName()))
                                     .anyMatch(m -> m.getNumRef() == material.getNumRef());
 
         if (exists) throw new IllegalArgumentException("The material is already present in the list");
@@ -45,21 +41,11 @@ public class MaterialController {
         // Log
     }
 
-    // TODO : delete this and use the method below
-    public static Material getByNameAndRef(String name, Integer numRef) {
-    	for (Material m : materials) {
-    		if (m.getName() == name && m.getNumRef() == numRef) {
-    			return m;
-    		}
-    	}
-    	return null;
-    }
-
     /**
      * @brief Returns the material associated to the parameter ID, null otherwise.
      * @throws NullPointerException {@code id is null}
      */
-    public static Material getMaterialById(UUID id) {
+    public Material getMaterialById(UUID id) {
         Objects.requireNonNull(id);
         return materials.stream().filter(m -> m.getId() == id).findAny().orElse(null);
     }
@@ -68,11 +54,11 @@ public class MaterialController {
      * @brief Removes a certain material if it's present in the list, does nothing otherwise.
      * @param toRemove
      * @return True if the material was removed successfully, false otherwise.
-     * @throws NullPointerException : {@code toRemove is null}
+     * @throws NullPointerException {@code} toRemove is null
      */
-    public static boolean removeMaterial(Material toRemove) {
+    public boolean removeMaterial(Material toRemove) {
 
-        Objects.requireNonNull(toRemove); // Make sur the user is coherent
+        Objects.requireNonNull(toRemove); // Make sure the user is coherent
 
         if (materials.remove(toRemove)) {
 
@@ -87,7 +73,13 @@ public class MaterialController {
 
     }
     
-    public static List<Material> getAllMaterials() {
+    /**
+     * Returns a new <i>copy</i> of the materials list, changes are not
+     * reflected back to this instance's list.
+     * 
+     * @return a <i>copy</i> of the materials list
+     */
+    public List<Material> getAllMaterials() {
     	return new ArrayList<>(materials);
     }
     

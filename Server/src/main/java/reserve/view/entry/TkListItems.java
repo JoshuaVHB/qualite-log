@@ -18,6 +18,12 @@ import reserve.model.OperatingSystem;
 
 public class TkListItems implements Take {
 	
+	private final MaterialController materials;
+	
+	public TkListItems(MaterialController materials) {
+		this.materials = materials;
+	}
+	
 	@Override
 	public Response act(Request req) throws Exception {
 		Href href = new RqHref.Base(req).href();
@@ -27,7 +33,7 @@ public class TkListItems implements Take {
 		String keyword = FormUtils.getParamString(href, "key", MaterialController.KEYWORD_FILTER_PATTERN, true);
 		boolean showUnavailable = FormUtils.hasParam(href, "show-unavailable");
 		
-		List<Material> res = MaterialController.getAllMaterials();
+		List<Material> res = materials.getAllMaterials();
 		if(os != null)       MaterialController.filterByOS(res, os);
 		if(type != null)     MaterialController.filterByType(res, type);
 		if(keyword != null)  MaterialController.filterByName(res, keyword);

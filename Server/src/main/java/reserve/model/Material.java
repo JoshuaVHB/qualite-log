@@ -12,7 +12,7 @@ public class Material
     private MaterialType    type;
     private String          name;
     private String          version; // V0.8 ex
-    private Integer         numRef; // INT(10) // TODO why not an int?
+    private int             numRef; // INT(10)
     private UUID            id;
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
@@ -22,7 +22,7 @@ public class Material
         this.os = OperatingSystem.XX;
         this.type = MaterialType.OTHER;
         this.name = "N/A";
-        this.version = "N/A";
+        this.version = "N/A"; // TODO why not null ?
         this.numRef = 0;
         this.id = UUID.randomUUID();
     }
@@ -45,17 +45,17 @@ public class Material
     public String getName()                     { return name;          }
     public MaterialType getType()               { return type;          }
     public String getVersion()                  { return version;       }
-    public Integer getNumRef()                  { return numRef;        }
+    public int getNumRef()                      { return numRef;        }
     public UUID getId()                         { return this.id;       }
 
     // -- Setters
 
-    public Material setReservation(Reservation reservation)     { this.reservation = reservation;   return this;}
-    public Material setOs(OperatingSystem os)                   { this.os = os;                     return this;}
-    public Material setType(MaterialType type)                  { this.type = type;                 return this;}
-    public Material setName(String name)                        { this.name = name;                 return this;}
-    public Material setNumRef(Integer numRef)                   { this.numRef = numRef;             return this;}
-    public Material setVersion(String version)                  { this.version = version;           return this;}
+    public Material setReservation(Reservation reservation)     { this.reservation = reservation;   return this; }
+    public Material setOs(OperatingSystem os)                   { this.os = os;                     return this; }
+    public Material setType(MaterialType type)                  { this.type = type;                 return this; }
+    public Material setName(String name)                        { this.name = name;                 return this; }
+    public Material setNumRef(int numRef)                       { this.numRef = numRef;             return this; }
+    public Material setVersion(String version)                  { this.version = version;           return this; }
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 

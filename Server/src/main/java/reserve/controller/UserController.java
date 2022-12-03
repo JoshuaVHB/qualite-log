@@ -2,46 +2,27 @@ package reserve.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Objects;
 
 import reserve.model.User;
 
 public class UserController {
 	
-	// FIX make controllers non-static, use a singleton instead
-	// that way UTs and dev tests can use mocks
-
     // TODO TEST THIS
 	public static final String USER_NAME_FORMAT = "[a-zA-Z]+"; // TODO change regexes to match specs
 	public static final String PASSWORD_FORMAT = "[a-zA-Z]+";
 	
-    private final static List<User> users = new ArrayList<>();
+    private final List<User> users = new ArrayList<>();
 
     // ------------------------------------------------------------------------------------------- //
 
     /**
      * Adds a new user to the list.
-     * @param name : String
-     * @param phone : String
-     * @param id : String
-     * @param email : String
-     * @return The user that was added
-     * @throws NullPointerException {@code name, phone, id or email} is null
      */
-    public static User createUser(String name, String phone, String id, String email){
-
-        Objects.requireNonNull(name);
-        Objects.requireNonNull(phone);
-        Objects.requireNonNull(id);
-        Objects.requireNonNull(email);
-
-        User added = new User(false, name, phone, id, email);
-        users.add(added);
-        // Serialize
-
-        return added;
-
+    public void addUser(User user) {
+        Objects.requireNonNull(user);
+        // TODO check for dupplicates
+        users.add(user);
     }
 
     /**
@@ -49,7 +30,7 @@ public class UserController {
      * @param id : String
      * @return User if the id is found, null otherwise.
      */
-    public static User getById(String id) {
+    public User getById(String id) {
         return users.stream()
                     .filter(u -> u.getId().equals(id))
                     .findAny()
@@ -57,7 +38,7 @@ public class UserController {
     }
     
 
-    public static boolean removeUser(User toRemove) {
+    public boolean removeUser(User toRemove) {
 
         Objects.requireNonNull(toRemove); // Make sure the user is coherent
 
@@ -78,16 +59,10 @@ public class UserController {
 
     // How do I test this
     
-    public static User authentifyUser(String userName, String password) {
+    public User authentifyUser(String userName, String password) {
     	if("password".equals(password))
     		return new User(false, "name", "phone", "id", "email"); // TODO mock better
     	return null;
     }
     
-    public static User getUserById(String id) throws NoSuchElementException {
-		return new User(false, "name", "phone", "id", "email"); // TODO mock better
-//    	return users.stream().filter(u -> u.getId().equals(id)).findFirst().get();
-    }
-
-
 }

@@ -3,33 +3,37 @@ package reserve.controller.io;
 import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.List;
+import java.util.UUID;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import reserve.controller.AppController;
 import reserve.controller.MaterialController;
-import reserve.controller.ReservationController;
 import reserve.controller.UserController;
 import reserve.model.Material;
 import reserve.model.MaterialType;
 import reserve.model.OperatingSystem;
+import reserve.model.Reservation;
 import reserve.model.User;
 
 public class FileStorage implements AppStorage {
 	
-
-	
-	
 	/**
+	 * FUTURE -- rewrite comments, the function signature has changed
+	 *           also note that this method is allowed to throw IOExceptions now
+	 * 
 	 * @brief read JSON files and fill Reservation, User and Material lists
 	 * 
 	 * @throws IOException
 	 * @throws ParseException
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	public void load() {
+	public void loadApplicationData(AppController application) throws IOException {
 		JSONParser parser = new JSONParser();
 		try (FileReader userFile = new FileReader("users.json");			//opening files
 			FileReader reservFile = new FileReader("reservations.json");
@@ -37,14 +41,14 @@ public class FileStorage implements AppStorage {
 			
 			JSONArray users = (JSONArray) parser.parse(userFile);
 			JSONArray reservations = (JSONArray) parser.parse(reservFile);		//parsing base
-			JSONArray material = (JSONArray) parser.parse(materialFile);
+			JSONArray materials = (JSONArray) parser.parse(materialFile);
 			
-			users.forEach(user -> parseUsers((JSONObject)  user));
-			reservations.forEach(res -> parseUsers((JSONObject)  res));		//call the parse functions 
-			material.forEach(mat -> parseUsers((JSONObject)  mat));
-			
-			
-			
+			for(JSONObject json : (List<JSONObject>) users)
+				application.getUsers().addUser(parseUsers(json));
+			for(JSONObject json : (List<JSONObject>) materials)
+				application.getMaterials().addMaterial(parseMaterial(json));
+			for(JSONObject json : (List<JSONObject>) reservations)
+				application.getReservations().addReservation(parseReservations(json, application.getUsers(), application.getMaterials()));
 		}
 		catch (IOException e) {
 			e.printStackTrace();
@@ -55,7 +59,7 @@ public class FileStorage implements AppStorage {
 		
 	}
 	
-	private static void parseUsers(JSONObject user) {
+	private static User parseUsers(JSONObject user) {
 		JSONObject userObject = (JSONObject) user.get("user");
 		
 		String id = (String) userObject.get("id");
@@ -63,10 +67,11 @@ public class FileStorage implements AppStorage {
 		String phone = (String) userObject.get("phone");		//get fields form the JSON parser
 		String email = (String) userObject.get("email");
 		
-		UserController.createUser(name, phone, id, email);		//generate a user object in the memory
+		// TODO parse user.isAdmin
+		return new User(false, name, phone, id, email);		//generate a user object in the memory
 	}
 	
-	private static void parseMaterial(JSONObject user) {
+	private static Material parseMaterial(JSONObject user) {
 		JSONObject userObject = (JSONObject) user.get("user");
 		
 		String strOS = (String) userObject.get("os");
@@ -79,33 +84,29 @@ public class FileStorage implements AppStorage {
 		MaterialType type = MaterialType.valueOf(strType);		//convert strings from JSON into the right type
 		Integer numRef = Integer.decode(strNumRef);
 		
-		MaterialController.addMaterial(new Material(os, type, name, version, numRef));		//generate a user object in the memory
-		
+		return new Material(os, type, name, version, numRef);		//generate a user object in the memory
 	}
 	
-	
-	private static void parseReservations(JSONObject reservation) {
+	private static Reservation parseReservations(JSONObject reservation, UserController users, MaterialController materials) {
 		JSONObject reservationObject = (JSONObject) reservation.get("user");
 		
 		String ownerId = (String) reservationObject.get("owner");
-		String nameMaterial = (String) reservationObject.get("materialname");
-		Integer refMaterial = (Integer) reservationObject.get("materialref");		//get fields form the JSON parser
+		String materialID = (String) reservationObject.get("UUID"); //get fields from the JSON parser
 		String strFrom = (String) reservationObject.get("phone");
 		String strTo = (String) reservationObject.get("email");
 		
-		User owner = UserController.getById(ownerId);
-		// TODO : use the MaterialController.getById() method
-		Material owned = MaterialController.getByNameAndRef(nameMaterial, refMaterial);	   //convert strings from JSON into the right type
+		User owner = users.getById(ownerId);
+		Material owned = materials.getMaterialById(UUID.fromString(materialID));	   //convert strings from JSON into the right type
 		LocalDate from = LocalDate.parse(strFrom);
 		LocalDate to = LocalDate.parse(strTo);
 		
-		ReservationController.makeReservation(owner, owned, from, to);		//generate a user object in the memory
+		return new Reservation(owner, owned, from, to); //generate a user object in memory
 	}
 	
 	
 	@Override
-	public void write() {
-		
+	public void writeApplicationData(AppController application) {
+		// TODO FileStorage#writeApplicationData
 	}
 	
 	

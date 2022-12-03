@@ -20,6 +20,12 @@ public class PsAuth implements Pass {
 	
 	private static final Logger logger = Main.LOGGER_FACTORY.getLogger("auth", Logger.LEVEL_INFO);
 	
+	private final UserController users;
+	
+	public PsAuth(UserController users) {
+		this.users = users;
+	}
+	
 	@Override
 	public Opt<Identity> enter(Request request) throws Exception {
 		RqForm form = new RqFormBase(request); // using POST form
@@ -33,7 +39,7 @@ public class PsAuth implements Pass {
 		if(userName == null || password == null)
 			return new Opt.Empty<>();
 		
-		User authentifiedUser = UserController.authentifyUser(userName, password);
+		User authentifiedUser = users.authentifyUser(userName, password);
 		logger.info("Trying to authentify " + userName + ", " + (authentifiedUser==null ? "invalid crendentials" : "success"));
 		
 		if(authentifiedUser == null)
