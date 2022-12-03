@@ -17,7 +17,7 @@ public class Material
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 
-    public Material() {
+    public Material() { // TODO is a default constructor necessary ?
         this.reservation = null;
         this.os = OperatingSystem.XX;
         this.type = MaterialType.OTHER;
@@ -28,6 +28,7 @@ public class Material
     }
 
     public Material(OperatingSystem os, MaterialType type, String name, String version, Integer numRef) {
+    	// TODO require fields not to be null in constructor and setters
         this.os = os;
         this.type = type;
         this.name = name;

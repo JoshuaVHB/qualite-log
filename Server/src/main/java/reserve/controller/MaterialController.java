@@ -15,7 +15,7 @@ public class MaterialController {
 	
     public static final String KEYWORD_FILTER_PATTERN = ".*";
     
-    private static List<Material> materials;
+    private final List<Material> materials = new ArrayList<>();
     
     // ------------------------------------------------------------------------------------------- //
 

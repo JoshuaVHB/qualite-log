@@ -1,7 +1,10 @@
 package reserve.view.entry;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.takes.Request;
 import org.takes.Response;
@@ -24,6 +27,7 @@ public class TkListItems implements Take {
 		this.materials = materials;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public Response act(Request req) throws Exception {
 		Href href = new RqHref.Base(req).href();
@@ -39,8 +43,16 @@ public class TkListItems implements Take {
 		if(keyword != null)  MaterialController.filterByName(res, keyword);
 		if(!showUnavailable) MaterialController.filterByAvailability(res);
 		
-		JSONObject serialized = JsonSerializer.serializeMaterialList(res);
-		return new RsText(serialized.toJSONString());
+		JSONObject serializedMaterials = JsonSerializer.serializeMaterialList(res);
+		JSONArray serializedTypesList = new JSONArray();
+		serializedTypesList.addAll(Arrays.asList(MaterialType.values()).stream().map(Object::toString).collect(Collectors.toList()));
+		JSONArray serializedOSList = new JSONArray();
+		serializedOSList.addAll(Arrays.asList(OperatingSystem.values()).stream().map(Object::toString).collect(Collectors.toList()));
+		JSONObject response = new JSONObject();
+		response.put("items", serializedMaterials);
+		response.put("type-list",  serializedTypesList);
+		response.put("os-list",  serializedOSList);
+		return new RsText(response.toJSONString());
 	}
 	
 }
