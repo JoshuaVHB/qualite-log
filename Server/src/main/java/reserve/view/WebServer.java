@@ -34,7 +34,7 @@ public class WebServer {
 	
 	private static final int PORT = 8080;
 	
-	private static final Logger logger = Main.getLogger("web-server", Logger.LEVEL_INFO);
+	private static final Logger logger = Main.LOGGER_FACTORY.getLogger("web-server", Logger.LEVEL_INFO);
 
 	/**
 	 * Opens the web server, this method does not return.
@@ -45,7 +45,7 @@ public class WebServer {
 			logger.info("Opening server on localhost:"+PORT);
 			new FtBasic(
 				new TkAuth(
-					new TkLog(Main.getLogger("route", Logger.LEVEL_DEBUG),
+					new TkLog(Main.LOGGER_FACTORY.getLogger("route", Logger.LEVEL_DEBUG),
 						new TkFork(
 							new FkRegex("/media/.*", new TkClasspath()),
 							new FkRegex("/api/list_items", new TkListItems()),
@@ -90,7 +90,7 @@ public class WebServer {
 		// match all paths that begin with the static part
 		return new FkRegex(dirRegex,
 			// log requests to this path
-			new TkLog(Main.getLogger("path-"+staticUrlPath, Logger.LEVEL_DEBUG), new TkFork(forks.toArray(Fork[]::new))));
+			new TkLog(Main.LOGGER_FACTORY.getLogger("path-"+staticUrlPath, Logger.LEVEL_DEBUG), new TkFork(forks.toArray(Fork[]::new))));
 	}
 	
 }

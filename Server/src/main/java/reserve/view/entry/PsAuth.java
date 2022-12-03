@@ -18,7 +18,7 @@ import reserve.util.Logger;
 
 public class PsAuth implements Pass {
 	
-	private static final Logger logger = Main.getLogger("auth", Logger.LEVEL_INFO);
+	private static final Logger logger = Main.LOGGER_FACTORY.getLogger("auth", Logger.LEVEL_INFO);
 	
 	@Override
 	public Opt<Identity> enter(Request request) throws Exception {
