@@ -9,8 +9,8 @@ import org.json.simple.JSONObject;
 import org.takes.Request;
 import org.takes.Response;
 import org.takes.Take;
-import org.takes.misc.Href;
-import org.takes.rq.RqHref;
+import org.takes.rq.RqForm;
+import org.takes.rq.form.RqFormBase;
 import org.takes.rs.RsText;
 
 import reserve.controller.MaterialController;
@@ -30,12 +30,14 @@ public class TkListItems implements Take {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Response act(Request req) throws Exception {
-		Href href = new RqHref.Base(req).href();
+		RqForm href = new RqFormBase(req); // using GET request
 		
 		MaterialType type = FormUtils.getParamEnum(href, "type", MaterialType.class, true);
-		OperatingSystem os = FormUtils.getParamEnum(href, "OS", OperatingSystem.class, true);
-		String keyword = FormUtils.getParamString(href, "key", MaterialController.KEYWORD_FILTER_PATTERN, true);
-		boolean showUnavailable = FormUtils.hasParam(href, "show-unavailable");
+		OperatingSystem os = FormUtils.getParamEnum(href, "os", OperatingSystem.class, true);
+		String keyword = FormUtils.getParamString(href, "name", MaterialController.KEYWORD_FILTER_PATTERN, true);
+		boolean showUnavailable = FormUtils.hasParam(href, "includeReserved");
+		
+		System.out.println(type + " " + os + " " + keyword + " " + showUnavailable);
 		
 		List<Material> res = materials.getAllMaterials();
 		if(os != null)       MaterialController.filterByOS(res, os);
@@ -43,7 +45,7 @@ public class TkListItems implements Take {
 		if(keyword != null)  MaterialController.filterByName(res, keyword);
 		if(!showUnavailable) MaterialController.filterByAvailability(res);
 		
-		JSONObject serializedMaterials = JsonSerializer.serializeMaterialList(res);
+		JSONArray serializedMaterials = JsonSerializer.serializeMaterialList(res, true);
 		JSONArray serializedTypesList = new JSONArray();
 		serializedTypesList.addAll(Arrays.asList(MaterialType.values()).stream().map(Object::toString).collect(Collectors.toList()));
 		JSONArray serializedOSList = new JSONArray();

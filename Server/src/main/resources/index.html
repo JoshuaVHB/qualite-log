@@ -25,30 +25,32 @@
       <div id="material-filter">
         <label>
           Type :
-          <select id="filter-type-list">
-            <option>Tous</option>
+          <select id="filter-type-list" class="filter-option">
+            <option value=''>Tous</option>
+            <!-- Populated: type list -->
           </select>
         </label>
         <label>
           OS :
-          <select id="filter-os-list">
-            <option>Tous</option>
+          <select id="filter-os-list" class="filter-option">
+            <option value=''>Tous</option>
+            <!-- Populated: os list -->
           </select>
         </label>
         <label>
           Nom :
-          <input type="text">
+          <input type="text" id="filter-name" class="filter-option">
         </label>
         <label>
           Afficher les appareils réservés :
-          <input type="checkbox">
+          <input type="checkbox" id="filter-include-reserved" class="filter-option">
         </label>
         <span>
           <label>
-            Reserver du <input type="date">
+            Reserver du <input type="date" id="reservation-from" autocomplete="off">
           </label>
           <label>
-            au <input type="date">
+            au <input type="date" id="reservation-to" autocomplete="off">
           </label>
           <button id="reserve-submit-btn" disabled onclick="reserveSelectedItems()">Reserver</button>
         </span>
@@ -57,11 +59,10 @@
       <table id="materials-table">
         <thead>
           <tr>
-            <th>Id</th>
             <th>Type</th>
             <th>OS</th>
+            <th>Nom</th>
             <th>Réservé par</th>
-            <th>le</th>
             <th>
               Réserver
               <input type="checkbox" id="select-all">
@@ -70,43 +71,24 @@
         </thead>
         <tbody>
           <!-- Populated: devices -->
-          <tr>
-            <td>1</td>
-            <td>PC</td>
-            <td>Windows</td>
-            <td></td>
-            <td></td>
-            <td>
-              <input type="checkbox">
-            </td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>PC</td>
-            <td>Windows</td>
-            <td>John Doe </td>
-            <td>25/30/22</td>
-            <td>
-              <input type="checkbox">
-            </td>
-          </tr>
         </tbody>
       </table>
       <template id="item-template">
         <tr>
-          <td id="t-os"></td>
           <td id="t-type"></td>
+          <td id="t-os"></td>
           <td id="t-name"></td>
-          <td id="t-version"></td>
+          <td id="t-reservation"></td>
           <td id="t-reference"></td>
         </tr>
       </template>
     </div>
   </div>
 
-  <div id="popup-frame">
+  <div id="popup-frame" hidden>
     <div id="popup">
       <h5 id="popup-title"></h5>
+      <button onclick="popupFrame.hidden = true;">Ok</button>
     </div>
   </div>
 
@@ -118,9 +100,16 @@ const reserveBtn = document.getElementById('reserve-submit-btn');
 const filterTypeList = document.getElementById('filter-type-list');
 const filterOSList = document.getElementById('filter-os-list');
 const itemTemplate = document.querySelector('item-template');
+const popupFrame = document.getElementById('popup-frame');
+const inputReservationFrom = document.getElementById('reservation-from');
+const inputReservationTo = document.getElementById('reservation-to');
+const filterInputs = document.querySelectorAll('.filter-option');
+const filterName = document.getElementById('filter-name');
+const filterIncludeReserved = document.getElementById('filter-include-reserved');
 
 var currentItems = [];
 var reservedItemIds = [];
+var fetchCooldown = null;
 
 selectAllBtn.addEventListener('change', (e) => {
   const checkboxes = Array.from(table.querySelectorAll('td input[type="checkbox"]'));
@@ -130,10 +119,34 @@ selectAllBtn.addEventListener('change', (e) => {
   });
 });
 
-function refreshCheckboxAll() {
+inputReservationFrom.addEventListener('change', (e) => {
+  inputReservationTo.min = e.target.value;
+  if(inputReservationTo.value < e.target.value)
+    inputReservationTo.value = e.target.value;
+  refreshSelectionButtons();
+});
+
+inputReservationTo.addEventListener('change', (e) => {
+  inputReservationFrom.max = e.target.value;
+  if(inputReservationFrom.value > e.target.value)
+    inputReservationFrom.value = e.target.value;
+  refreshSelectionButtons();
+});
+
+filterInputs.forEach((input) => {
+  if(input.type === 'text')
+    input.addEventListener('input', fetchItemsLater);
+  else
+    input.addEventListener('input', fetchItems);
+});
+
+function refreshSelectionButtons() {
   const checkboxes = Array.from(table.querySelectorAll('td input[type="checkbox"]'));
   const allChecked = Array.from(checkboxes).every((checkbox) => checkbox.checked);
   const anyChecked = Array.from(checkboxes).some((checkbox) => checkbox.checked);
+  let dateFrom = new Date(inputReservationFrom.value);
+  let dateTo = new Date(inputReservationTo.value);
+  let validDates = dateFrom < dateTo && dateFrom >= new Date();
   if(allChecked) {
     selectAllBtn.checked = true;
     selectAllBtn.indeterminate = false;
@@ -144,7 +157,7 @@ function refreshCheckboxAll() {
     selectAllBtn.checked = false;
     selectAllBtn.indeterminate = false;
   }
-  reserveBtn.disabled = !anyChecked;
+  reserveBtn.disabled = !anyChecked || !validDates;
 }
 
 function populateItemsTable(items) {
@@ -164,13 +177,18 @@ function populateItemsTable(items) {
       continue;
     let element = itemTemplate.content.cloneNode(true);
     element.querySelector('#t-os').textContent = item.os;
-    element.querySelector('#t-type').textContent = item.type;
+    element.querySelector('#t-type').textContent = item.type + ' ' + item.version;
     element.querySelector('#t-name').textContent = item.name;
-    element.querySelector('#t-version').textContent = item.version;
     element.querySelector('#t-reference').textContent = item.numRef;
+    element.querySelector('#t-reservation').textContent = item.reservation ? item.reservation.userName + ' jusqu\'au ' + item.reservation.upToDate : '';
     element.querySelectorAll('[id]').forEach((el) => el.removeAttribute('id'));
-    element.querySelector('input[type=checkbox]').addEventListener('change', (e) => {
-      refreshCheckboxAll();
+    let selectionCheckbox = element.querySelector('input[type=checkbox]');
+    selectionCheckbox.addEventListener('change', (e) => {
+      refreshSelectionButtons();
+      if(selectionCheckbox.checked)
+        reservedItemIds.push(item.id);
+      else
+        reservedItemIds = reservedItemIds.filter((id) => id !== item.id);
     });
     tbody.appendChild(element);
     currentItems.push({
@@ -197,39 +215,70 @@ function populateFilters(typeList, osList) {
   });
 }
 
-function fetchItems(options={}) {
-  let xhr = new XMLHttpRequest();
-  xhr.open('GET', '/api/list_items');
-  xhr.setRequestHeader('Content-Type', 'application/json');
-  xhr.send(JSON.stringify(options));
-  xhr.onload = () => {
-    if (xhr.status != 200) {
-      console.log(`Error ${xhr.status}: ${xhr.statusText}`);
-      // TODO prompt user with error
-    } else {
-      const data = JSON.parse(xhr.response);
-      populateFilters(data['type-list'], data['os-list']);
-      populateItemsTable(data['items']);
-    }
-  };
+function encodeFormOptions(options={}) {
+  let params = new URLSearchParams();
+  for(let key in options) {
+    if(options[key] !== null && options[key] !== undefined)
+      params.append(key, options[key]);
+  }
+  return params.toString();
+}
+
+function fetchItems() {
+  let options = {};
+  if(filterName.value) options.name = filterName.value;
+  if(filterTypeList.value) options.type = filterTypeList.value;
+  if(filterOSList.value) options.os = filterOSList.value;
+  if(filterIncludeReserved.checked) options.includeReserved = true;
+  
+  fetch('/api/list_items', {
+    method: 'POST',
+    body: encodeFormOptions(options),
+  }).then((response) => {
+    if(response.ok)
+      return response.json();
+    else
+      throw new Error('Could not fetch items');
+  }).then((data) => {
+    populateItemsTable(data.items);
+    populateFilters(data['type-list'], data['os-list']);
+  }).catch((err) => {
+    console.error(err);
+    popupFrame.hidden = false;
+    popupFrame.querySelector('#popup-title').innerText = err.message;
+  });
+}
+
+function fetchItemsLater() {
+  if(fetchCooldown)
+    clearTimeout(fetchCooldown);
+  fetchCooldown = setTimeout(() => {
+    fetchItems();
+  }, 500);
 }
 
 function reserveSelectedItems() {
-  let xhr = new XMLHttpRequest();
-  xhr.open('POST', '/api/reserve_items');
-  xhr.setRequestHeader('Content-Type', 'application/json');
-  xhr.send(JSON.stringify({
-  }));
-  xhr.onload = () => {
-    if (xhr.status != 200) {
-      console.log(`Error ${xhr.status}: ${xhr.statusText}`);
+  fetch('/api/reserve_items', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      items: reservedItemIds,
+      from: inputReservationFrom.value,
+      to: inputReservationTo.value
+    })
+  }).then((response) => {
+    if (response.status != 200) {
+      console.log(`Error ${response.status}: ${response.statusText}`);
       // TODO prompt user with error
     } else {
-      const data = JSON.parse(xhr.response);
-      console.log(data);
+      response.json().then((data) => {
+        console.log(data);
       // TODO prompt user with popup
+      });
     }
-  };
+  });
 }
 
 window.addEventListener('load', () => {
