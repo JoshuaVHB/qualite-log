@@ -26,6 +26,7 @@ import reserve.controller.AppController;
 import reserve.util.Logger;
 import reserve.view.entry.TkListItems;
 import reserve.view.entry.PsAuth;
+import reserve.view.entry.PsLogout;
 import reserve.view.entry.TkReserverItem;
 import reserve.view.front.TkLog;
 import reserve.view.front.TkSpecificResource;
@@ -34,7 +35,7 @@ public class WebServer {
 	
 	private static final int PORT = 8080;
 	
-	private static final Logger logger = Main.LOGGER_FACTORY.getLogger("web-server", Logger.LEVEL_INFO);
+	public static final Logger logger = Main.LOGGER_FACTORY.getLogger("web-server", Logger.LEVEL_INFO);
 
 	private final AppController application;
 	
@@ -67,6 +68,7 @@ public class WebServer {
 						)
 					),
 					new PsChain(
+						new PsLogout(),
 						new PsCookie(new CcSafe(new CcHex(new CcXor(new CcCompact(), "secret-code")))),
 						new PsAuth(application.getUsers())
 				    )

@@ -37,8 +37,6 @@ public class TkListItems implements Take {
 		String keyword = FormUtils.getParamString(href, "name", MaterialController.KEYWORD_FILTER_PATTERN, true);
 		boolean showUnavailable = FormUtils.hasParam(href, "includeReserved");
 		
-		System.out.println(type + " " + os + " " + keyword + " " + showUnavailable);
-		
 		List<Material> res = materials.getAllMaterials();
 		if(os != null)       MaterialController.filterByOS(res, os);
 		if(type != null)     MaterialController.filterByType(res, type);

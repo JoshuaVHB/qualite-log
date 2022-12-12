@@ -30,11 +30,13 @@ public class PsAuth implements Pass {
 	public Opt<Identity> enter(Request request) throws Exception {
 		RqForm form = new RqFormBase(request); // using POST form
 		
-		String userName = FormUtils.getParamString(form, "username", UserController.USER_NAME_FORMAT, true);
-		String password = FormUtils.getParamString(form, "password", UserController.PASSWORD_FORMAT, true);
-		
-		if(FormUtils.hasParam(form, "logout"))
-			return new Opt.Single<>(Identity.ANONYMOUS);
+		String userName, password;
+		try {
+			userName = FormUtils.getParamString(form, "username", UserController.USER_NAME_FORMAT, true);
+			password = FormUtils.getParamString(form, "password", UserController.PASSWORD_FORMAT, true);
+		} catch (IllegalArgumentException e) {
+			return new Opt.Empty<>();
+		}
 		
 		if(userName == null || password == null)
 			return new Opt.Empty<>();
