@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 public class T_TkLog {
 
-    // TODO : trouver de tests
+    // TODO : trouver des tests
 
     @Test
     public void should_succed_when_() {

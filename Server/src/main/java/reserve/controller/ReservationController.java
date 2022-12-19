@@ -29,8 +29,8 @@ public class ReservationController {
             throws RuntimeException, NullPointerException {
 
         // ------ ERROR CHECKING ------ //
-    	LocalDate to = reservation.getBeginning();
-    	LocalDate from = reservation.getEnding();
+    	LocalDate from = reservation.getBeginning();
+    	LocalDate to = reservation.getEnding();
 
         // -- Get the current day to determine where the reservation should be stored
         LocalDate today = LocalDate.now();
@@ -46,7 +46,7 @@ public class ReservationController {
 
         // ------ CODE ------- //
 
-        if (from.compareTo(to) <= 0) { // Means that the start day is before or today -> store in current reservation
+        if (from.compareTo(today) <= 0) { // Means that the start day is before or today -> store in current reservation
             reservation.getMaterial().setReservation(reservation);
             current.add(reservation);
         } else {

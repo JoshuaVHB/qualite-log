@@ -22,13 +22,16 @@ public class MaterialController {
     /**
      * @brief Adds a material instance to the whole material list
      * @params material Material to be added
+     * @throws NullPointerException {@code material} is null
      * @throws IllegalArgumentException {@code material} is already in the list
      */
-    public void addMaterial(Material material) throws IllegalArgumentException {
+    public boolean addMaterial(Material material) throws IllegalArgumentException, NullPointerException {
 
         // this should work i guess, i have to do tests
 
         // ------ Error checking ----- //
+        Objects.requireNonNull(material);
+
         boolean exists = materials  .stream()
                                     .filter(m -> m.getName().equals(material.getName()))
                                     .anyMatch(m -> m.getNumRef() == material.getNumRef());
@@ -37,8 +40,7 @@ public class MaterialController {
 
         // -------------------------//
 
-        materials.add(material);
-        // Log
+        return (materials.add(material));
     }
 
     /**

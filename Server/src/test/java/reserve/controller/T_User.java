@@ -1,4 +1,4 @@
-package reserve.T_model;
+package reserve.controller;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;

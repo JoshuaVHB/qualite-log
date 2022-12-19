@@ -1,4 +1,4 @@
-package reserve.T_model;
+package reserve.controller;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -137,7 +137,6 @@ public class T_Reservation {
                 LocalDate.now().plusDays(2)
                 );
         reservations.addReservation(reservation);
-
 
         Assertions.assertTrue(reservations.getIncomingReservation().contains(reservation));
 
