@@ -17,6 +17,8 @@ import reserve.view.WebServer;
 
 public class TkSpecificResource implements Take {
 	
+	private static final boolean USE_CACHE = false;
+	
 	private final String path;
 	private final Map<String, String> resources = new HashMap<>();
 	
@@ -34,14 +36,18 @@ public class TkSpecificResource implements Take {
 	}
 	
 	private String loadFile(String path) {
-		return resources.computeIfAbsent(path, (_path) -> {
-			try (InputStream is = TkSpecificResource.class.getResourceAsStream(path)) {
-				return new String(is.readAllBytes(), Charset.forName("utf-8"));
-			} catch (IOException | NullPointerException e) {
-				WebServer.logger.merr(e, "Could not load resource '" + _path + "'");
-				return "";
-			}
-		});
+		return USE_CACHE ?
+				resources.computeIfAbsent(path, TkSpecificResource::readFileFromResources) :
+				readFileFromResources(path);
+	}
+	
+	private static String readFileFromResources(String path) {
+		try (InputStream is = TkSpecificResource.class.getResourceAsStream(path)) {
+			return new String(is.readAllBytes(), Charset.forName("utf-8"));
+		} catch (IOException | NullPointerException e) {
+			WebServer.logger.merr(e, "Could not load resource '" + path + "'");
+			return "";
+		}
 	}
 	
 }

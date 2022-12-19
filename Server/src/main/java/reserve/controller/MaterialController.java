@@ -21,7 +21,7 @@ public class MaterialController {
 
     /**
      * @brief Adds a material instance to the whole material list
-     * @params material Material to be added
+     * @param material Material to be added
      * @throws NullPointerException {@code material} is null
      * @throws IllegalArgumentException {@code material} is already in the list
      */
@@ -87,9 +87,9 @@ public class MaterialController {
     
     /**
      * @brief Filter for the first time the list of materials
-     * @param os, operating system chosen
+     * @param os operating system chosen
      */
-    public static void filterByOS(List<Material> materials, OperatingSystem os) {//on va faire une classe enum pour trier , voir si champs = enum param, TODO
+    public static void filterByOS(List<Material> materials, OperatingSystem os) {
     	materials.removeIf(m -> m.getOs() != os);
     }
 
@@ -97,7 +97,7 @@ public class MaterialController {
      * @brief Filter the list once more by type
      * @param type type of material chosen
      */
-    public static void filterByType(List<Material> materials, MaterialType type) {//on va faire une classe enum pour trier , voir si champs = enum param, 
+    public static void filterByType(List<Material> materials, MaterialType type) {
     	materials.removeIf(m -> m.getType() != type);
     }
 
@@ -106,7 +106,7 @@ public class MaterialController {
      * @param materials
      * @param keyword keyword chosen
      */
-    public static void filterByName(List<Material> materials, String keyword) {//on va faire une classe enum pour trier , voir si champs = enum param,
+    public static void filterByName(List<Material> materials, String keyword) {
     	String lcKeyword = keyword.toLowerCase();
 		materials.removeIf(m -> !m.getName().toLowerCase().contains(lcKeyword));
     }
@@ -116,6 +116,6 @@ public class MaterialController {
      * @param materials
      */
     public static void filterByAvailability(List<Material> materials) {
-    	materials.removeIf(m -> m.getReservation() == null);
+    	materials.removeIf(m -> m.getReservation() != null);
     }
 }

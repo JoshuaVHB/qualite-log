@@ -11,6 +11,9 @@ import org.takes.facets.auth.codecs.CcCompact;
 import org.takes.facets.auth.codecs.CcHex;
 import org.takes.facets.auth.codecs.CcSafe;
 import org.takes.facets.auth.codecs.CcXor;
+import org.takes.facets.fallback.FbChain;
+import org.takes.facets.fallback.FbStatus;
+import org.takes.facets.fallback.TkFallback;
 import org.takes.facets.fork.FkAnonymous;
 import org.takes.facets.fork.FkAuthenticated;
 import org.takes.facets.fork.FkRegex;
@@ -18,15 +21,17 @@ import org.takes.facets.fork.Fork;
 import org.takes.facets.fork.TkFork;
 import org.takes.http.Exit;
 import org.takes.http.FtBasic;
+import org.takes.rs.RsRedirect;
+import org.takes.rs.RsText;
 import org.takes.tk.TkClasspath;
 import org.takes.tk.TkRedirect;
 
 import reserve.Main;
 import reserve.controller.AppController;
 import reserve.util.Logger;
-import reserve.view.entry.TkListItems;
 import reserve.view.entry.PsAuth;
 import reserve.view.entry.PsLogout;
+import reserve.view.entry.TkListItems;
 import reserve.view.entry.TkReserverItem;
 import reserve.view.front.TkLog;
 import reserve.view.front.TkSpecificResource;
@@ -34,6 +39,7 @@ import reserve.view.front.TkSpecificResource;
 public class WebServer {
 	
 	private static final int PORT = 8080;
+	private static final boolean REDIRECT_ON_404 = false;
 	
 	public static final Logger logger = Main.LOGGER_FACTORY.getLogger("web-server", Logger.LEVEL_INFO);
 
@@ -51,27 +57,32 @@ public class WebServer {
 		try {
 			logger.info("Opening server on localhost:"+PORT);
 			new FtBasic(
-				new TkAuth(
-					new TkLog(Main.LOGGER_FACTORY.getLogger("route", Logger.LEVEL_DEBUG),
-						new TkFork(
-							new FkRegex("/media/.*", new TkClasspath()),
-							new FkRegex("/api/list_items", new TkListItems(application.getMaterials())),
-							new FkRegex("/api/reserve_item", new TkReserverItem(application)),
-							new FkRegex("/connexion.*",
-								new TkFork(
-									new FkAuthenticated(new TkRedirect("/")),
-									new FkAnonymous(new TkFork(indexPage("/connexion")))
-								)
-							),
-							indexPage("/connexion"),
-							indexPage("/")
-						)
+				new TkFallback(
+					new TkAuth(
+						new TkLog(Main.LOGGER_FACTORY.getLogger("route", Logger.LEVEL_DEBUG),
+							new TkFork(
+								new FkRegex("/media/.*", new TkClasspath()),
+								new FkRegex("/api/list_items", new TkListItems(application.getMaterials())),
+								new FkRegex("/api/reserve_item", new TkReserverItem(application)),
+								new FkRegex("/connexion.*",
+									new TkFork(
+										new FkAuthenticated(new TkRedirect("/")),
+										new FkAnonymous(new TkFork(indexPage("/connexion")))
+									)
+								),
+								indexPage("/connexion"),
+								indexPage("/")
+							)
+						),
+						new PsChain(
+							new PsLogout(),
+							new PsCookie(new CcSafe(new CcHex(new CcXor(new CcCompact(), "secret-code")))),
+							new PsAuth(application.getUsers())
+					    )
 					),
-					new PsChain(
-						new PsLogout(),
-						new PsCookie(new CcSafe(new CcHex(new CcXor(new CcCompact(), "secret-code")))),
-						new PsAuth(application.getUsers())
-				    )
+					new FbChain(
+						new FbStatus(404, REDIRECT_ON_404 ? new RsRedirect("/") : new RsText("404. No page to be seen here"))
+					)
 				), PORT).start(Exit.NEVER);
 		} catch (IOException e) {
 			logger.merr(e, "Could not open server");

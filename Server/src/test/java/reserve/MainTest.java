@@ -5,7 +5,7 @@ import reserve.controller.MaterialController;
 import reserve.controller.ReservationController;
 import reserve.controller.UserController;
 import reserve.controller.io.AppStorage;
-import reserve.controller.io.FileStorage;
+import reserve.controller.io.DummyStorage;
 import reserve.view.WebServer;
 
 /**
@@ -17,7 +17,7 @@ import reserve.view.WebServer;
 public class MainTest {
 
 	public static void main(String[] args) {
-		AppStorage storage = new FileStorage();
+		AppStorage storage = new DummyStorage();
 		MaterialController materials = new MaterialController();
 		ReservationController reservations = new ReservationController();
 		UserController users = new UserController();

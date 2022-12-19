@@ -57,8 +57,16 @@
 #materials-table td:nth-child(1),
 #materials-table td:nth-child(2),
 #materials-table td:nth-child(3),
-#materials-table td:nth-child(5) {
+#materials-table td:nth-child(4),
+#materials-table td:nth-child(6) {
   text-align: center;
+}
+
+#materials-table tr.selected-reserved:nth-child(odd) {
+  background-color: #cafbc2;
+}
+#materials-table tr.selected-reserved:nth-child(even) {
+  background-color: #a8ee9e;
 }
 
 #popup-frame {

@@ -39,7 +39,7 @@
           <input type="text" id="filter-name" class="filter-option">
         </label>
         <label>
-          Afficher les appareils rÃ©servÃ©s :
+          Afficher les appareils réservés :
           <input type="checkbox" id="filter-include-reserved" class="filter-option">
         </label>
         <span>
@@ -59,9 +59,10 @@
             <th>Type</th>
             <th>OS</th>
             <th>Nom</th>
-            <th>RÃ©servÃ© par</th>
+            <th>Référence</th>
+            <th>Réservé par</th>
             <th>
-              RÃ©server
+              Réserver
               <input type="checkbox" id="select-all">
             </th>
           </tr>
@@ -75,8 +76,9 @@
           <td id="t-type"></td>
           <td id="t-os"></td>
           <td id="t-name"></td>
-          <td id="t-reservation"></td>
           <td id="t-reference"></td>
+          <td id="t-reservation"></td>
+          <td><input type="checkbox"/></td>
         </tr>
       </template>
     </div>
@@ -89,14 +91,14 @@
     </div>
   </div>
 
-  <script>
+  <script defer>
 
 const table = document.getElementById('materials-table');
 const selectAllBtn = document.getElementById('select-all');
 const reserveBtn = document.getElementById('reserve-submit-btn');
 const filterTypeList = document.getElementById('filter-type-list');
 const filterOSList = document.getElementById('filter-os-list');
-const itemTemplate = document.querySelector('item-template');
+const itemTemplate = document.getElementById('item-template');
 const popupFrame = document.getElementById('popup-frame');
 const inputReservationFrom = document.getElementById('reservation-from');
 const inputReservationTo = document.getElementById('reservation-to');
@@ -105,30 +107,34 @@ const filterName = document.getElementById('filter-name');
 const filterIncludeReserved = document.getElementById('filter-include-reserved');
 
 var currentItems = [];
-var reservedItemIds = [];
+var reservedItemIds = new Set();
 var fetchCooldown = null;
 
 selectAllBtn.addEventListener('change', (e) => {
-  const checkboxes = Array.from(table.querySelectorAll('td input[type="checkbox"]'));
-  checkboxes.forEach((checkbox) => {
-    checkbox.checked = e.target.checked;
-    reserveBtn.disabled = !e.target.checked;
-  });
+	for(let item of currentItems)
+		setReserved(item, e.target.checked, true);
 });
 
 inputReservationFrom.addEventListener('change', (e) => {
-  inputReservationTo.min = e.target.value;
+  //inputReservationTo.min = e.target.value;
   if(inputReservationTo.value < e.target.value)
     inputReservationTo.value = e.target.value;
   refreshSelectionButtons();
 });
 
 inputReservationTo.addEventListener('change', (e) => {
-  inputReservationFrom.max = e.target.value;
+  //inputReservationFrom.max = e.target.value;
   if(inputReservationFrom.value > e.target.value)
     inputReservationFrom.value = e.target.value;
   refreshSelectionButtons();
 });
+
+{
+	let now = new Date().toISOString();
+	now = now.substr(0, now.indexOf('T'));
+	inputReservationFrom.min = now;
+	inputReservationTo.min = now;
+}
 
 filterInputs.forEach((input) => {
   if(input.type === 'text')
@@ -143,7 +149,7 @@ function refreshSelectionButtons() {
   const anyChecked = Array.from(checkboxes).some((checkbox) => checkbox.checked);
   let dateFrom = new Date(inputReservationFrom.value);
   let dateTo = new Date(inputReservationTo.value);
-  let validDates = dateFrom < dateTo && dateFrom >= new Date();
+  let validDates = dateFrom <= dateTo;
   if(allChecked) {
     selectAllBtn.checked = true;
     selectAllBtn.indeterminate = false;
@@ -154,44 +160,59 @@ function refreshSelectionButtons() {
     selectAllBtn.checked = false;
     selectAllBtn.indeterminate = false;
   }
+  console.log(anyChecked, validDates);
   reserveBtn.disabled = !anyChecked || !validDates;
+}
+
+function setReserved(item, reserved, silenceEvents=false) {
+	if(reserved) {
+		reservedItemIds.add(item.id);
+		item.element.classList.add('selected-reserved');
+	} else {
+		reservedItemIds.delete(item.id);
+		item.element.classList.remove('selected-reserved');
+	}
+	item.element.querySelector('input[type=checkbox]').checked = reserved;
+	if(!silenceEvents)
+    	refreshSelectionButtons();
+    console.log(reservedItemIds);
+}
+
+function isReserved(item) {
+	return reservedItemIds.has(item.id);
 }
 
 function populateItemsTable(items) {
   console.log(items);
   const tbody = table.querySelector('tbody');
+  tbody.innerHTML = '';
   
   // keep reserved items
-  for(let item of currentItems) {
-    if(reservedItemIds.includes(item.id))
-      item.reserved = true;
-    tbody.removeChild(item.element);
-  }
-  currentItems = currentItems.filter(it => reservedItemIds.includes(it.id));
+  currentItems = currentItems.filter(isReserved);
+  console.log('remaining', currentItems);
+  for(let item of currentItems)
+  	tbody.appendChild(item.element);
 
   for(let item of items) {
     if(currentItems.some((i) => i.id === item.id))
       continue;
-    let element = itemTemplate.content.cloneNode(true);
+    let element = document.importNode(itemTemplate.content, true).firstElementChild;
+    let it = {
+      id: item.id,
+      element: element
+    };
     element.querySelector('#t-os').textContent = item.os;
     element.querySelector('#t-type').textContent = item.type + ' ' + item.version;
     element.querySelector('#t-name').textContent = item.name;
-    element.querySelector('#t-reference').textContent = item.numRef;
-    element.querySelector('#t-reservation').textContent = item.reservation ? item.reservation.userName + ' jusqu\'au ' + item.reservation.upToDate : '';
+    element.querySelector('#t-reference').textContent = item.numref;
+    element.querySelector('#t-reservation').textContent = item.reservation ? item.reservation.userName + ' jusqu\'au ' + item.reservation.upToDate : '-';
     element.querySelectorAll('[id]').forEach((el) => el.removeAttribute('id'));
     let selectionCheckbox = element.querySelector('input[type=checkbox]');
     selectionCheckbox.addEventListener('change', (e) => {
-      refreshSelectionButtons();
-      if(selectionCheckbox.checked)
-        reservedItemIds.push(item.id);
-      else
-        reservedItemIds = reservedItemIds.filter((id) => id !== item.id);
+      setReserved(it, !isReserved(it));
     });
     tbody.appendChild(element);
-    currentItems.push({
-      id: item.id,
-      element: element
-    });
+    currentItems.push(it);
   }
 }
 
