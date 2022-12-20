@@ -464,4 +464,36 @@ public class T_Material {
 
     }
 
+    @Test
+    public void should_return_empty_when_reservation_started_after_recalculating_reservations() {
+
+        // -- Create a material whose status is not available
+        Material dummy = new Material();
+        materials.addMaterial(dummy);
+
+        // -- Create a reservation
+        Reservation reservation = new Reservation(
+                new User(),
+                dummy,
+                LocalDate.now().plusDays(1),
+                LocalDate.now().plusDays(2));
+
+
+        // -- Add the reservation, change the beginning date and recalculate
+        ReservationController rc = new ReservationController();
+        rc.addReservation(reservation);
+
+        reservation.setBeginning(LocalDate.now().minusDays(1));
+        rc.recalculateReservations();
+
+        // -- Filter and check if the material is available.
+        List<Material> allMats = materials.getAllMaterials();
+
+        MaterialController.filterByAvailability(allMats);
+
+        Assertions.assertEquals(0, allMats.size());
+
+    }
+
+
 }
