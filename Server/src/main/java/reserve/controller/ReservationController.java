@@ -59,12 +59,14 @@ public class ReservationController {
      * This method has to be called before any operations on reservations.
      */
     public void recalculateReservations() {
+
         // Loop through incoming reservation and compare to today's date.
         for (Reservation reservation : incoming) {
 
             if (reservation.getBeginning().compareTo(LocalDate.now()) <= 0)
             {
                 // Move the reservation to the current
+                reservation.getMaterial().setReservation(reservation); // FIX : i forgot this
                 current.add(reservation);
             }
         }

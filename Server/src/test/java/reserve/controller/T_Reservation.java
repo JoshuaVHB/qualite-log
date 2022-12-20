@@ -220,6 +220,22 @@ public class T_Reservation {
         reservations.closeReservation(new User(true,"na","na","na","na"),reservation);
     }
 
+    @Test
+    public void should_change_state_of_owned_material_when_reservation_starts() {
+
+        // -- Setup
+        Reservation reservation = new Reservation(new User(), new Material(), LocalDate.now().plusDays(1), LocalDate.now().plusDays(3));
+        reservations.addReservation(reservation);
+        reservation.setBeginning(LocalDate.now());
+
+        // -- Test
+        reservations.recalculateReservations();
+        Assertions.assertNotNull(reservation.getMaterial().getReservation());
+
+        // -- Undo
+
+        reservations.closeReservation(new User().setAdmin(true), reservation);
+    }
 
     // --------- ReservationController.closeReservation() --------------- //
 
