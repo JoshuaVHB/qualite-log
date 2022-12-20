@@ -6,9 +6,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import reserve.Main;
 import reserve.model.Material;
+import reserve.model.OperatingSystem;
 import reserve.util.AnsiLogger;
 import reserve.util.Logger;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 public class T_Material {
@@ -136,7 +139,54 @@ public class T_Material {
 
     // --------- MaterialController.filterByOS() --------------- //
 
-    // TODO : will the filter functions stay the same ?
+    @Test
+    public void should_return_false_when_looking_for_a_filtered_by_wrong_os_material() {
+
+        Material dummy = new Material(); // OS type is XX
+        materials.addMaterial(dummy);
+        List<Material> allMats = materials.getAllMaterials();
+
+        MaterialController.filterByOS(allMats, OperatingSystem.AP);
+
+        Assertions.assertFalse(allMats.contains(dummy));
+
+    }
+
+    @Test
+    public void should_return_true_when_looking_for_a_filtered_by_right_os_material() {
+
+        Material dummy = new Material(); // OS type is XX
+        materials.addMaterial(dummy);
+        List<Material> allMats = materials.getAllMaterials();
+
+        MaterialController.filterByOS(allMats, OperatingSystem.XX);
+
+        Assertions.assertTrue(allMats.contains(dummy));
+
+    }
+
+    @Test
+    public void should_contain_all_materials_of_filter_by_os() {
+
+        Material dummies[] = new Material[] {
+
+          new Material(),
+          new Material(),
+          new Material(),
+          new Material(),
+          new Material(),
+
+        };
+
+        Arrays.stream(dummies).forEach(m -> {materials.addMaterial(m);});
+
+        List<Material> allMats = materials.getAllMaterials();
+        MaterialController.filterByOS(allMats, OperatingSystem.XX);
+
+        Assertions.assertTrue(allMats.size()==dummies.length );
+
+
+    }
 
 
 

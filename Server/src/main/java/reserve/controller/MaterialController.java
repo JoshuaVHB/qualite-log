@@ -27,14 +27,11 @@ public class MaterialController {
      */
     public boolean addMaterial(Material material) throws IllegalArgumentException, NullPointerException {
 
-        // this should work i guess, i have to do tests
-
         // ------ Error checking ----- //
         Objects.requireNonNull(material);
 
         boolean exists = materials  .stream()
-                                    .filter(m -> m.getName().equals(material.getName()))
-                                    .anyMatch(m -> m.getNumRef() == material.getNumRef());
+                                    .anyMatch(m -> m.getId() == material.getId());
 
         if (exists) throw new IllegalArgumentException("The material is already present in the list");
 
