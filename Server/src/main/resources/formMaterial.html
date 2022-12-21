@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Ajouter un matériel</title>
+    <script src="https://kit.fontawesome.com/02544ac723.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <h1 class="title">Ajout d'un nouveau matériel</h1>
+    <div>
+        <form class="form" method="GET" id="addMateriel">
+            <label for="genre">
+                Type du matériel <select name="type" id="type" required>
+                    <option value="MOBILE">Téléphone</option>
+                    <option value="LAPTOP">Ordinateur portable</option>
+                    <option value="TABLET">Tablette</option>
+                    <option value="OTHER">Autre</option>
+                </select>
+            </label><br />
+            <label for="genre">
+                System d'operation <select name="OS" id="OS" required>
+                    <option value="AN">Android</option>
+                    <option value="AP">Apple</option>
+                    <option value="XX">Autre</option>
+                </select>
+            </label><br />
+
+            <label for="name">
+                Nom de l'appareil <input class="input" type="text" name="nom" id="prenom" placeholder="Samsung note 10" pattern="{1,30}" required><br>
+            </label>
+            <label>
+                Version <input class="input" type="text" name="version" id="nom" placeholder="10.2" pattern="[0-9.]{1,}" required><br>
+            </label>
+
+
+            <button type="submit" name="submit" value="registration" id="submit" oneclick="addMateriel();">
+                Valider
+            </button>
+
+        </form>
+
+    </div>
+</body>
+</html>
+
+<script>
+    function addMateriel() {
+
+        var user = new FormData(document.getElementById("addUser"));
+
+        let url = 'D:\Ellyn\Documents\Web\www\qualite_log_test/api/CreateMateriel';
+        let params = user;
+        let xhr = new XMLHttpRequest();
+        xhr.open('GET', url, true);
+        xhr.send(params);
+        xhr.onload = () => {
+            if (xhr.status == 200) {
+                console.log("Response =", xhr.responseText);
+                // do something with the data
+            } else {
+                throw new Error("Could not fetch ");
+            }
+        };
+
+    }
+</script>
