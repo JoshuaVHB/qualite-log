@@ -1,6 +1,7 @@
 package reserve.model;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class Reservation {
 
@@ -14,10 +15,13 @@ public class Reservation {
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 
     public Reservation(User owner, Material material, LocalDate beginning, LocalDate ending) {
-        this.owner = owner;
-        this.material = material;
-        this.beginning = beginning;
-        this.ending = ending;
+        this.owner = Objects.requireNonNull(owner);
+        this.material = Objects.requireNonNull(material);
+        this.beginning = Objects.requireNonNull(beginning);
+        this.ending = Objects.requireNonNull(ending);
+
+        if (ending.compareTo(beginning) <= 0) // reservation starts after or at the end ...
+            throw new IllegalArgumentException("The reservation starting date must be before the ending date !");
     }
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//

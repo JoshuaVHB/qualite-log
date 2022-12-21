@@ -1,48 +1,68 @@
 package reserve.controller;
 
-import reserve.model.User;
-
-
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-// TODO : Serialize everything
+import reserve.model.User;
+
 public class UserController {
-
-    private static List<User> users;
-
+	
+    // TODO TEST THIS
+	public static final String USER_NAME_FORMAT = "[a-zA-Z]+"; // TODO change regexes to match specs
+	public static final String PASSWORD_FORMAT = "[a-zA-Z]+";
+	
+    private final List<User> users = new ArrayList<>();
 
     // ------------------------------------------------------------------------------------------- //
 
     /**
-     * @brief Adds a new user to the list.
-     * @param name
-     * @param phone
-     * @param id
-     * @param email
+     * Adds a new user to the list.
      */
-    public static void createUser(String name, String phone, String id, String email){
-
-        users.add(new User(false, name, phone, id, email));
-        // Serialize
-
+    public void addUser(User user) {
+        Objects.requireNonNull(user);
+        // TODO check for dupplicates
+        users.add(user);
     }
 
-    static void removeUser(User toRemove) {
+    /**
+     * Gets the user with the desired ID.
+     * @param id : String
+     * @return User if the id is found, null otherwise.
+     */
+    public User getById(String id) {
+        return users.stream()
+                    .filter(u -> u.getId().equals(id))
+                    .findAny()
+                    .orElse(null);
+    }
+    
 
-        Objects.requireNonNull(toRemove); // Make sur the user is coherent
+    public boolean removeUser(User toRemove) {
+
+        Objects.requireNonNull(toRemove); // Make sure the user is coherent
 
         if (users.remove(toRemove)) {
 
-            // Log sucessful
+            // Log successful
+            return true;
 
         } else {
 
             // Log
 
+            return false;
+
         }
 
     }
 
-
+    // How do I test this
+    
+    public User authentifyUser(String userName, String password) {
+    	if("password".equals(password))
+    		return new User(false, "name", "phone", "id", "email"); // TODO mock better
+    	return null;
+    }
+    
 }
