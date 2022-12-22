@@ -1,4 +1,17 @@
 <span>
     <a href="?logout">Déconnexion</a>
-    <span class="material-symbols-outlined"><i class="fas fa-user-circle"> </i>account_circle</span>
+     <span class="popupDataAccount" onclick="showData()">
+         <span class="material-symbols-outlined">account_circle</span>
+        <span id="dataAccount">salut test</span>
+    </span>
 </span>
+
+
+<script>
+    function showData() {
+        var popup = document.getElementById("dataAccount");
+        popup.classList.toggle("show");
+        console.log("test");
+    }
+
+</script>

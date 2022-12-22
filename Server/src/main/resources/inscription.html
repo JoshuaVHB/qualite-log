@@ -10,20 +10,17 @@
     <h1 class="title">Inscription d'un utilisateur</h1>
     <div>
         <form class="forminscription" method="GET" id="addUser">
-            <label for="genre">
-                Role utilisateur <select name="genre" id="genre" required>
-                    <option value="user">Utilisateur</option>
-                    <option value="admin">Admin</option>
-                </select>
+            <label for="role">
+                <input type="checkbox" id="filter-include-role" class="filter-option">Utilisateur est un administrateur 
             </label><br />
             <label for="First-name">
                 Matricule <input class="inputinscription" type="text" name="matricule" id="nom" placeholder="Matricule" pattern="[0-9]{7}" required><br>
             </label>
             <label for="Last-name">
-                Prenom <input class="inputinscription" type="text" name="prenom" id="prenom" placeholder="Prenom" pattern="{1,30}" required><br>
+                Prenom <input class="inputinscription" type="text" name="prenom" id="prenom" placeholder="Prenom"  required><br>
             </label>
             <label for="First-name">
-                Nom <input class="inputinscription" type="text" name="nom" id="nom" placeholder="Nom" pattern="{1,30}" required><br>
+                Nom <input class="inputinscription" type="text" name="nom" id="nom" placeholder="Nom" required><br>
             </label>
 
             <label for="email">
@@ -38,7 +35,7 @@
                 <input class="inputinscription" type="password" placeholder="Confirmation le mot de passe" name="cmdp" id="cmdp" onchange='check_pass();' required><br>
             </label>
 
-            <button type="submit" name="submit" value="registration" id="submit" oneclick="addUser();">
+            <button type="submit" id="submit" oneclick="addUser();">
                 Valider
             </button>
 
@@ -60,7 +57,7 @@
     function addUser() {
         var user = new FormData(document.getElementById("addUser"));
 
-        let url = './api/CreateUser';
+        let url = '/api/CreateUser';
         let params = user;
         let xhr = new XMLHttpRequest();
         xhr.open('GET', url, true);
@@ -69,6 +66,7 @@
             if (xhr.status == 200) {
                 console.log("Response =", xhr.responseText);
                 // do something with the data
+                document.location.href = "./index.html";
             } else {
                 throw new Error("Could not fetch ");
             }
