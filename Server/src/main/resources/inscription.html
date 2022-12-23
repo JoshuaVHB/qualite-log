@@ -11,13 +11,13 @@
     <div>
         <form class="forminscription" method="GET" id="addUser">
             <label for="role">
-                <input type="checkbox" id="filter-include-role" class="filter-option">Utilisateur est un administrateur 
+                <input type="checkbox" id="filter-include-role" class="filter-option">Utilisateur est un administrateur
             </label><br />
             <label for="First-name">
-                Matricule <input class="inputinscription" type="text" name="matricule" id="nom" placeholder="Matricule" pattern="[0-9]{7}" required><br>
+                Matricule <input class="inputinscription" type="text" name="matricule" id="matricule" placeholder="Matricule" pattern="[0-9]{7}" required><br>
             </label>
             <label for="Last-name">
-                Prenom <input class="inputinscription" type="text" name="prenom" id="prenom" placeholder="Prenom"  required><br>
+                Prenom <input class="inputinscription" type="text" name="prenom" id="prenom" placeholder="Prenom" required><br>
             </label>
             <label for="First-name">
                 Nom <input class="inputinscription" type="text" name="nom" id="nom" placeholder="Nom" required><br>
@@ -34,12 +34,13 @@
                 Confirmer le mot de passe <label class="labelinscription" for="cmdp"></label>
                 <input class="inputinscription" type="password" placeholder="Confirmation le mot de passe" name="cmdp" id="cmdp" onchange='check_pass();' required><br>
             </label>
+        </form>
 
-            <button type="submit" id="submit" oneclick="addUser();">
+            <button type="submit" id="submit" onclick="addUser();">
                 Valider
             </button>
 
-        </form>
+        
 
     </div>
 
@@ -66,7 +67,6 @@
             if (xhr.status == 200) {
                 console.log("Response =", xhr.responseText);
                 // do something with the data
-                document.location.href = "./index.html";
             } else {
                 throw new Error("Could not fetch ");
             }

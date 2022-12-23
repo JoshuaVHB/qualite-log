@@ -7,31 +7,3 @@ body {
     margin: 0;
     font-family: "Questrial";
 }
-
-.dataAccount {
-    visibility: hidden;
-}
-.popupDataAccount .show {
-    visibility: visible;
-    -webkit-animation: fadeIn 1s;
-    animation: fadeIn 1s;
-}
-@-webkit-keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-
-    to {
-        opacity: 1;
-    }
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-
-    to {
-        opacity: 1;
-    }
-}

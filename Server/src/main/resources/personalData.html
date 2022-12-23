@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Donnees utilisateur</title>
+    <script src="https://kit.fontawesome.com/02544ac723.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <h1 class="title">Donnees de l'utilisateur</h1>
+    <div>
+        <form class="forminscription" method="GET" id="changeUser">
+            <label for="role">
+                <input type="checkbox" id="role" class="inputData" disabled="disabled">Utilisateur est un administrateur
+            </label><br />
+            <label for="First-name">
+                Matricule <input class="inputData" type="text" name="matricule" id="matricule" disabled="disabled"><br>
+            </label>
+            <label for="Last-name">
+                Prenom <input class="inputData" type="text" name="prenom" id="prenom" disabled="disabled"><br>
+            </label>
+            <label for="First-name">
+                Nom <input class="inputData" type="text" name="nom" id="nom" disabled="disabled"><br>
+            </label>
+
+            <label for="email">
+                Email <input class="inputData" type="email" name="email" id="email" disabled="disabled"><br>
+            </label>
+        </form>
+
+            <button id="changeData" onclick="changeData()">
+                Modifier
+            </button>
+        <br />
+            <a href="./index.html">Retour à l'acceuil</a>
+    </div>
+
+</body>
+</html>
+<script>
+    //let user = ;
+    document.getElementById('role').value = true;
+    document.getElementById('matricule').value = "$$__matricule";
+    document.getElementById('prenom').value = "$$__prenom";
+    document.getElementById('nom').value = "$$__nom";
+    document.getElementById('email').value = "$$__email";
+    const elements = document.getElementsByClassName('inputData');
+    function changeData() {
+        if (document.getElementById('changeData').innerText == 'Modifier') {
+            document.getElementById('changeData').innerText = 'Valider';
+            
+            for (let elem of elements) {
+                elem.disabled = false;
+            }
+        }
+        else {
+            validateData();
+            document.getElementById('changeData').innerText = 'Modifier';
+            for (let elem of elements) {
+                elem.disabled = true;
+            }
+        }
+        
+    }
+
+    function validateData() {
+        var user = new FormData(document.getElementById("changeUser"));
+
+        let url = '/api/CreateUser';
+        let params = user;
+        let xhr = new XMLHttpRequest();
+        xhr.open('GET', url, true);
+        xhr.send(params);
+        xhr.onload = () => {
+            if (xhr.status == 200) {
+                console.log("Response =", xhr.responseText);
+                // do something with the data
+            } else {
+                throw new Error("Could not fetch ");
+            }
+        };
+    }
+</script>
