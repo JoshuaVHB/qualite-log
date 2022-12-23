@@ -31,7 +31,7 @@ public class MaterialController {
         Objects.requireNonNull(material);
 
         boolean exists = materials  .stream()
-                                    .anyMatch(m -> m.getId() == material.getId());
+                                    .anyMatch(m -> m.getId().equals(material.getId()));
 
         if (exists) throw new IllegalArgumentException("The material is already present in the list");
 
@@ -46,7 +46,7 @@ public class MaterialController {
      */
     public Material getMaterialById(UUID id) {
         Objects.requireNonNull(id);
-        return materials.stream().filter(m -> m.getId() == id).findAny().orElse(null);
+        return materials.stream().filter(m -> m.getId().equals(id)).findAny().orElse(null);
     }
 
     /**

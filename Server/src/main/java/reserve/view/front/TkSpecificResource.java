@@ -11,13 +11,13 @@ import java.util.regex.Pattern;
 import org.takes.Request;
 import org.takes.Response;
 import org.takes.Take;
-import org.takes.facets.auth.Identity;
-import org.takes.facets.auth.RqAuth;
 import org.takes.rs.RsWithBody;
 
 import reserve.Main;
+import reserve.model.User;
 import reserve.util.Logger;
 import reserve.view.WebServer;
+import reserve.view.entry.FormUtils;
 
 public class TkSpecificResource implements Take {
 	
@@ -65,12 +65,12 @@ public class TkSpecificResource implements Take {
 	}
 	
 	private boolean isConditionRespected(String condition, Request request) throws IOException {
-		Identity identity = new RqAuth(request).identity();
-		boolean authentified = identity != Identity.ANONYMOUS;
+		User user = FormUtils.getUserIdentity(request);
 		
 		switch(condition) {
-		case "LOGGED":     return authentified;
-		case "NOT_LOGGED": return !authentified;
+		case "LOGGED":     return user != null;
+		case "NOT_LOGGED": return user == null;
+		case "ADMIN":      return user.isAdmin();
 		default: logger.warn("Unknown condition '" + condition + "'"); return false;
 		}
 	}

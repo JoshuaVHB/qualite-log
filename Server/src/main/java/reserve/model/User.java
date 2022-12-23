@@ -11,6 +11,7 @@ public class User {
     private String phone;
     private String id;
     private String email;
+    // TODO add a password field
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 

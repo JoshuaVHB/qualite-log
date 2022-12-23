@@ -29,10 +29,13 @@ import org.takes.tk.TkRedirect;
 import reserve.Main;
 import reserve.controller.AppController;
 import reserve.util.Logger;
+import reserve.view.entry.FormUtils;
 import reserve.view.entry.PsAuth;
 import reserve.view.entry.PsLogout;
 import reserve.view.entry.TkListItems;
-import reserve.view.entry.TkReserverItem;
+import reserve.view.entry.TkMaterialManager;
+import reserve.view.entry.TkReserverationManager;
+import reserve.view.entry.TkUserManager;
 import reserve.view.front.TkLog;
 import reserve.view.front.TkSpecificResource;
 
@@ -55,6 +58,7 @@ public class WebServer {
 	 */
 	public void open() {
 		try {
+			FormUtils.setIdentificationManager(application.getUsers());
 			logger.info("Opening server on localhost:"+PORT);
 			new FtBasic(
 				new TkFallback(
@@ -63,7 +67,9 @@ public class WebServer {
 							new TkFork(
 								new FkRegex("/media/.*", new TkClasspath()),
 								new FkRegex("/api/list_items", new TkListItems(application.getMaterials())),
-								new FkRegex("/api/reserve_item", new TkReserverItem(application)),
+								new FkRegex("/api/reservation", new TkReserverationManager(application)),
+								new FkRegex("/api/materials", new TkMaterialManager(application.getMaterials())),
+								new FkRegex("/api/users", new TkUserManager(application.getUsers())),
 								new FkRegex("/connexion.*",
 									new TkFork(
 										new FkAuthenticated(new TkRedirect("/")),

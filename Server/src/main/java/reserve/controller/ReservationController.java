@@ -20,13 +20,9 @@ public class ReservationController {
      * This method makes sure that the dates are coherent, and stores it in the right list.
      * 
      * FUTURE these  vvv  may be replaced by "throws a npe unless otherwise specified"
-     * @throws NullPointerException {@code owner} is null
-     * @throws NullPointerException {@code owner} is null
-     * @throws NullPointerException {@code to} is before current day
      * @returns The newly created reservation
      */
-    public void addReservation(Reservation reservation)
-            throws RuntimeException, NullPointerException {
+    public void addReservation(Reservation reservation) throws RuntimeException, NullPointerException {
 
         // ------ ERROR CHECKING ------ //
     	LocalDate from = reservation.getBeginning();
@@ -36,7 +32,8 @@ public class ReservationController {
         LocalDate today = LocalDate.now();
 
         // Makes sure the reservation end date is coherent
-        if (to.compareTo(today) < 0) {
+        if (to.compareTo(today) < 0) { // TODO move validation checks in the class
+        	                           // because setters can be used *after* addReservation has been called
             throw new RuntimeException("Reservation end date is before current day !");
         }
         
