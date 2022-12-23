@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion</title>
+    <link href="index.css" rel="stylesheet">
+    <link rel="stylesheet" href="/main.css">
+    <script src="https://kit.fontawesome.com/02544ac723.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div id="container">
+        <div class="form">
+            <h2>Connexion</h2>
+            <form method="POST" action="">
+                <div class="inputBx">
+                    <span><i class="fas fa-user-circle"></i> Matricule</span>
+                    <input type="text" name="username" placeholder="votre matricule" required ="required">
+                </div>
+                <div class="inputBx password">
+                    <span><i class="fas fa-key"></i> Mot de passe </span>
+                    <input id="password" type="password" name="password" placeholder="Votre mot de passe" required="required">
+                    <a href="#" class="password-control" onclick="return show_hide_password(this);"><i class="fa-solid fa-eye"></i></i></a>
+                </div>
+                <div class="inputBx">
+                    <input type="submit" class="btn" name="formconnexion" value="Connecter">
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>
+<script>
+    function show_hide_password(target) {
+        var input = document.getElementById('password');
+        if (input.getAttribute('type') == 'password') {
+            target.classList.add('view');
+            input.setAttribute('type', 'text');
+        } else {
+            target.classList.remove('view');
+            input.setAttribute('type', 'password');
+        }
+        return false;
+    }
+</script>
