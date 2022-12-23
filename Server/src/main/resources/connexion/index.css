@@ -1,11 +1,55 @@
 .form {
-	width: 100%;
+	width: 50%;
 	max-width: 330px;
 	padding: 15px;
 	margin: auto;
 }
+h1 {
+  font-size: 40px;
+  text-align: center;
+  color: white;
+  font-family: monospace;
+  font-weight: bold;
+  margin-top:5px;
 
+}
+h2 {
+  font-size: 20px;
+  color: white;
+  font-weight: bold;
+  font-family:monospace;
+}
+.connectButt {
+  background-color: white;
+  border-radius: 300px;
+  color: rgb(46, 164, 140 );
+  cursor: pointer;
+  display: inline-block;
+  font-family: monospace;
+  padding: 7px 20px;
+  text-align: center;
+  text-decoration: none;
+  transition: all 250ms;
+  border: 0;
+  font-size: 20px;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  width: 200px;
+  height:50px;
+  margin-top: 30px;
+  margin-left:60px;
+}
+
+.connectButt:hover {
+  transform: scale(1.05);
+  text-align:center;
+}
 #container {
 	display: flex;
-	height: 100vh;
+	margin:400px;
+	margin-top:100px;
+	height: 50vh;
+	background-color:#8ADECD;
+	border-radius:30px;
 }
