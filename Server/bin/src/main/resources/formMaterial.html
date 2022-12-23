@@ -7,11 +7,6 @@
     <script src="https://kit.fontawesome.com/02544ac723.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <header>
-        <div id="user-tab">
-            $$LOGGED$$
-        </div>
-    </header>
     <h1 class="title">Ajout d'un nouveau matériel</h1>
     <div>
         <form class="form" method="GET" id="addMateriel">
@@ -46,7 +41,6 @@
         </form>
 
     </div>
-    <div class="returnIndex"><a href="./index.html">Retour à l'acceuil</a></div>
 </body>
 </html>
 
@@ -55,7 +49,7 @@
 
         var user = new FormData(document.getElementById("addUser"));
 
-        let url = './api/CreateMateriel';
+        let url = 'D:\Ellyn\Documents\Web\www\qualite_log_test/api/CreateMateriel';
         let params = user;
         let xhr = new XMLHttpRequest();
         xhr.open('GET', url, true);

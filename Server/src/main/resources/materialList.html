@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="materialList.css">
+    <link rel="stylesheet" href="/main.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/02544ac723.js" crossorigin="anonymous"> </script>
+</head>
+<body>
+  <header>
+    <div id="user-tab">
+      $$LOGGED$$
+    </div>
+  </header>
+
+  <div id="page-content">
+    <div>
+      <div id="material-filter">
+        <label>
+          Type :
+          <select id="filter-type-list" class="filter-option">
+            <option value=''>Tous</option>
+            <!-- Populated: type list -->
+          </select>
+        </label>
+        <label>
+          OS :
+          <select id="filter-os-list" class="filter-option">
+            <option value=''>Tous</option>
+            <!-- Populated: os list -->
+          </select>
+        </label>
+        <label>
+          Nom :
+          <input type="text" id="filter-name" class="filter-option">
+        </label>
+        <label>
+          Afficher les appareils réservés :
+          <input type="checkbox" id="filter-include-reserved" class="filter-option">
+        </label>
+        <span>
+          <label>
+            Reserver du <input type="date" id="reservation-from" autocomplete="off">
+          </label>
+          <label>
+            au <input type="date" id="reservation-to" autocomplete="off">
+          </label>
+          <button id="reserve-submit-btn" disabled onclick="reserveSelectedItems()">Reserver</button>
+        </span>
+      </div>
+
+      <table id="materials-table">
+        <thead>
+          <tr>
+            <th>Type</th>
+            <th>OS</th>
+            <th>Nom</th>
+            <th>Réference</th>
+            <th>Réservé par</th>
+            <th>
+              Réserver
+              <input type="checkbox" id="select-all">
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Populated: devices -->
+        </tbody>
+      </table>
+      <template id="item-template">
+        <tr>
+          <td id="t-type"></td>
+          <td id="t-os"></td>
+          <td id="t-name"></td>
+          <td id="t-reference"></td>
+          <td id="t-reservation"></td>
+          <td><input type="checkbox"/></td>
+        </tr>
+      </template>
+    </div>
+  </div>
+
+  <div id="popup-frame" hidden>
+    <div id="popup">
+      <h5 id="popup-title"></h5>
+      <button onclick="popupFrame.hidden = true;">Ok</button>
+    </div>
+  </div>
+
+  <script defer>
+
+const table = document.getElementById('materials-table');
+const selectAllBtn = document.getElementById('select-all');
+const reserveBtn = document.getElementById('reserve-submit-btn');
+const filterTypeList = document.getElementById('filter-type-list');
+const filterOSList = document.getElementById('filter-os-list');
+const itemTemplate = document.getElementById('item-template');
+const popupFrame = document.getElementById('popup-frame');
+const inputReservationFrom = document.getElementById('reservation-from');
+const inputReservationTo = document.getElementById('reservation-to');
+const filterInputs = document.querySelectorAll('.filter-option');
+const filterName = document.getElementById('filter-name');
+const filterIncludeReserved = document.getElementById('filter-include-reserved');
+
+var currentItems = [];
+var reservedItemIds = new Set();
+var fetchCooldown = null;
+
+selectAllBtn.addEventListener('change', (e) => {
+	for(let item of currentItems)
+		setReserved(item, e.target.checked, true);
+});
+
+inputReservationFrom.addEventListener('change', (e) => {
+  //inputReservationTo.min = e.target.value;
+  if(inputReservationTo.value < e.target.value)
+    inputReservationTo.value = e.target.value;
+  refreshSelectionButtons();
+});
+
+inputReservationTo.addEventListener('change', (e) => {
+  //inputReservationFrom.max = e.target.value;
+  if(inputReservationFrom.value > e.target.value)
+    inputReservationFrom.value = e.target.value;
+  refreshSelectionButtons();
+});
+
+{
+	let now = new Date().toISOString();
+	now = now.substr(0, now.indexOf('T'));
+	inputReservationFrom.min = now;
+	inputReservationTo.min = now;
+}
+
+filterInputs.forEach((input) => {
+  if(input.type === 'text')
+    input.addEventListener('input', fetchItemsLater);
+  else
+    input.addEventListener('input', fetchItems);
+});
+
+function refreshSelectionButtons() {
+  const checkboxes = Array.from(table.querySelectorAll('td input[type="checkbox"]'));
+  const allChecked = Array.from(checkboxes).every((checkbox) => checkbox.checked);
+  const anyChecked = Array.from(checkboxes).some((checkbox) => checkbox.checked);
+  let dateFrom = new Date(inputReservationFrom.value);
+  let dateTo = new Date(inputReservationTo.value);
+  let validDates = dateFrom <= dateTo;
+  if(allChecked) {
+    selectAllBtn.checked = true;
+    selectAllBtn.indeterminate = false;
+  } else if(anyChecked) {
+    selectAllBtn.checked = false;
+    selectAllBtn.indeterminate = true;
+  } else {
+    selectAllBtn.checked = false;
+    selectAllBtn.indeterminate = false;
+  }
+  console.log(anyChecked, validDates);
+  reserveBtn.disabled = !anyChecked || !validDates;
+}
+
+function setReserved(item, reserved, silenceEvents=false) {
+	if(reserved) {
+		reservedItemIds.add(item.id);
+		item.element.classList.add('selected-reserved');
+	} else {
+		reservedItemIds.delete(item.id);
+		item.element.classList.remove('selected-reserved');
+	}
+	item.element.querySelector('input[type=checkbox]').checked = reserved;
+	if(!silenceEvents)
+    	refreshSelectionButtons();
+    console.log(reservedItemIds);
+}
+
+function isReserved(item) {
+	return reservedItemIds.has(item.id);
+}
+
+function populateItemsTable(items) {
+  console.log(items);
+  const tbody = table.querySelector('tbody');
+  tbody.innerHTML = '';
+  
+  // keep reserved items
+  currentItems = currentItems.filter(isReserved);
+  console.log('remaining', currentItems);
+  for(let item of currentItems)
+  	tbody.appendChild(item.element);
+
+  for(let item of items) {
+    if(currentItems.some((i) => i.id === item.id))
+      continue;
+    let element = document.importNode(itemTemplate.content, true).firstElementChild;
+    let it = {
+      id: item.id,
+      element: element
+    };
+    element.querySelector('#t-os').textContent = item.os;
+    element.querySelector('#t-type').textContent = item.type + ' ' + item.version;
+    element.querySelector('#t-name').textContent = item.name;
+    element.querySelector('#t-reference').textContent = item.numref;
+    element.querySelector('#t-reservation').textContent = item.reservation ? item.reservation.userName + ' jusqu\'au ' + item.reservation.upToDate : '-';
+    element.querySelectorAll('[id]').forEach((el) => el.removeAttribute('id'));
+    let selectionCheckbox = element.querySelector('input[type=checkbox]');
+    selectionCheckbox.addEventListener('change', (e) => {
+      setReserved(it, !isReserved(it));
+    });
+    tbody.appendChild(element);
+    currentItems.push(it);
+  }
+}
+
+function populateFilters(typeList, osList) {
+  if(filterTypeList.options.length != 1)
+    return;
+  typeList.forEach((type) => {
+    const option = document.createElement('option');
+    option.value = type;
+    option.innerText = type;
+    filterTypeList.appendChild(option);
+  });
+  osList.forEach((os) => {
+    const option = document.createElement('option');
+    option.value = os;
+    option.innerText = os;
+    filterOSList.appendChild(option);
+  });
+}
+
+function encodeFormOptions(options={}) {
+  let params = new URLSearchParams();
+  for(let key in options) {
+    if(options[key] !== null && options[key] !== undefined)
+      params.append(key, options[key]);
+  }
+  return params.toString();
+}
+
+function fetchItems() {
+  let options = {};
+  if(filterName.value) options.name = filterName.value;
+  if(filterTypeList.value) options.type = filterTypeList.value;
+  if(filterOSList.value) options.os = filterOSList.value;
+  if(filterIncludeReserved.checked) options.includeReserved = true;
+  
+  fetch('/api/list_items', {
+    method: 'POST',
+    body: encodeFormOptions(options),
+  }).then((response) => {
+    if(response.ok)
+      return response.json();
+    else
+      throw new Error('Could not fetch items');
+  }).then((data) => {
+    populateItemsTable(data.items);
+    populateFilters(data['type-list'], data['os-list']);
+  }).catch((err) => {
+    console.error(err);
+    popupFrame.hidden = false;
+    popupFrame.querySelector('#popup-title').innerText = err.message;
+  });
+}
+
+function fetchItemsLater() {
+  if(fetchCooldown)
+    clearTimeout(fetchCooldown);
+  fetchCooldown = setTimeout(() => {
+    fetchItems();
+  }, 500);
+}
+
+function reserveSelectedItems() {
+  fetch('/api/reserve_items', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      items: reservedItemIds,
+      from: inputReservationFrom.value,
+      to: inputReservationTo.value
+    })
+  }).then((response) => {
+    if (response.status != 200) {
+      console.log(`Error ${response.status}: ${response.statusText}`);
+      // TODO prompt user with error
+    } else {
+      response.json().then((data) => {
+        console.log(data);
+      // TODO prompt user with popup
+      });
+    }
+  });
+}
+
+window.addEventListener('load', () => {
+  fetchItems();
+});
+
+  </script>
+</body>
+</html>

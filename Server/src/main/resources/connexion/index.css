@@ -3,6 +3,7 @@
 	max-width: 330px;
 	padding: 15px;
 	margin: auto;
+
 }
 h1 {
   font-size: 40px;
@@ -13,11 +14,13 @@ h1 {
   margin-top:5px;
 
 }
-t2 {
-  font-size: 20px;
-  color: white;
-  font-weight: bold;
-  font-family:monospace;
+.t2 {
+	font-size: 20px;
+	color: white;
+	font-weight: bold;
+	font-family: monospace;
+	justify-content: center;
+	align-items: center;
 }
 .connectButt {
   background-color: white;
@@ -47,8 +50,8 @@ t2 {
 }
 #container {
 	display: flex;
-	margin:400px;
-	margin-top:100px;
+	margin:20%;
+	margin-top:10%;
 	height: 50vh;
 	background-color:#8ADECD;
 	border-radius:30px;

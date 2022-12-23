@@ -1,0 +1,9 @@
+@font-face {
+    font-family: "Questrial";
+    src: url(https://fonts.gstatic.com/s/questrial/v9/QdVUSTchPBm7nuUeVf70viFluW44JQ.woff2);
+}
+
+body {
+    margin: 0;
+    font-family: "Questrial";
+}
