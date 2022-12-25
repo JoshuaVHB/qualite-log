@@ -1,16 +1,21 @@
 package reserve.controller;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import reserve.Main;
 import reserve.model.User;
+import reserve.util.Logger;
 
 public class UserController {
 	
     // TODO TEST THIS
 	public static final String USER_NAME_FORMAT = "[a-zA-Z]+"; // TODO change regexes to match specs
 	public static final String PASSWORD_FORMAT = "[a-zA-Z]+";
+	
+	private static Logger logger = Main.LOGGER_FACTORY.getLogger("users", Logger.LEVEL_DEBUG);
 	
     private final List<User> users = new ArrayList<>();
 
@@ -21,13 +26,14 @@ public class UserController {
      */
     public void addUser(User user) {
         Objects.requireNonNull(user);
-        // TODO check for dupplicates
+        if(getById(user.getId()) != null)
+        	throw new IllegalArgumentException("Duplicate user id found");
         users.add(user);
+        logger.debug("Created user " + user);
     }
 
     /**
-     * Gets the user with the desired ID.
-     * @param id : String
+     * Gets the user with the desired ID
      * @return User if the id is found, null otherwise.
      */
     public User getById(String id) {
@@ -36,6 +42,10 @@ public class UserController {
                     .findAny()
                     .orElse(null);
     }
+
+	public List<User> getUsers() {
+		return Collections.unmodifiableList(users);
+	}
     
 
     public boolean removeUser(User toRemove) {
@@ -61,7 +71,7 @@ public class UserController {
     
     public User authentifyUser(String userName, String password) {
     	if("password".equals(password))
-    		return new User(false, "name", "phone", "id", "email"); // TODO mock better
+    		return new User(false, "name", "phone", "id", "email", "password"); // TODO mock better
     	return null;
     }
     

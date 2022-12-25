@@ -19,7 +19,6 @@ import org.takes.facets.fork.FkAuthenticated;
 import org.takes.facets.fork.FkRegex;
 import org.takes.facets.fork.Fork;
 import org.takes.facets.fork.TkFork;
-import org.takes.http.Exit;
 import org.takes.http.FtBasic;
 import org.takes.rs.RsRedirect;
 import org.takes.rs.RsText;
@@ -83,7 +82,7 @@ public class WebServer {
 					new FbChain(
 						new FbStatus(404, REDIRECT_ON_404 ? new RsRedirect("/") : new RsText("404. No page to be seen here"))
 					)
-				), PORT).start(Exit.NEVER);
+				), PORT).start(WebServer::shouldStop);
 		} catch (IOException e) {
 			logger.merr(e, "Could not open server");
 		}
@@ -110,6 +109,15 @@ public class WebServer {
 		return new FkRegex(dirRegex,
 			// log requests to this path
 			new TkLog(Main.LOGGER_FACTORY.getLogger("path-"+staticUrlPath, Logger.LEVEL_DEBUG), new TkFork(forks.toArray(Fork[]::new))));
+	}
+	
+	private static boolean shouldStop() {
+		// stop the server when sending anything to the console
+		try {
+			return System.in.available() > 0;
+		} catch (IOException e) {
+			return false;
+		}
 	}
 	
 }
