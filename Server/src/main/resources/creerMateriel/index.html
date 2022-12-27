@@ -1,29 +1,31 @@
-ï»¿<!DOCTYPE html>
+<!DOCTYPE html>
 
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
     <meta charset="utf-8" />
-    <title>Ajouter un matÃ©riel</title>
-	<link rel="stylesheet" href="index.css">
+    <title>Ajouter un matériel</title>
+    <link rel="stylesheet" href="index.css">
     <script src="https://kit.fontawesome.com/02544ac723.js" crossorigin="anonymous"></script>
-	
+
 </head>
 <body>
-	<div class="div div1">
-		<nav>
-			<li class="test"><a href="../accueil/">Page d'accueil</a>
-			<a href="#">DÃ©connexion   <i class="fa-solid fa-arrow-right-from-bracket"></i></a></li>
-		</nav>
-	</div>
-	<div>
-		<p><h1>Ajout d'un nouveau matÃ©riel</h1></p>
-	</div>
-	<div id="container">
+    <div class="div div1">
+        <nav>
+            <li class="test">
+                <a href="/accueil/">Page d'accueil</a>
+                <a href="?logout">Déconnexion   <i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+            </li>
+        </nav>
+    </div>
+    <div>
+        <p><h1>Ajout d'un nouveau matériel</h1></p>
+    </div>
+    <div id="container">
         <form class="form" method="GET" id="addMateriel">
             <label class="label lab1" for="genre">
-                Type du matÃ©riel <select name="type" id="type" required>
-                    <option value="MOBILE">TÃ©lÃ©phone</option>
+                Type du matériel <select name="type" id="type" required>
+                    <option value="MOBILE">Téléphone</option>
                     <option value="LAPTOP">Ordinateur portable</option>
                     <option value="TABLET">Tablette</option>
                     <option value="OTHER">Autre</option>
@@ -44,18 +46,17 @@
                 Version <input class="input" type="text" name="version" id="nom" placeholder="10.2" pattern="[0-9.]{1,}" required><br>
             </label>
 
-			<div>
-            <button type="submit" class="connectButt" name="submit" value="registration" id="submit" oneclick="addMateriel();">
-                Valider
-            </button>
-			</div>
+            <div>
+                <button type="submit" class="connectButt" name="submit" value="registration" id="submit" oneclick="addMateriel();">
+                    Valider
+                </button>
+            </div>
         </form>
     </div>
 </body>
 </html>
 
-<script>
-    function addMateriel() {
+<script>function addMateriel() {
 
         var user = new FormData(document.getElementById("addUser"));
 
@@ -73,5 +74,4 @@
             }
         };
 
-    }
-</script>
+    }</script>

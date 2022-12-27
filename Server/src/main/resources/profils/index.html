@@ -1,4 +1,4 @@
-ï»¿<!DOCTYPE html>
+<!DOCTYPE html>
 
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -7,11 +7,115 @@
 </head>
 <body>
     <header>
-        <div id="user-tab">
-            $$LOGGED$$
+        <div class="div div1">
+            <nav>
+                <li class="test">
+                    <a href="/accueil">Page d'accueil</a>
+                    <a href="?logout">Déconnexion   <i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+                </li>
+            </nav>
         </div>
     </header>
-    <div class="returnIndex"><a href="../accueil">Retour Ã  l'acceuil</a></div>
+    <table id="user-table">
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Matricule</th>
+                <th>Role</th>
+                <th>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Populated: devices -->
+        </tbody>
+    </table>
+    <template id="user-template">
+        <tr>
+            <td id="t-nom"></td>
+            <td id="t-matricule"></td>
+            <td id="t-role"></td>
+            <td id="t-modify">
+                <a href="/profil">
+                    <button id="details-btn">Details</button>
+                </a>
+            </td>
+        </tr>
+    </template>
+    <div id="popup-frame" hidden>
+        <div id="popup">
+            <h5 id="popup-title"></h5>
+            <button onclick="popupFrame.hidden = true;">Ok</button>
+        </div>
+    </div>
+    <div class="returnIndex"><a href="/accueil">Retour à l'acceuil</a></div>
 
 </body>
 </html>
+
+<script>
+    const table = document.getElementById('user-table');
+    const userTemplate = document.getElementById('user-template');
+
+    const popupFrame = document.getElementById('popup-frame');
+
+    var currentUsers = [];
+    var fetchCooldown = null;
+
+    function populateUsersTable(users) {
+        console.log(users);
+        const tbody = table.querySelector('tbody');
+        tbody.innerHTML = '';
+
+        for (let user of currentUsers)
+            tbody.appendChild(user.element);
+
+        for (let user of users) {
+            if (currentUsers.some((i) => i.id === user.id))
+                continue;
+            let element = document.importNode(userTemplate.content, true).firstElementChild;
+            console.log(element);
+            let it = {
+                id: user.id,
+                element: element
+            };
+            element.querySelector('#t-nom').textContent = user.name;
+            element.querySelector('#t-matricule').textContent = user.id;
+            element.querySelector('#t-role').textContent = user.role;
+            element.querySelectorAll('[id]').forEach((el) => el.removeAttribute('id'));
+
+            tbody.appendChild(element);
+            currentUsers.push(it);
+        }
+    }
+
+    function fetchUsers() {
+
+        fetch('/api/list_users', {
+            method: 'POST',
+        }).then((response) => {
+            if (response.ok)
+                return response.json();
+            else
+                throw new Error('Could not fetch items');
+        }).then((data) => {
+            populateUsersTable(data.items);
+        }).catch((err) => {
+            console.error(err);
+            popupFrame.hidden = false;
+            popupFrame.querySelector('#popup-title').innerText = err.message;
+        });
+    }
+
+    function fetchUsersLater() {
+        if (fetchCooldown)
+            clearTimeout(fetchCooldown);
+        fetchCooldown = setTimeout(() => {
+            fetchUsers();
+        }, 500);
+    }
+
+    window.addEventListener('load', () => {
+        fetchUsers();
+    });
+</script>

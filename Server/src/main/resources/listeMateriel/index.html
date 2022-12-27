@@ -27,6 +27,7 @@
 					<a href="../connexion">Connexion   <i class="fa-solid fa-arrow-right-from-bracket"></i></a></li>
 				</nav>
 			</div>
+            
             -->
         </div>
     </header>
@@ -36,74 +37,80 @@
 			<p><h1>Liste du matériel</h1></p>
 		</div>
         <div>
-			<div id="container">
-				<div id="material-filter">
-					<label class="label lab2">
-						Type :
-						<select id="filter-type-list" class="filter-option">
-							<option value=''>Tous</option>
-							<!-- Populated: type list -->
-						</select>
-					</label>
-					<label class="label lab2">
-						OS :
-						<select id="filter-os-list" class="filter-option">
-							<option value=''>Tous</option>
-							<!-- Populated: os list -->
-						</select>
-					</label>
-					<label class="label lab2">
-						Nom :
-						<input type="text" id="filter-name" class="filter-option">
-					</label>
-					<label class="label lab2">
-						Afficher les appareils réservés :
-						<input type="checkbox" id="filter-include-reserved" class="filter-option">
-					</label>
-					<span>
-						<label class="label lab2">
-							Reserver du <input type="date" id="reservation-from" autocomplete="off">
-						</label>
-						<label class="label lab2">
-							au <input type="date" id="reservation-to" autocomplete="off">
-						</label>
-						<button id="reserve-submit-btn" disabled onclick="reserveSelectedItems()" class="butt reserverButt">Reserver</button>
-					</span>
-				</div>
-            </div>
-			<div id="table">
-				<table id="materials-table">
-					<thead>
-						<tr>
-							<th>Type</th>
-							<th>OS</th>
-							<th>Nom</th>
-							<th>Réference</th>
-							<th>Réservé par</th>
-							<th>
-								Réserver
-								<input type="checkbox" id="select-all">
-							</th>
-						</tr>
-					</thead>
-					<tbody>
-						<!-- Populated: devices -->
-					</tbody>
-				</table>
-				<div id="content">
-					<template id="item-template">
-						<tr>
-							<td id="t-type"></td>
-							<td id="t-os"></td>
-							<td id="t-name"></td>
-							<td id="t-reference"></td>
-							<td id="t-reservation"></td>
-							<td><input type="checkbox" /></td>
-						</tr>
-					</template>
-				</div>
-			</div>
-        </div>
+            <div id="material-filter">
+                <label>
+                    Type :
+                    <select id="filter-type-list" class="filter-option">
+                        <option value=''>Tous</option>
+                        <!-- Populated: type list -->
+                    </select>
+                </label>
+                <label>
+                    OS :
+                    <select id="filter-os-list" class="filter-option">
+                        <option value=''>Tous</option>
+                        <!-- Populated: os list -->
+                    </select>
+                </label>
+                <label>
+                    Nom :
+                    <input type="text" id="filter-name" class="filter-option">
+                </label>
+                <label>
+                    Afficher les appareils réservés :
+                    <input type="checkbox" id="filter-include-reserved" class="filter-option">
+                </label>
+                <span>
+                    <label>
+                        Reserver du <input type="date" id="reservation-from" autocomplete="off">
+                    </label>
+                    <label>
+                        au <input type="date" id="reservation-to" autocomplete="off">
+                    </label>
+                    <!--{{NOT_LOGGED}}<a href="/connexion"> -->
+                    <button id="reserve-submit-btn" disabled onclick="reserveSelectedItems()">Reserver</button>
+                    <!--{{NOT_LOGGED}}</a> -->
+                </span>
+    </div>
+
+    <table id="materials-table">
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th>OS</th>
+                <th>Nom</th>
+                <th>Réference</th>
+                <th>Réservé par</th>
+                <th>
+                    Réserver
+                    <input type="checkbox" id="select-all">
+                </th>
+                <!--{{ADMIN}} <th> </th> --> <!--{{ADMIN}} <th> </th> -->
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Populated: devices -->
+                    </tbody>
+                    </table>
+                    <template id="item-template">
+                        <tr>
+                            <td id="t-type"></td>
+                            <td id="t-os"></td>
+                            <td id="t-name"></td>
+                            <td id="t-reference"></td>
+                            <td id="t-reservation"></td>
+                            <td><input type="checkbox" /></td>
+                            <!--{{ADMIN}} <td>
+                                    <a href="TODO">
+                                    <button>Modifier</button>
+                                    </a>
+                             </td> -->
+                            <!--{{ADMIN}} <td>
+                                    <button class="delete-btn" onclik="deleteMaterial();">Supprimer</button>
+                             </td> -->
+                        </tr>
+                    </template>
+</div>
     </div>
 
     <div id="popup-frame" hidden>
@@ -127,6 +134,7 @@
         const filterInputs = document.querySelectorAll('.filter-option');
         const filterName = document.getElementById('filter-name');
         const filterIncludeReserved = document.getElementById('filter-include-reserved');
+
 
         var currentItems = [];
         var reservedItemIds = new Set();
@@ -164,6 +172,10 @@
             else
                 input.addEventListener('input', fetchItems);
         });
+
+        function deleteMaterial (){
+            //TODO
+        }
 
         function refreshSelectionButtons() {
             const checkboxes = Array.from(table.querySelectorAll('td input[type="checkbox"]'));

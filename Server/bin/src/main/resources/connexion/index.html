@@ -12,19 +12,19 @@
 <body>
     <div id="container">
         <div class="form">
-            <h2>Connexion</h2>
+            <h1>Connexion</h1>
             <form method="POST" action="">
                 <div class="inputBx">
-                    <span><i class="fas fa-user-circle"></i> Matricule</span>
-                    <input type="text" name="username" placeholder="votre matricule" required ="required">
+                    <div class="t2"><i class="fas fa-user-circle"></i>  Matricule </div>
+                    <div class="t2"><input type="text" name="username" placeholder="votre matricule" required="required"></div>
                 </div>
                 <div class="inputBx password">
-                    <span><i class="fas fa-key"></i> Mot de passe </span>
+                    <div class="t2"><i class="fas fa-key"></i>  Mot de passe
                     <input id="password" type="password" name="password" placeholder="Votre mot de passe" required="required">
-                    <a href="#" class="password-control" onclick="return show_hide_password(this);"><i class="fa-solid fa-eye"></i></i></a>
+                    <a href="#" class="password-control" onclick="return show_hide_password(this);"><i class="fa-solid fa-eye t2"></i></a></div>
                 </div>
                 <div class="inputBx">
-                    <input type="submit" class="btn" name="formconnexion" value="Connecter">
+                    <input type="submit" class="connectButt" name="formconnexion" value="se connecter">
                 </div>
             </form>
         </div>
