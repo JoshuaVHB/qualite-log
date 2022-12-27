@@ -16,8 +16,8 @@
 		</nav>
 	</div>
     <p><h1 class="title">Données de l'utilisateur</h1></p>
-	<div id="container">
-		<form class="forminscription" method="GET" id="changeUser">
+    <div id="container">
+        <form class="forminscription" method="GET" id="changeUser">
             <label class="label lab1" for="role">
                 <input type="checkbox" id="role" class="inputData" disabled="disabled">Utilisateur est un administrateur
             </label><br />
@@ -34,13 +34,13 @@
             <label class="label lab1" for="email">
                 Email <input class="inputData" type="email" name="email" id="email" disabled="disabled"><br>
             </label>
-			<div>
-			<button id="changeData" class="connectButt" onclick="changeData()">
-				Modifier
-			</button>
-		</div>
+            <div>
+                <button id="changeData" class="connectButt" onclick="changeData();">
+                    Modifier
+                </button>
+            </div>
         </form>
-        <br />
+        
     </div>
 </body>
 </html>
@@ -52,6 +52,8 @@
     document.getElementById('nom').value = "$$__nom";
     document.getElementById('email').value = "$$__email";
     const elements = document.getElementsByClassName('inputData');
+
+    
     function changeData() {
         if (document.getElementById('changeData').innerText == 'Modifier') {
             document.getElementById('changeData').innerText = 'Valider';
