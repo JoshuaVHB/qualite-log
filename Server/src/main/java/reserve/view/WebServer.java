@@ -32,6 +32,7 @@ import reserve.view.entry.FormUtils;
 import reserve.view.entry.PsAuth;
 import reserve.view.entry.PsLogout;
 import reserve.view.entry.TkListItems;
+import reserve.view.entry.TkListUsers;
 import reserve.view.entry.TkReserverItem;
 import reserve.view.front.TkLog;
 import reserve.view.front.TkSpecificResource;
@@ -63,6 +64,7 @@ public class WebServer {
 						new TkLog(Main.LOGGER_FACTORY.getLogger("route", Logger.LEVEL_DEBUG),
 							new TkFork(
 								new FkRegex("/media/.*", new TkClasspath()),
+								new FkRegex("/api/list_users", new TkListUsers(application.getUsers())),
 								new FkRegex("/api/list_items", new TkListItems(application.getMaterials())),
 								new FkRegex("/api/reserve_item", new TkReserverItem(application)),
 								new FkRegex("/connexion.*",

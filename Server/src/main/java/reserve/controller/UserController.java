@@ -74,4 +74,14 @@ public class UserController {
     		.findAny().orElse(null);
     }
     
+    /**
+     * Returns a new <i>copy</i> of the users list, changes are not
+     * reflected back to this instance's list.
+     * 
+     * @return a <i>copy</i> of the users list
+     */
+    public List<User> getAllUsers() {
+    	return new ArrayList<>(users);
+    }
+    
 }
