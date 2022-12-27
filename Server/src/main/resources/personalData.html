@@ -4,42 +4,44 @@
 <head>
     <meta charset="utf-8" />
     <title>Donnees utilisateur</title>
+	<link rel="stylesheet" href="styleProfil.css">
+
     <script src="https://kit.fontawesome.com/02544ac723.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <header>
-        <div id="user-tab">
-            $$LOGGED$$
-        </div>
-    </header>
-    <h1 class="title">Donnees de l'utilisateur</h1>
-    <div>
-        <form class="forminscription" method="GET" id="changeUser">
-            <label for="role">
+	<div class="div div1">
+		<nav>
+			<li class="test"><a href="./indexLog.html">Page d'accueil</a>
+			<a href="#">Déconnexion   <i class="fa-solid fa-arrow-right-from-bracket"></i></a></li>
+		</nav>
+	</div>
+    <p><h1 class="title">Données de l'utilisateur</h1></p>
+	<div id="container">
+		<form class="forminscription" method="GET" id="changeUser">
+            <label class="label lab1" for="role">
                 <input type="checkbox" id="role" class="inputData" disabled="disabled">Utilisateur est un administrateur
             </label><br />
-            <label for="First-name">
+            <label class="label lab1" for="First-name">
                 Matricule <input class="inputData" type="text" name="matricule" id="matricule" disabled="disabled"><br>
             </label>
-            <label for="Last-name">
+            <label class="label lab1" for="Last-name">
                 Prenom <input class="inputData" type="text" name="prenom" id="prenom" disabled="disabled"><br>
             </label>
-            <label for="First-name">
+            <label class="label lab1" for="First-name">
                 Nom <input class="inputData" type="text" name="nom" id="nom" disabled="disabled"><br>
             </label>
 
-            <label for="email">
+            <label class="label lab1" for="email">
                 Email <input class="inputData" type="email" name="email" id="email" disabled="disabled"><br>
             </label>
+			<div>
+			<button id="changeData" class="connectButt" onclick="changeData()">
+				Modifier
+			</button>
+		</div>
         </form>
-
-        <button id="changeData" onclick="changeData()">
-            Modifier
-        </button>
         <br />
     </div>
-    <div class="returnIndex"><a href="./index.html">Retour � l'acceuil</a></div>
-
 </body>
 </html>
 <script>

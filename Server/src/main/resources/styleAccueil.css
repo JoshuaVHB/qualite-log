@@ -1,0 +1,70 @@
+a:link{
+	font-size: 20px;
+	color: #FFFFFF;
+	font-family: monospace;
+	font-weight: bold;
+	text-decoration: none;
+	margin-left:20px;
+}
+a:visited{
+	font-size: 20px;
+	color: #FFFFFF;
+	font-family: monospace;
+	font-weight: bold;
+	text-decoration: none;
+	margin-left:20px;
+}
+div.div1{
+	height:30px;
+	width:100%;
+	background-color:black;
+	margin-top:-10px;
+}
+li.test{
+	text-align:right;
+	text-align:bottom;
+	margin-right:20px;
+}
+
+h1 {
+  font-size: 40px;
+  text-align: center;
+  color: #8ADECD;
+  font-family: monospace;
+  font-weight: bold;
+  margin-top:30px;
+  margin-bottom:40px;
+}
+p{
+	margin-top: 100px;
+    text-align: center;
+	margin-bottom: 50px;
+
+}
+p.butt{
+	margin-bottom: 10px;
+	margin-top:10px;
+}
+
+.button-33 {
+  background-color: #8ADECD;
+  border-radius: 300px;
+  color: rgb(46, 164, 140 );
+  cursor: pointer;
+  font-family: monospace;
+  text-align: center;
+  text-decoration: none;
+  transition: all 250ms;
+  border: 0;
+  font-size: 20px;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  width: 350px;
+  height:50px;
+}
+
+.button-33:hover {
+  transform: scale(1.05);
+  text-align:center;
+}

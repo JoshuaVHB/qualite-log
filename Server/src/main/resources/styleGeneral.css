@@ -18,6 +18,16 @@ p.butt{
 	margin-top:50px;
 }
 
+#container {
+	display: flex;
+	height: 50vh;
+	background-color:#8ADECD;
+	border-radius:30px;
+	width:300px;
+	margin-left: auto;
+	margin-right: auto;
+	width: 500px; /* largeur obligatoire pour être centré */
+}
 .button-33 {
   background-color: #8ADECD;
   border-radius: 300px;
