@@ -20,6 +20,7 @@ div.div1{
 	background-color:black;
 	margin-top:-10px;
 }
+
 li.test{
 	text-align:right;
 	text-align:bottom;
@@ -37,7 +38,7 @@ h1 {
 }
 
 #container {
-	display: flex;
+	display: block;
 	height: 60vh;
 	background-color:#8ADECD;
 	border-radius:30px;
