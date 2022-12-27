@@ -81,7 +81,11 @@
             };
             element.querySelector('#t-nom').textContent = user.name;
             element.querySelector('#t-matricule').textContent = user.id;
-            element.querySelector('#t-role').textContent = user.role;
+
+            if (user.isAdmin == true)
+                element.querySelector('#t-role').textContent = "administrateur";
+            else
+                element.querySelector('#t-role').textContent = "utilisateur";
             element.querySelectorAll('[id]').forEach((el) => el.removeAttribute('id'));
 
             tbody.appendChild(element);

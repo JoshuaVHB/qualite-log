@@ -58,6 +58,7 @@ public class JsonSerializer {
 	
 	public static JSONObject serializeUser(User user) {
 		JSONObject json = new JSONObject();
+		json.put("isAdmin", user.isAdmin());
 		json.put("id",       user.getId().toString());
 		json.put("name",     user.getName());
 		json.put("email",    user.getEmail());
