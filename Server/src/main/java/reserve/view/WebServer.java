@@ -73,8 +73,16 @@ public class WebServer {
 										new FkAnonymous(new TkFork(indexPage("/connexion")))
 									)
 								),
+								new FkRegex("/", new TkRedirect("/accueil")) ,
 								indexPage("/connexion"),
-								indexPage("/")
+								indexPage("/accueil"),
+								indexPage("/creerMateriel"),
+								indexPage("/inscription"),
+								indexPage("/listeMateriel"),
+								indexPage("/profil"),
+								indexPage("/profils"),
+								indexPage("/materielReserve")
+								
 							)
 						),
 						new PsChain(
