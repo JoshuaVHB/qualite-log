@@ -83,3 +83,8 @@ select{
 	outline:0;
 	border-color:transparent;
 }
+input{
+	border:none;
+	outline:0;
+	border-color:transparent;
+}

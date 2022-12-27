@@ -13,82 +13,96 @@
     <header>
         <div id="user-tab">
             <!--{{LOGGED}}
-            <div>
-              <span class="material-symbols-outlined">account_circle <a href="?logout">Déconnexion</a></span>
-            </div>
+            <div class="div div1">
+				<nav>
+					<li class="test"><a href="../accueil/">Page d'accueil</a>
+					<a href="#">Déconnexion   <i class="fa-solid fa-arrow-right-from-bracket"></i></a></li>
+				</nav>
+			</div>
             -->
             <!--{{NOT_LOGGED}}
-            <span>
-              <a href="../connexion/index.html">Connexion</a>
-            </span>
+            <div class="div div1">
+				<nav>
+					<li class="test"><a href="../accueil/">Page d'accueil</a>
+					<a href="../connexion">Connexion   <i class="fa-solid fa-arrow-right-from-bracket"></i></a></li>
+				</nav>
+			</div>
             -->
         </div>
     </header>
 
     <div id="page-content">
+		<div>
+			<p><h1>Liste du matériel</h1></p>
+		</div>
         <div>
-            <div id="material-filter">
-                <label>
-                    Type :
-                    <select id="filter-type-list" class="filter-option">
-                        <option value=''>Tous</option>
-                        <!-- Populated: type list -->
-                    </select>
-                </label>
-                <label>
-                    OS :
-                    <select id="filter-os-list" class="filter-option">
-                        <option value=''>Tous</option>
-                        <!-- Populated: os list -->
-                    </select>
-                </label>
-                <label>
-                    Nom :
-                    <input type="text" id="filter-name" class="filter-option">
-                </label>
-                <label>
-                    Afficher les appareils réservés :
-                    <input type="checkbox" id="filter-include-reserved" class="filter-option">
-                </label>
-                <span>
-                    <label>
-                        Reserver du <input type="date" id="reservation-from" autocomplete="off">
-                    </label>
-                    <label>
-                        au <input type="date" id="reservation-to" autocomplete="off">
-                    </label>
-                    <button id="reserve-submit-btn" disabled onclick="reserveSelectedItems()">Reserver</button>
-                </span>
+			<div id="container">
+				<div id="material-filter">
+					<label class="label lab2">
+						Type :
+						<select id="filter-type-list" class="filter-option">
+							<option value=''>Tous</option>
+							<!-- Populated: type list -->
+						</select>
+					</label>
+					<label class="label lab2">
+						OS :
+						<select id="filter-os-list" class="filter-option">
+							<option value=''>Tous</option>
+							<!-- Populated: os list -->
+						</select>
+					</label>
+					<label class="label lab2">
+						Nom :
+						<input type="text" id="filter-name" class="filter-option">
+					</label>
+					<label class="label lab2">
+						Afficher les appareils réservés :
+						<input type="checkbox" id="filter-include-reserved" class="filter-option">
+					</label>
+					<span>
+						<label class="label lab2">
+							Reserver du <input type="date" id="reservation-from" autocomplete="off">
+						</label>
+						<label class="label lab2">
+							au <input type="date" id="reservation-to" autocomplete="off">
+						</label>
+						<button id="reserve-submit-btn" disabled onclick="reserveSelectedItems()" class="butt reserverButt">Reserver</button>
+					</span>
+				</div>
             </div>
-
-            <table id="materials-table">
-                <thead>
-                    <tr>
-                        <th>Type</th>
-                        <th>OS</th>
-                        <th>Nom</th>
-                        <th>Réference</th>
-                        <th>Réservé par</th>
-                        <th>
-                            Réserver
-                            <input type="checkbox" id="select-all">
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Populated: devices -->
-                </tbody>
-            </table>
-            <template id="item-template">
-                <tr>
-                    <td id="t-type"></td>
-                    <td id="t-os"></td>
-                    <td id="t-name"></td>
-                    <td id="t-reference"></td>
-                    <td id="t-reservation"></td>
-                    <td><input type="checkbox" /></td>
-                </tr>
-            </template>
+			<div id="table">
+				<table id="materials-table">
+					<thead>
+						<tr>
+							<th>Type</th>
+							<th>OS</th>
+							<th>Nom</th>
+							<th>Réference</th>
+							<th>Réservé par</th>
+							<th>
+								Réserver
+								<input type="checkbox" id="select-all">
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<!-- Populated: devices -->
+					</tbody>
+				</table>
+				<div id="content">
+					<template id="item-template">
+						<tr>
+							<td id="t-type"></td>
+							<td id="t-os"></td>
+							<td id="t-name"></td>
+							<td id="t-reference"></td>
+							<td id="t-reservation"></td>
+							<td><input type="checkbox" /></td>
+						</tr>
+					</template>
+				</div>
+			</div>
         </div>
     </div>
 

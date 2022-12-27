@@ -7,3 +7,141 @@ body {
     margin: 0;
     font-family: "Questrial";
 }
+a:link{
+	font-size: 20px;
+	color: #FFFFFF;
+	font-family: monospace;
+	font-weight: bold;
+	text-decoration: none;
+	margin-left:20px;
+}
+a:visited{
+	font-size: 20px;
+	color: #FFFFFF;
+	font-family: monospace;
+	font-weight: bold;
+	text-decoration: none;
+	margin-left:20px;
+}
+div.div1{
+	height:30px;
+	width:100%;
+	background-color:black;
+	margin-top:-10px;
+}
+li.test{
+	text-align:right;
+	text-align:bottom;
+	margin-right:20px;
+}
+
+h1 {
+  font-size: 30px;
+  text-align: center;
+  color: #8ADECD;
+  font-family: monospace;
+  font-weight: bold;
+  margin-top:30px;
+  margin-bottom:40px;
+}
+#container {
+	display: block;
+	min-height:50px;
+	height: auto;
+	background-color:#8ADECD;
+	border-radius:10px;
+	width:90%;
+	margin-left: auto;
+	margin-right: auto;
+	text-align:center;
+	margin-top:40px;
+}
+#table {
+	display: block;
+	height:300px; /*à enlever, juste pour tester content*/
+	/*min-height:50px;
+	height:auto;*/
+	background-color:#8ADECD;
+	border-radius:10px;
+	width:90%;
+	margin-left: auto;
+	margin-right: auto;
+	text-align:center;
+	margin-top:40px;
+}
+#content{
+	display: block;
+	min-height:50px;/*à enlever, juste pour tester*/
+	/*height: auto;*/
+	background-color:white;
+	border-radius:10px;
+	width:98%;
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom:10px;
+	padding-bottom:10px;
+	text-align:center;
+	align:center;
+}
+
+label.lab2{
+	
+	font-size: 18px;
+	color: #FFFFFF;
+	font-family: monospace;
+	font-weight: bold;
+	padding-left:15px;
+	padding-top:10px;
+	display:inline-block;
+}
+
+.reserverButt {
+  background-color: rgb(46, 164, 140 );
+  border-radius: 300px;
+  color: white;
+  cursor: pointer;
+  display: inline-block;
+  font-family: monospace;
+  padding: 7px 20px;
+  text-align: center;
+  text-decoration: none;
+  transition: all 250ms;
+  border: 0;
+  font-size: 18px;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  width: auto;
+  height:auto;
+  margin-top: 10px;
+  margin-bottom:10px;
+}
+select{
+	border:none;
+	outline:0;
+	border-color:transparent;
+}
+input{
+	border:none;
+	outline:0;
+	border-color:transparent;
+}
+th{
+	font-size: 18px;
+	color: #FFFFFF;
+	font-family: monospace;
+	font-weight: bold;
+	padding-left:60px;
+	padding-bottom:20px;
+	padding-top:20px;
+	display:inline-block;
+}
+td{
+	font-size: 15px;
+	font-family: monospace;
+	font-weight: bold;
+	padding-left:60px;
+	padding-bottom:20px;
+	padding-top:20px;
+	display:inline-block;
+}
