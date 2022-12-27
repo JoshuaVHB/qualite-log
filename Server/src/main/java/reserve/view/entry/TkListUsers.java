@@ -32,15 +32,13 @@ public class TkListUsers implements Take {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Response act(Request req) throws Exception {
-		RqForm href = new RqFormBase(req); // using GET request
-
 		List<User> res = users.getAllUsers();
 		System.out.println(res);
 
 		JSONArray serializedUsers = JsonSerializer.serializeUserList(res);
 
 		JSONObject response = new JSONObject();
-		response.put("users", serializedUsers);
+		response.put("items", serializedUsers);
 		return new RsText(response.toJSONString());
 	}
 

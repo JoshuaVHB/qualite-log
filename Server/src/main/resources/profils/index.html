@@ -37,7 +37,7 @@
             <td id="t-role"></td>
             <td id="t-modify">
                 <a href="/profil">
-                    <button>Details</button>
+                    <button id="details-btn">Details</button>
                 </a>
             </td>
         </tr>
@@ -79,22 +79,14 @@
                 id: user.id,
                 element: element
             };
-            element.querySelector('#t-nom').textContent = user.nom;
-            element.querySelector('#t-matricule').textContent = user.matricule;
+            element.querySelector('#t-nom').textContent = user.name;
+            element.querySelector('#t-matricule').textContent = user.id;
             element.querySelector('#t-role').textContent = user.role;
             element.querySelectorAll('[id]').forEach((el) => el.removeAttribute('id'));
 
             tbody.appendChild(element);
             currentUsers.push(it);
         }
-    }
-    function encodeFormOptions(options = {}) {
-        let params = new URLSearchParams();
-        for (let key in options) {
-            if (options[key] !== null && options[key] !== undefined)
-                params.append(key, options[key]);
-        }
-        return params.toString();
     }
 
     function fetchUsers() {
