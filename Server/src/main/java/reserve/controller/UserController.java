@@ -66,13 +66,12 @@ public class UserController {
         }
 
     }
-
-    // How do I test this
     
     public User authentifyUser(String userName, String password) {
-    	if("password".equals(password))
-    		return new User(false, "name", "phone", "id", "email", "password"); // TODO mock better
-    	return null;
+    	return users.stream()
+    		.filter(u->u.getName().equals(userName))
+    		.filter(u->u.getPassword().equals(password))
+    		.findAny().orElse(null);
     }
     
 }

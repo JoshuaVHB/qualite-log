@@ -28,6 +28,7 @@ import org.takes.tk.TkRedirect;
 import reserve.Main;
 import reserve.controller.AppController;
 import reserve.util.Logger;
+import reserve.view.entry.FormUtils;
 import reserve.view.entry.PsAuth;
 import reserve.view.entry.PsLogout;
 import reserve.view.entry.TkListItems;
@@ -55,6 +56,7 @@ public class WebServer {
 	public void open() {
 		try {
 			logger.info("Opening server on localhost:"+PORT);
+			FormUtils.setIdentificationManager(application.getUsers());
 			new FtBasic(
 				new TkFallback(
 					new TkAuth(
