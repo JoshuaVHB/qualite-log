@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
@@ -14,6 +15,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import reserve.controller.AppController;
+import reserve.model.Reservation;
 
 public class FileStorage implements AppStorage {
 
@@ -51,8 +53,11 @@ public class FileStorage implements AppStorage {
 				application.getUsers().addUser(JsonSerializer.parseUser(json));
 			for(JSONObject json : (List<JSONObject>) materials)
 				application.getMaterials().addMaterial(JsonSerializer.parseMaterial(json));
-			for(JSONObject json : (List<JSONObject>) reservations)
-				application.getReservations().addReservation(JsonSerializer.parseReservations(json, application.getUsers(), application.getMaterials()));
+			for(JSONObject json : (List<JSONObject>) reservations) {
+				Reservation reservation = JsonSerializer.parseReservations(json, application.getUsers(), application.getMaterials());
+				if(reservation.getEnding().compareTo(LocalDate.now()) >= 0)
+					application.getReservations().addReservation(reservation);
+			}
 		} catch (NumberFormatException | NullPointerException e) {
 			throw new IOException("Invalid storage files", e);
 		} catch (ParseException e) {
