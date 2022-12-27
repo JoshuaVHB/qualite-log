@@ -22,27 +22,26 @@ import reserve.model.OperatingSystem;
 import reserve.model.User;
 
 public class TkListUsers implements Take {
-	
-	private final UserController users;
-	
+
+	final UserController users;
+
 	public TkListUsers(UserController users) {
 		this.users = users;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public Response act(Request req) throws Exception {
 		RqForm href = new RqFormBase(req); // using GET request
-		
-		
+
 		List<User> res = users.getAllUsers();
 		System.out.println(res);
-		
+
 		JSONArray serializedUsers = JsonSerializer.serializeUserList(res);
-		
+
 		JSONObject response = new JSONObject();
-		response.put("items", serializedUsers);
+		response.put("users", serializedUsers);
 		return new RsText(response.toJSONString());
 	}
-	
+
 }

@@ -68,6 +68,7 @@ public class UserController {
     }
     
     public User authentifyUser(String userName, String password) {
+    	System.out.println(userName+password);
     	return users.stream()
     		.filter(u->u.getName().equals(userName))
     		.filter(u->u.getPassword().equals(password))

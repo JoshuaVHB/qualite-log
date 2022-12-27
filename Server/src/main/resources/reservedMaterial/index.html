@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="/main.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/02544ac723.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <li class="test">
+                <a href="./indexLog.html">Page d'accueil</a>
+                <a href="?logout">Déconnexion   <i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+            </li>
+        </nav>
+    </header>
+    <h1 class="title">Materiel emrpunt�</h1>
+    <div id="page-content">
+        <div>
+            <div id="material-filter">
+                <label>
+                    Nom :
+                    <input type="text" id="filter-name" class="filter-option">
+                </label>
+            </div>
+
+            <table id="materials-table">
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>OS</th>
+                        <th>Nom</th>
+                        <th>R�ference</th>
+                        <th>R�serv� par</th>
+                        <th>
+                            Date de r�servation
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Populated: devices -->
+                </tbody>
+            </table>
+            <template id="item-template">
+                <tr>
+                    <td id="t-type"></td>
+                    <td id="t-os"></td>
+                    <td id="t-name"></td>
+                    <td id="t-reference"></td>
+                    <td id="t-reservation"></td>
+                    <td id="t-date"></td>
+                </tr>
+            </template>
+        </div>
+    </div>
+
+    <div id="popup-frame" hidden>
+        <div id="popup">
+            <h5 id="popup-title"></h5>
+            <button onclick="popupFrame.hidden = true;">Ok</button>
+        </div>
+    </div>
+    <div class="returnIndex"><a href="./index.html">Retour a l'acceuil</a></div>
+
+</body>
+</html>
+<script>
+
+    const table = document.getElementById('materials-table');
+    const itemTemplate = document.getElementById('item-template');
+    const popupFrame = document.getElementById('popup-frame');
+    const filterName = document.getElementById('filter-name');
+
+    var currentItems = [];
+    var reservedItemIds = new Set();
+    var fetchCooldown = null;
+
+
+    function isReserved(item) {
+        return reservedItemIds.has(item.id);
+    }
+
+    function populateItemsTable(items) {
+        console.log(items);
+        const tbody = table.querySelector('tbody');
+        tbody.innerHTML = '';
+
+        // keep reserved items
+        currentItems = currentItems.filter(isReserved);
+        console.log('remaining', currentItems);
+        for (let item of currentItems)
+            tbody.appendChild(item.element);
+
+        for (let item of items) {
+            if (currentItems.some((i) => i.id === item.id))
+                continue;
+            let element = document.importNode(itemTemplate.content, true).firstElementChild;
+            let it = {
+                id: item.id,
+                element: element
+            };
+            element.querySelector('#t-os').textContent = item.os;
+            element.querySelector('#t-type').textContent = item.type + ' ' + item.version;
+            element.querySelector('#t-name').textContent = item.name;
+            element.querySelector('#t-reference').textContent = item.numref;
+            element.querySelector('#t-reservation').textContent = item.reservation ? item.reservation.userName + ' jusqu\'au ' + item.reservation.upToDate : '-';
+            element.querySelectorAll('[id]').forEach((el) => el.removeAttribute('id'));
+            let selectionCheckbox = element.querySelector('input[type=checkbox]');
+            selectionCheckbox.addEventListener('change', (e) => {
+                setReserved(it, !isReserved(it));
+            });
+            tbody.appendChild(element);
+            currentItems.push(it);
+        }
+    }
+
+    function encodeFormOptions(options = {}) {
+        let params = new URLSearchParams();
+        for (let key in options) {
+            if (options[key] !== null && options[key] !== undefined)
+                params.append(key, options[key]);
+        }
+        return params.toString();
+    }
+
+    function fetchItems() {
+        let options = {};
+        if (filterName.value) options.name = filterName.value;
+        if (filterTypeList.value) options.type = filterTypeList.value;
+        if (filterOSList.value) options.os = filterOSList.value;
+        if (filterIncludeReserved.checked) options.includeReserved = true;
+
+        fetch('/api/list_items', {
+            method: 'POST',
+            body: encodeFormOptions(options),
+        }).then((response) => {
+            if (response.ok)
+                return response.json();
+            else
+                throw new Error('Could not fetch items');
+        }).then((data) => {
+            populateItemsTable(data.items);
+        }).catch((err) => {
+            console.error(err);
+            popupFrame.hidden = false;
+            popupFrame.querySelector('#popup-title').innerText = err.message;
+        });
+    }
+
+    function fetchItemsLater() {
+        if (fetchCooldown)
+            clearTimeout(fetchCooldown);
+        fetchCooldown = setTimeout(() => {
+            fetchItems();
+        }, 500);
+    }
+
+
+    window.addEventListener('load', () => {
+        fetchItems();
+    });
+</script>
