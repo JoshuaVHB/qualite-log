@@ -5,15 +5,19 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+import reserve.Main;
 import reserve.model.Material;
 import reserve.model.MaterialType;
 import reserve.model.OperatingSystem;
+import reserve.util.Logger;
 
 // TODO LOG EVERYTHING
 
 public class MaterialController {
 	
     public static final String KEYWORD_FILTER_PATTERN = ".*";
+    
+    private static final Logger logger = Main.LOGGER_FACTORY.getLogger("materials", Logger.LEVEL_DEBUG);
     
     private final List<Material> materials = new ArrayList<>();
     
@@ -34,9 +38,9 @@ public class MaterialController {
                                     .anyMatch(m -> m.getId() == material.getId());
 
         if (exists) throw new IllegalArgumentException("The material is already present in the list");
-
         // -------------------------//
 
+        logger.debug("Created material " + material);
         return (materials.add(material));
     }
 
@@ -46,7 +50,7 @@ public class MaterialController {
      */
     public Material getMaterialById(UUID id) {
         Objects.requireNonNull(id);
-        return materials.stream().filter(m -> m.getId() == id).findAny().orElse(null);
+        return materials.stream().filter(m -> m.getId().equals(id)).findAny().orElse(null);
     }
 
     /**

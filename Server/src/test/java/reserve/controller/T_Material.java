@@ -1,18 +1,24 @@
 package reserve.controller;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import reserve.Main;
-import reserve.model.*;
-import reserve.util.AnsiLogger;
-import reserve.util.Logger;
+import static reserve.controller.T_Utils.dummyUser;
 
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import reserve.Main;
+import reserve.model.Material;
+import reserve.model.MaterialType;
+import reserve.model.OperatingSystem;
+import reserve.model.Reservation;
+import reserve.util.AnsiLogger;
+import reserve.util.Logger;
 
 public class T_Material {
 
@@ -29,7 +35,7 @@ public class T_Material {
     public void prepare_test() {
         this.materials = new MaterialController();
     }
-
+    
 
     // --------- MaterialController.addMaterial() --------------- //
 
@@ -90,7 +96,6 @@ public class T_Material {
     public void should_return_material_when_id_exists() {
 
         Material dummy = new Material();
-        Material dummy2 = new Material();
         materials.addMaterial(dummy);
 
         Assertions.assertEquals(dummy, materials.getMaterialById(dummy.getId()));
@@ -375,7 +380,7 @@ public class T_Material {
         materials.addMaterial(dummy);
 
         Reservation reservation = new Reservation(
-                new User(),
+        		dummyUser(),
                 dummy,
                 LocalDate.now().minusDays(1),
                 LocalDate.now().plusDays(1));
@@ -413,7 +418,7 @@ public class T_Material {
 
         // -- Create a reservation
         Reservation reservation = new Reservation(
-                new User(),
+        		dummyUser(),
                 dummy,
                 LocalDate.now().minusDays(1),
                 LocalDate.now().plusDays(1));
@@ -423,7 +428,7 @@ public class T_Material {
         ReservationController rc = new ReservationController();
         rc.addReservation(reservation);
 
-        rc.closeReservation(new User().setAdmin(true), reservation);
+        rc.closeReservation(dummyUser().setAdmin(true), reservation);
 
         // -- Filter and check if the material is available.
         List<Material> allMats = materials.getAllMaterials();
@@ -443,7 +448,7 @@ public class T_Material {
 
         // -- Create a reservation
         Reservation reservation = new Reservation(
-                new User(),
+        		dummyUser(),
                 dummy,
                 LocalDate.now().plusDays(1),
                 LocalDate.now().plusDays(2));
@@ -453,7 +458,7 @@ public class T_Material {
         ReservationController rc = new ReservationController();
         rc.addReservation(reservation);
 
-        rc.closeReservation(new User().setAdmin(true), reservation);
+        rc.closeReservation(dummyUser().setAdmin(true), reservation);
 
         // -- Filter and check if the material is available.
         List<Material> allMats = materials.getAllMaterials();
@@ -473,7 +478,7 @@ public class T_Material {
 
         // -- Create a reservation
         Reservation reservation = new Reservation(
-                new User(),
+        		dummyUser(),
                 dummy,
                 LocalDate.now().plusDays(1),
                 LocalDate.now().plusDays(2));

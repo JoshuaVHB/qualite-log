@@ -3,4 +3,6 @@
 # eclipse files
 .settings/
 .classpath
-
+.apt_generated_tests/
+bin/
+storage/

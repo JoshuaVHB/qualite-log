@@ -36,13 +36,9 @@ public class Reservation {
     public Reservation setBeginning(LocalDate beginning)   { this.beginning = beginning;    return this;}
     public Reservation setEnding(LocalDate ending)         { this.ending = ending;          return this;}
 
-
-
-
-
-
+    @Override
+    public String toString() {
+    	return String.format("Reservation(owner=%s material=%s begining=%s)", owner.getId(), material.getId(), beginning);
+    }
+    
 }
-
-
-
-
