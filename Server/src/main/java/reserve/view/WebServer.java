@@ -33,8 +33,10 @@ import reserve.view.entry.PsAuth;
 import reserve.view.entry.PsLogout;
 import reserve.view.entry.TkListItems;
 import reserve.view.entry.TkListUsers;
+import reserve.view.entry.TkProfilUser;
 import reserve.view.entry.TkReserverItem;
 import reserve.view.front.TkLog;
+import reserve.view.front.TkRedirectDir;
 import reserve.view.front.TkSpecificResource;
 
 public class WebServer {
@@ -73,6 +75,7 @@ public class WebServer {
 										new FkAnonymous(new TkFork(indexPage("/connexion")))
 									)
 								),
+								new FkRegex("/profil_item", new TkProfilUser(application.getUsers())),
 								new FkRegex("/", new TkRedirect("/accueil")) ,
 								indexPage("/connexion"),
 								indexPage("/accueil"),
@@ -106,7 +109,7 @@ public class WebServer {
 		
 		if(!staticUrlPath.equals("/")) {
 			// redirect '/connexion' to '/connexion/'
-			forks.add(new FkRegex(staticUrlPath, new TkRedirect(staticUrlPath+"/")).setRemoveTrailingSlash(false));
+			forks.add(new FkRegex(staticUrlPath, new TkRedirectDir()).setRemoveTrailingSlash(false));
 			// upon '/connexion', send '/connexion/index.html'
 			forks.add(new FkRegex(staticUrlPath+"/", new TkSpecificResource(staticUrlPath + "/index.html")).setRemoveTrailingSlash(false));
 			// send any other file in the directory directly

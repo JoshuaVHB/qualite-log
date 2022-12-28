@@ -36,9 +36,10 @@
             <td id="t-matricule"></td>
             <td id="t-role"></td>
             <td id="t-modify">
-                <a href="/profil">
-                    <button id="details-btn">Details</button>
-                </a>
+                <form class="forminscription" method="GET" id="profilUser" action="/profil?id=">
+                    <input type="hidden" id="profil_item" name="id" value="">
+                    <p class="p butt"><button id="details-btn">Details</button></p>
+                </form>
             </td>
         </tr>
     </template>
@@ -62,6 +63,10 @@
     var currentUsers = [];
     var fetchCooldown = null;
 
+    function test() {
+
+    }
+
     function populateUsersTable(users) {
         console.log(users);
         const tbody = table.querySelector('tbody');
@@ -81,11 +86,18 @@
             };
             element.querySelector('#t-nom').textContent = user.name;
             element.querySelector('#t-matricule').textContent = user.id;
+            element.querySelector('#profil_item').value = user.id;
+            element.querySelector('#profilUser').action += user.id;
+            console.log(element.querySelector('#profilUser').action);
 
-            if (user.isAdmin == true)
+            console.log(user.isAdmin);
+            if (user.isAdmin =="true") {
                 element.querySelector('#t-role').textContent = "administrateur";
-            else
+            }
+            else {
                 element.querySelector('#t-role').textContent = "utilisateur";
+            }
+                
             element.querySelectorAll('[id]').forEach((el) => el.removeAttribute('id'));
 
             tbody.appendChild(element);

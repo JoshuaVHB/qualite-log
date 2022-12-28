@@ -58,7 +58,9 @@ public class JsonSerializer {
 	
 	public static JSONObject serializeUser(User user) {
 		JSONObject json = new JSONObject();
-		json.put("isAdmin", user.isAdmin());
+		String isAdmin = "false";
+		if(user.isAdmin()) isAdmin = "true";
+		json.put("isAdmin", isAdmin);
 		json.put("id",       user.getId().toString());
 		json.put("name",     user.getName());
 		json.put("email",    user.getEmail());
@@ -82,7 +84,7 @@ public class JsonSerializer {
 
 	public static User parseUser(JSONObject user) {
 		// get fields form the JSON parser
-		boolean isAdmin = "true".equals(user.get("password"));
+		boolean isAdmin = "true".equals(user.get("isAdmin"));
 		String id = (String) user.get("id");
 		String name = (String) user.get("name");
 		String phone = (String) user.get("phone");
