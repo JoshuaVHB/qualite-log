@@ -33,6 +33,7 @@ import reserve.view.entry.PsAuth;
 import reserve.view.entry.PsLogout;
 import reserve.view.entry.TkListItems;
 import reserve.view.entry.TkListUsers;
+import reserve.view.entry.TkProfilUser;
 import reserve.view.entry.TkReserverItem;
 import reserve.view.front.TkLog;
 import reserve.view.front.TkSpecificResource;
@@ -73,6 +74,7 @@ public class WebServer {
 										new FkAnonymous(new TkFork(indexPage("/connexion")))
 									)
 								),
+								new FkRegex("/profil_item", new TkProfilUser(application.getUsers())),
 								new FkRegex("/", new TkRedirect("/accueil")) ,
 								indexPage("/connexion"),
 								indexPage("/accueil"),

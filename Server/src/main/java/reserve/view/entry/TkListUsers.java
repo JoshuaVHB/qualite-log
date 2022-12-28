@@ -33,8 +33,6 @@ public class TkListUsers implements Take {
 	@Override
 	public Response act(Request req) throws Exception {
 		List<User> res = users.getAllUsers();
-		System.out.println(res);
-
 		JSONArray serializedUsers = JsonSerializer.serializeUserList(res);
 
 		JSONObject response = new JSONObject();
