@@ -82,6 +82,7 @@ public class WebServer {
 								indexPage("/creerMateriel"),
 								indexPage("/inscription"),
 								indexPage("/listeMateriel"),
+								indexPage("/modifieMateriel"),
 								indexPage("/profil"),
 								indexPage("/profils"),
 								indexPage("/materielReserve")

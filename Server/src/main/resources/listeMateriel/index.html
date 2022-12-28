@@ -67,9 +67,7 @@
 					<label class="lab lab2">
 						au <input type="date" id="reservation-to" autocomplete="off">
 					</label>
-					<!--{{NOT_LOGGED}}<a href="/connexion"> -->
 					<button id="reserve-submit-btn" disabled onclick="reserveSelectedItems()" class="reserverButt">Reserver</button>
-					<!--{{NOT_LOGGED}}</a> -->
 				</span>
 			</div>
 		</div>
@@ -87,7 +85,7 @@
 							Réserver
 							<input type="checkbox" id="select-all">
 						</th>
-						<!--{{ADMIN}} <th> </th> --> <!--{{ADMIN}} <th> </th> -->
+						<!--{{ADMIN}} <th> </th> <th> </th> -->
 					</tr>
 				</thead>
 				<tbody>
@@ -96,24 +94,25 @@
 			</table>
                 <template id="item-template">
                     <tr class="tr content">
-						<td class="td void"> </td>
+                        <td class="td void"> </td>
                         <td id="t-type" class="td text"></td>
-						<td id="t-os" class="td text"></td>
-						<td id="t-name" class="td text"></td>
-						<td id="t-reference" class="td text"></td>
-						<td id="t-reservation" class="td text"></td>
-						<td class="td check"><input type="checkbox" /></td>
-						<!--{{ADMIN}} 
-						<td class="td button">
-								<a href="TODO">
-								<button class="buttButt">Modifier</button>
-								</a>
-						 </td>
-						 <td class="td button">
-								<button class="buttButt" onclik="deleteMaterial();">Supprimer</button>
-						 </td>
-						 -->
-					</tr>
+                        <td id="t-os" class="td text"></td>
+                        <td id="t-name" class="td text"></td>
+                        <td id="t-reference" class="td text"></td>
+                        <td id="t-reservation" class="td text"></td>
+                        <td class="td check"><input type="checkbox" /></td>
+                        <!--{{ADMIN}}
+                        <td class="td button">
+                            <form class="forminscription" method="GET" id="profilItem" action="/modifieMateriel?id=">
+                                <input type="hidden" id="profil_item" name="id" value="">
+                                <p class="p butt"><button class="buttButt" id="details-btn">Modifier</button></p>
+                            </form>
+                         </td>
+                         <td class="td button">
+                                <button class="buttButt" onclik="deleteMaterial();">Supprimer</button>
+                         </td>
+                         -->
+                    </tr>
 				</template>
 		</div>
     </div>
@@ -244,6 +243,9 @@
                 element.querySelector('#t-name').textContent = item.name;
                 element.querySelector('#t-reference').textContent = item.numref;
                 element.querySelector('#t-reservation').textContent = item.reservation ? item.reservation.userName + ' jusqu\'au ' + item.reservation.upToDate : '-';
+                element.querySelector('#profil_item').value = item.id;
+                element.querySelector('#profilItem').action += item.id;
+
                 element.querySelectorAll('[id]').forEach((el) => el.removeAttribute('id'));
                 let selectionCheckbox = element.querySelector('input[type=checkbox]');
                 selectionCheckbox.addEventListener('change', (e) => {
