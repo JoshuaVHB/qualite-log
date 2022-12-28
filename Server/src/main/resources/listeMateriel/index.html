@@ -36,83 +36,87 @@
 		<div>
 			<p><h1>Liste du matériel</h1></p>
 		</div>
-        <div>
-            <div id="material-filter">
-                <label>
-                    Type :
-                    <select id="filter-type-list" class="filter-option">
-                        <option value=''>Tous</option>
-                        <!-- Populated: type list -->
-                    </select>
-                </label>
-                <label>
-                    OS :
-                    <select id="filter-os-list" class="filter-option">
-                        <option value=''>Tous</option>
-                        <!-- Populated: os list -->
-                    </select>
-                </label>
-                <label>
-                    Nom :
-                    <input type="text" id="filter-name" class="filter-option">
-                </label>
-                <label>
-                    Afficher les appareils réservés :
-                    <input type="checkbox" id="filter-include-reserved" class="filter-option">
-                </label>
-                <span>
-                    <label>
-                        Reserver du <input type="date" id="reservation-from" autocomplete="off">
-                    </label>
-                    <label>
-                        au <input type="date" id="reservation-to" autocomplete="off">
-                    </label>
-                    <!--{{NOT_LOGGED}}<a href="/connexion"> -->
-                    <button id="reserve-submit-btn" disabled onclick="reserveSelectedItems()">Reserver</button>
-                    <!--{{NOT_LOGGED}}</a> -->
-                </span>
+		<div id="container">
+			<div id="material-filter">
+				<label class="lab lab2">
+					Type :
+					<select id="filter-type-list" class="filter-option">
+						<option value=''>Tous</option>
+						<!-- Populated: type list -->
+					</select>
+				</label>
+				<label class="lab lab2">
+					OS :
+					<select id="filter-os-list" class="filter-option">
+						<option value=''>Tous</option>
+						<!-- Populated: os list -->
+					</select>
+				</label>
+				<label class="lab lab2">
+					Nom :
+					<input type="text" id="filter-name" class="filter-option">
+				</label>
+				<label class="lab lab2">
+					Afficher les appareils réservés :
+					<input type="checkbox" id="filter-include-reserved" class="filter-option">
+				</label>
+				<span>
+					<label class="lab lab2">
+						Reserver du <input type="date" id="reservation-from" autocomplete="off">
+					</label>
+					<label class="lab lab2">
+						au <input type="date" id="reservation-to" autocomplete="off">
+					</label>
+					<!--{{NOT_LOGGED}}<a href="/connexion"> -->
+					<button id="reserve-submit-btn" disabled onclick="reserveSelectedItems()" class="reserverButt">Reserver</button>
+					<!--{{NOT_LOGGED}}</a> -->
+				</span>
+			</div>
+		</div>
+		<div id="table">
+			<table id="materials-table">
+				<thead>
+					<tr class="tr list">
+						<th class="void"> </th>
+						<th>Type</th>
+						<th>OS</th>
+						<th>Nom</th>
+						<th>Réference</th>
+						<th>Réservé par</th>
+						<th>
+							Réserver
+							<input type="checkbox" id="select-all">
+						</th>
+						<!--{{ADMIN}} <th> </th> --> <!--{{ADMIN}} <th> </th> -->
+					</tr>
+				</thead>
+				<tbody>
+					<!-- Populated: devices -->
+				</tbody>
+			</table>
+                <template id="item-template">
+                    <tr class="tr content">
+						<td class="td void"> </td>
+                        <td id="t-type" class="td text"></td>
+						<td id="t-os" class="td text"></td>
+						<td id="t-name" class="td text"></td>
+						<td id="t-reference" class="td text"></td>
+						<td id="t-reservation" class="td text"></td>
+						<td class="td check"><input type="checkbox" /></td>
+						<!--{{ADMIN}} 
+						<td class="td button">
+								<a href="TODO">
+								<button class="buttButt">Modifier</button>
+								</a>
+						 </td>
+						 <td class="td button">
+								<button class="buttButt" onclik="deleteMaterial();">Supprimer</button>
+						 </td>
+						 -->
+					</tr>
+				</template>
+		</div>
     </div>
-
-    <table id="materials-table">
-        <thead>
-            <tr>
-                <th>Type</th>
-                <th>OS</th>
-                <th>Nom</th>
-                <th>Réference</th>
-                <th>Réservé par</th>
-                <th>
-                    Réserver
-                    <input type="checkbox" id="select-all">
-                </th>
-                <!--{{ADMIN}} <th> </th> --> <!--{{ADMIN}} <th> </th> -->
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Populated: devices -->
-                    </tbody>
-                    </table>
-                    <template id="item-template">
-                        <tr>
-                            <td id="t-type"></td>
-                            <td id="t-os"></td>
-                            <td id="t-name"></td>
-                            <td id="t-reference"></td>
-                            <td id="t-reservation"></td>
-                            <td><input type="checkbox" /></td>
-                            <!--{{ADMIN}} <td>
-                                    <a href="TODO">
-                                    <button>Modifier</button>
-                                    </a>
-                             </td> -->
-                            <!--{{ADMIN}} <td>
-                                    <button class="delete-btn" onclik="deleteMaterial();">Supprimer</button>
-                             </td> -->
-                        </tr>
-                    </template>
-</div>
-    </div>
-
     <div id="popup-frame" hidden>
         <div id="popup">
             <h5 id="popup-title"></h5>
