@@ -58,7 +58,6 @@ public class JsonSerializer {
 	
 	public static JSONObject serializeUser(User user) {
 		JSONObject json = new JSONObject();
-		//
 		String isAdmin = "false";
 		if(user.isAdmin()) isAdmin = "true";
 		json.put("isAdmin", isAdmin);
