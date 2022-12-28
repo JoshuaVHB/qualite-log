@@ -12,7 +12,7 @@ import reserve.util.Logger;
 public class UserController {
 	
     // TODO TEST THIS
-	public static final String USER_NAME_FORMAT = "[a-zA-Z]+"; // TODO change regexes to match specs
+	public static final String USER_ID_FORMAT = "[0-9]+"; // TODO change regexes to match specs
 	public static final String PASSWORD_FORMAT = "[a-zA-Z]+";
 	
 	private static Logger logger = Main.LOGGER_FACTORY.getLogger("users", Logger.LEVEL_DEBUG);
@@ -67,10 +67,9 @@ public class UserController {
 
     }
     
-    public User authentifyUser(String userName, String password) {
-    	System.out.println(userName+password);
+    public User authentifyUser(String userId, String password) {
     	return users.stream()
-    		.filter(u->u.getName().equals(userName))
+    		.filter(u->u.getId().equals(userId))
     		.filter(u->u.getPassword().equals(password))
     		.findAny().orElse(null);
     }
