@@ -42,16 +42,9 @@ public class TkProfilUser implements Take {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Response act(Request req) throws Exception {
-		Href href = new RqHref.Base(req).href();
-		System.out.println(href);
-		String id = FormUtils.getParamString(href, "id", "[1-9]+", true);
 		User user = FormUtils.getUserIdentity(req);
-		System.out.println(id);
-		if(id!=null)
-			user = users.getById(id);
 		
 		JSONObject serialiezUser = JsonSerializer.serializeUser(user);
-		
 		JSONObject response = new JSONObject();
 		response.put("items", serialiezUser);
 		return new RsText(response.toJSONString());

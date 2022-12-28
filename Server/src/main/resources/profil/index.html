@@ -52,38 +52,73 @@
 </body>
 </html>
 <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    let id = urlParams.get('id');
+    if (id) {
+        document.getElementById('matricule').value = id;
+    } else {
+        document.getElementById('matricule').value = "";
+    }
+    
     
     const elements = document.getElementsByClassName('inputData');
 
-    function populateData(user) {
+    function populateData(users) {
+        for (let user of users) {
+            if (user.id == id) {
+                dataUser(user);
+            }
+        }
+    }
+
+    function dataUser(user) {
         document.getElementById('role').checked = user.isAdmin;
-        
+
         document.getElementById('matricule').value = user.id;
         document.getElementById('prenom').value = user.name;
         document.getElementById('nom').value = user.name;
         document.getElementById('email').value = user.email;
     }
 
-    function fetchUser() {
-        console.log(window.location.href);
-        fetch('/profil_item', {
-            method: 'GET',
-        }).then((response) => {
-            if (response.ok)
-                return response.json();
-            else
-                throw new Error('Could not fetch items');
-        }).then((data) => {
-            populateData(data.items);
-        }).catch((err) => {
-            console.error(err);
-            popupFrame.hidden = false;
-            popupFrame.querySelector('#popup-title').innerText = err.message;
-        });
+    function fetchUsers() {
+
+        if (id) {
+            fetch('/api/list_users', {
+                method: 'POST',
+            }).then((response) => {
+                if (response.ok)
+                    return response.json();
+                else
+                    throw new Error('Could not fetch items');
+            }).then((data) => {
+                populateData(data.items);
+            }).catch((err) => {
+                console.error(err);
+                popupFrame.hidden = false;
+                popupFrame.querySelector('#popup-title').innerText = err.message;
+            });
+        }
+        else {
+            fetch('/profil_item', {
+                method: 'POST',
+            }).then((response) => {
+                if (response.ok)
+                    return response.json();
+                else
+                    throw new Error('Could not fetch items');
+            }).then((data) => {
+                dataUser(data.items);
+            }).catch((err) => {
+                console.error(err);
+                popupFrame.hidden = false;
+                popupFrame.querySelector('#popup-title').innerText = err.message;
+            });
+        }
+        
     }
 
     window.addEventListener('load', () => {
-        fetchUser();
+        fetchUsers();
     });
 
     
