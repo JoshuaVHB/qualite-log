@@ -43,8 +43,10 @@ public class Main {
 	private static void kickstartApp(AppController controller) {
 		User adminUser = new User(true, "admin", "-", "0000001", "-", "password");
 		User testUser = new User(false, "test", "-", "0000002", "-", "password");
+		
 		controller.getUsers().addUser(adminUser);
 		controller.getUsers().addUser(testUser);
+		
 		
 		// also add dummy reservations and materials
 		Material mat1 = new Material(OperatingSystem.AN, MaterialType.LAPTOP, "name", "version", 0);
