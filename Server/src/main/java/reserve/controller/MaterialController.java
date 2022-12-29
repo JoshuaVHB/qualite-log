@@ -5,15 +5,21 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+import reserve.Main;
 import reserve.model.Material;
 import reserve.model.MaterialType;
 import reserve.model.OperatingSystem;
+import reserve.util.Logger;
 
 // TODO LOG EVERYTHING
 
 public class MaterialController {
 	
     public static final String KEYWORD_FILTER_PATTERN = ".*";
+    public static final String MAT_NAME_FORMAT = ".*";
+    public static final String MAT_VERSION_FORMAT = ".*"; // TODO change regex to match specs
+    
+    private static final Logger logger = Main.LOGGER_FACTORY.getLogger("materials", Logger.LEVEL_DEBUG);
     
     private final List<Material> materials = new ArrayList<>();
     
@@ -31,12 +37,12 @@ public class MaterialController {
         Objects.requireNonNull(material);
 
         boolean exists = materials  .stream()
-                                    .anyMatch(m -> m.getId().equals(material.getId()));
+                                    .anyMatch(m -> m.getId() == material.getId());
 
         if (exists) throw new IllegalArgumentException("The material is already present in the list");
-
         // -------------------------//
 
+        logger.debug("Created material " + material);
         return (materials.add(material));
     }
 
@@ -50,26 +56,13 @@ public class MaterialController {
     }
 
     /**
-     * @brief Removes a certain material if it's present in the list, does nothing otherwise.
-     * @param toRemove
-     * @return True if the material was removed successfully, false otherwise.
-     * @throws NullPointerException {@code} toRemove is null
+     * Removes a certain material
+     * @throws IllegalArgumentException if the element was not known
      */
-    public boolean removeMaterial(Material toRemove) {
-
-        Objects.requireNonNull(toRemove); // Make sure the user is coherent
-
-        if (materials.remove(toRemove)) {
-
-            // Log sucessful
-            return true;
-
-        } else {
-
-            // Log
-            return false;
-        }
-
+    public void removeMaterial(Material toRemove) {
+        if (!materials.remove(toRemove))
+        	throw new IllegalArgumentException("Unknown material");
+        logger.debug("Deleted material " + toRemove);
     }
     
     /**

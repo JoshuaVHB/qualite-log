@@ -4,11 +4,17 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
-import reserve.model.*;
+import reserve.Main;
+import reserve.model.Reservation;
+import reserve.model.User;
+import reserve.util.Logger;
 
 
 public class ReservationController {
+	
+	private static final Logger logger = Main.LOGGER_FACTORY.getLogger("reservations", Logger.LEVEL_DEBUG);
 	
     private List<Reservation> incoming = new ArrayList<Reservation>();
     private List<Reservation> current = new ArrayList<Reservation>();
@@ -16,13 +22,11 @@ public class ReservationController {
     // ------------------------------------------------------------------------------------------- //
 
     /**
-     * @brief Creates a new Reservation.
-     * This method makes sure that the dates are coherent, and stores it in the right list.
+     * Creates a new Reservation.
      * 
-     * FUTURE these  vvv  may be replaced by "throws a npe unless otherwise specified"
-     * @returns The newly created reservation
+     * This method makes sure that the dates are coherent, and stores it in the right list.
      */
-    public void addReservation(Reservation reservation) throws RuntimeException, NullPointerException {
+    public void addReservation(Reservation reservation) throws IllegalStateException {
 
         // ------ ERROR CHECKING ------ //
     	LocalDate from = reservation.getBeginning();
@@ -32,17 +36,17 @@ public class ReservationController {
         LocalDate today = LocalDate.now();
 
         // Makes sure the reservation end date is coherent
-        if (to.compareTo(today) < 0) { // TODO move validation checks in the class
-        	                           // because setters can be used *after* addReservation has been called
-            throw new RuntimeException("Reservation end date is before current day !");
+        if (to.compareTo(today) < 0) {
+            throw new IllegalStateException("Reservation end date is before current day !");
         }
         
     	if (reservation.getMaterial().getReservation() != null) { // The object is already owned
-    		throw new RuntimeException("The material asked for is already owned.");
+    		throw new IllegalStateException("The material asked for is already owned.");
     	}
 
         // ------ CODE ------- //
 
+    	logger.debug("Created reservation " + reservation);
         if (from.compareTo(today) <= 0) { // Means that the start day is before or today -> store in current reservation
             reservation.getMaterial().setReservation(reservation);
             current.add(reservation);
@@ -78,14 +82,14 @@ public class ReservationController {
     /**
      * @brief This method is to be called by an admin to close a reservation.
      * // TODO semantically it does not make much sense to call this method w/ a user object
-     * // the check should be done by the caller
+     * // the check should be done by the caller, also currently a user cannot close one of
+     * // their reservations
      * @param admin
      * @param reservation
-     * @throws RuntimeException {@code user is not admin OR reservation is not in the lists}
+     * @throws IllegalArgumentException {@code user is not admin OR reservation is not in the lists}
      * @throws NullPointerException {@code admin or reservation is null}
      */
-    public boolean closeReservation(User admin, Reservation reservation)
-            throws RuntimeException {
+    public void closeReservation(User admin, Reservation reservation) throws IllegalArgumentException {
 
         // -- Error checking
 
@@ -94,30 +98,34 @@ public class ReservationController {
 
         if (!admin.isAdmin()) throw new RuntimeException("The user is not an admin");
 
-        if (!current.contains(reservation) && !incoming.contains(reservation) ) {
-            throw new RuntimeException("How could this possibly happen ?");
-        }
+        if (!current.contains(reservation) && !incoming.contains(reservation))
+            throw new IllegalArgumentException("Unknown reservation");
 
         // ------------- //
 
         reservation.getMaterial().setReservation(null); // Detach the object from the reservation
 
-        if (current.remove(reservation) || incoming.remove(reservation))  {
-
-            // Log admin ... deleted reservation ....
-            return true;
-        } else {
-
-            // Log erreur
-            return false;
-
-        }
-
-
+        current.remove(reservation);
+        incoming.remove(reservation);
+    	logger.debug("Closed reservation " + reservation);
     }
 
 
     public List<Reservation> getIncomingReservation() { return incoming; }
     public List<Reservation> getCurrentReservation() { return current; }
+	public List<Reservation> getAllReservations() {
+		List<Reservation> all = new ArrayList<>(incoming.size() + current.size());
+		all.addAll(current);
+		all.addAll(incoming);
+		return all;
+	}
+
+	public Reservation getReservation(UUID materialID, String userId, LocalDate fromDate) {
+		return getAllReservations().stream()
+				.filter(r -> r.getMaterial().getId().equals(materialID))
+				.filter(r -> r.getOwner().getId().contentEquals(userId))
+				.filter(r -> r.getBeginning().equals(fromDate))
+				.findAny().orElse(null);
+	}
 
 }

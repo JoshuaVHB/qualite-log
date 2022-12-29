@@ -45,7 +45,7 @@ public class FormUtils {
 		String value = getSingleParamValue(values, param, nullable);
 		if (value == null)
 			return value;
-		if(!value.matches(format))
+		if(format != null && !value.matches(format))
 			throw new IllegalArgumentException("Invalid value for '" + param + "'");
 		return value;
 	}

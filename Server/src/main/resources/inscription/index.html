@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Inscription</title>
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="../css/global.css">
+    <script src="https://kit.fontawesome.com/02544ac723.js" crossorigin="anonymous"></script>
+    <script src="/main.js" defer></script>
+</head>
+<body>
+    <div class="div div1">
+        <nav>
+            <li class="test">
+                <a href="/accueil">Page d'accueil</a>
+                <a href="?logout">Deconnexion   <i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+            </li>
+        </nav>
+    </div>
+    <p><h1 class="title">Inscription d'un utilisateur</h1></p>
+    <div id="container">
+        <form class="forminscription" id="addUser" onsubmit="return addUser(event)">
+            <label class="label lab1" for="role">
+                <input type="checkbox" id="filter-include-role" name="is-admin" class="filter-option">Utilisateur est un administrateur
+            </label><br />
+            <!-- <label class="label lab1" for="First-name">
+                Matricule <input class="inputinscription" type="text" name="matricule" id="matricule" placeholder="0000000" pattern="[0-9]{7}" required><br>
+            </label> -->
+            <label class="label lab1" for="Last-name">
+                Prenom <input class="inputinscription" type="text" name="first-name" id="prenom" placeholder="Prenom" required><br>
+            </label>
+            <label class="label lab1" for="First-name">
+                Nom <input class="inputinscription" type="text" name="last-name" id="nom" placeholder="Nom" required><br>
+            </label>
+
+            <label class="label lab1" for="email">
+                Email <input class="inputinscription" type="email" name="mail" id="email" placeholder="Email" required><br>
+            </label>
+
+            <label class="label lab1" for="password">
+                Mot de passe <input class="inputinscription" type="password" name="password" placeholder="Mot de passe" id="mdp" onchange='check_pass();' required><br>
+            </label>
+            <label class="label lab1">
+                Confirmer le mot de passe <label class="labelinscription" for="cmdp"></label>
+                <input class="inputinscription" type="password" placeholder="Confirmation le mot de passe" id="cmdp" onkeyup='check_pass();' required><br>
+            </label>
+            <div>
+                <button type="submit" class="connectButt" id="submit">
+                    Valider
+                </button>
+            </div>
+        </form>
+    </div>
+    <div id="popup-frame" hidden>
+        <div id="popup">
+            <h5 id="popup-title"> test</h5>
+            <button onclick="popupFrame.hidden = true;" id="btn_popup">Ok</button>
+        </div>
+    </div>
+</body>
+</html>
+<script defer>
+
+function check_pass() {
+    if (document.getElementById('mdp').value ==
+        document.getElementById('cmdp').value) {
+        document.getElementById('submit').disabled = false;
+    } else {
+        document.getElementById('submit').disabled = true;
+    }
+}
+
+function addUser(ev) {
+    ev.preventDefault();
+    console.log("debut validation");
+
+    var user = new FormData(document.getElementById("addUser"));
+    user.set('is-admin', user.get('is-admin') === 'on' ? 'true' : 'false');
+
+    fetch('/api/edit_user', {
+        method: 'POST',
+        body: encodeFormOptions(formDataToObject(user)),
+    }).then((response) => {
+        if (response.ok)
+            return response.text();
+        else
+            throw new Error('Could not fetch items');
+    }).then((data) => {
+        popupFrame.hidden = false;
+        popupFrame.querySelector('#popup-title').innerText = "L'utilisateur a été créé avec succès";
+        popupFrame.querySelector('#btn_popup').setAttribute("onClick", "window.location.href = '/accueil'");
+    }).catch(promptError);
+
+    return false;
+}
+
+    </script>

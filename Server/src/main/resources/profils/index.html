@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste utilisateur</title>
+	<link rel="stylesheet" href="index.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
+    <title>Donnees utilisateur</title>
+    <script src="https://kit.fontawesome.com/02544ac723.js" crossorigin="anonymous"></script>
+</head>
+<body>
+   <header>
+        <div id="user-tab">
+            <div class="div div1">
+				<nav>
+					<li class="test"><a href="/accueil/">Page d'accueil</a>
+					<a href="?logout">Déconnexion   <i class="fa-solid fa-arrow-right-from-bracket"></i></a></li>
+				</nav>
+			</div>
+        </div>
+    </header>
+	
+    <p><h1 class="title">Liste utilisateur</h1></p>
+	 <div id="table">
+		<table id="user-table">
+			<thead>
+				<tr class="tr list">
+					<th class="void"> </th>
+					<th>Nom</th>
+					<th>Matricule</th>
+					<th>Role</th>
+					<th>
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<!-- Populated: devices -->
+			</tbody>
+		</table>
+		<template id="user-template">
+			<tr class="tr content">
+				<td class="td void"> </td>
+				<td id="t-nom" class="td text"></td>
+				<td id="t-matricule" class="td text"></td>
+				<td id="t-role" class="td text"></td>
+				<td id="t-modify" class="td button">
+					<form class="forminscription" method="GET" id="profilUser" action="/profil?id=">
+						<input type="hidden" id="profil_item" name="id" value="">
+						<p class="p butt"><button id="details-btn" class="buttButt" >Details</button></p>
+					</form>
+				</td>
+			</tr>
+		</template>
+		<div id="popup-frame" hidden>
+			<div id="popup">
+				<h5 id="popup-title"></h5>
+				<button onclick="popupFrame.hidden = true;">Ok</button>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
+
+<script>
+    const table = document.getElementById('user-table');
+    const userTemplate = document.getElementById('user-template');
+
+    const popupFrame = document.getElementById('popup-frame');
+
+    var currentUsers = [];
+    var fetchCooldown = null;
+
+    function populateUsersTable(users) {
+        console.log(users);
+        const tbody = table.querySelector('tbody');
+        tbody.innerHTML = '';
+
+        for (let user of currentUsers)
+            tbody.appendChild(user.element);
+
+        for (let user of users) {
+            if (currentUsers.some((i) => i.id === user.id))
+                continue;
+            let element = document.importNode(userTemplate.content, true).firstElementChild;
+            console.log(element);
+            let it = {
+                id: user.id,
+                element: element
+            };
+            element.querySelector('#t-nom').textContent = user['first-name']; + ' ' + user['last-name'];;
+            element.querySelector('#t-matricule').textContent = user.id;
+            element.querySelector('#profil_item').value = user.id;
+            element.querySelector('#profilUser').action += user.id;
+            console.log(element.querySelector('#profilUser').action);
+
+            console.log(user.isAdmin);
+            if (user.isAdmin =="true") {
+                element.querySelector('#t-role').textContent = "administrateur";
+            }
+            else {
+                element.querySelector('#t-role').textContent = "utilisateur";
+            }
+                
+            element.querySelectorAll('[id]').forEach((el) => el.removeAttribute('id'));
+
+            tbody.appendChild(element);
+            currentUsers.push(it);
+        }
+    }
+
+    function fetchUsers() {
+
+        fetch('/api/list_users', {
+            method: 'POST',
+        }).then((response) => {
+            if (response.ok)
+                return response.json();
+            else
+                throw new Error('Could not fetch items');
+        }).then((data) => {
+            populateUsersTable(data.items);
+        }).catch((err) => {
+            console.error(err);
+            popupFrame.hidden = false;
+            popupFrame.querySelector('#popup-title').innerText = err.message;
+        });
+    }
+
+    function fetchUsersLater() {
+        if (fetchCooldown)
+            clearTimeout(fetchCooldown);
+        fetchCooldown = setTimeout(() => {
+            fetchUsers();
+        }, 500);
+    }
+
+    window.addEventListener('load', () => {
+        fetchUsers();
+    });
+</script>

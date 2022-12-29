@@ -1,6 +1,7 @@
 package reserve.view;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +20,6 @@ import org.takes.facets.fork.FkAuthenticated;
 import org.takes.facets.fork.FkRegex;
 import org.takes.facets.fork.Fork;
 import org.takes.facets.fork.TkFork;
-import org.takes.http.Exit;
 import org.takes.http.FtBasic;
 import org.takes.rs.RsRedirect;
 import org.takes.rs.RsText;
@@ -29,20 +29,26 @@ import org.takes.tk.TkRedirect;
 import reserve.Main;
 import reserve.controller.AppController;
 import reserve.util.Logger;
+import reserve.view.entry.FbError;
 import reserve.view.entry.FormUtils;
 import reserve.view.entry.PsAuth;
 import reserve.view.entry.PsLogout;
+import reserve.view.entry.TkEditItem;
+import reserve.view.entry.TkEditUser;
+import reserve.view.entry.TkEndReservation;
 import reserve.view.entry.TkListItems;
-import reserve.view.entry.TkMaterialManager;
-import reserve.view.entry.TkReserverationManager;
-import reserve.view.entry.TkUserManager;
+import reserve.view.entry.TkListUsers;
+import reserve.view.entry.TkProfilUser;
+import reserve.view.entry.TkReserverItem;
 import reserve.view.front.TkLog;
+import reserve.view.front.TkRedirectDir;
 import reserve.view.front.TkSpecificResource;
 
 public class WebServer {
 	
 	private static final int PORT = 8080;
 	private static final boolean REDIRECT_ON_404 = false;
+	private static final boolean MASK_INTERNAL_ERRORS = false;
 	
 	public static final Logger logger = Main.LOGGER_FACTORY.getLogger("web-server", Logger.LEVEL_INFO);
 
@@ -58,25 +64,37 @@ public class WebServer {
 	 */
 	public void open() {
 		try {
-			FormUtils.setIdentificationManager(application.getUsers());
 			logger.info("Opening server on localhost:"+PORT);
+			FormUtils.setIdentificationManager(application.getUsers());
 			new FtBasic(
 				new TkFallback(
 					new TkAuth(
 						new TkLog(Main.LOGGER_FACTORY.getLogger("route", Logger.LEVEL_DEBUG),
 							new TkFork(
 								new FkRegex("/media/.*", new TkClasspath()),
+								new FkRegex("/api/list_users", new TkListUsers(application.getUsers())),
 								new FkRegex("/api/list_items", new TkListItems(application.getMaterials())),
-								new FkRegex("/api/reservation", new TkReserverationManager(application)),
-								new FkRegex("/api/materials", new TkMaterialManager(application.getMaterials())),
-								new FkRegex("/api/users", new TkUserManager(application.getUsers())),
+								new FkRegex("/api/reserve_items", new TkReserverItem(application)),
+								new FkRegex("/api/end_reservation", new TkEndReservation(application.getReservations())),
+								new FkRegex("/api/edit_item", new TkEditItem(application.getMaterials())),
+								new FkRegex("/api/edit_user", new TkEditUser(application.getUsers())),
 								new FkRegex("/connexion.*",
 									new TkFork(
 										new FkAuthenticated(new TkRedirect("/")),
 										new FkAnonymous(new TkFork(indexPage("/connexion")))
 									)
 								),
+								new FkRegex("/profil_item", new TkProfilUser(application.getUsers())),
+								new FkRegex("/", new TkRedirect("/accueil")),
 								indexPage("/connexion"),
+								indexPage("/accueil"),
+								indexPage("/creerMateriel"),
+								indexPage("/inscription"),
+								indexPage("/listeMateriel"),
+								indexPage("/modifieMateriel"),
+								indexPage("/profil"),
+								indexPage("/profils"),
+								indexPage("/materielReserve"),
 								indexPage("/")
 							)
 						),
@@ -87,9 +105,13 @@ public class WebServer {
 					    )
 					),
 					new FbChain(
+						(MASK_INTERNAL_ERRORS ? new FbChain(
+							FbError.withStatus(IllegalArgumentException.class, HttpURLConnection.HTTP_BAD_REQUEST),
+							FbError.withStatus(IllegalStateException.class, HttpURLConnection.HTTP_BAD_REQUEST)
+						) : new FbChain()),
 						new FbStatus(404, REDIRECT_ON_404 ? new RsRedirect("/") : new RsText("404. No page to be seen here"))
 					)
-				), PORT).start(Exit.NEVER);
+				), PORT).start(WebServer::shouldStop);
 		} catch (IOException e) {
 			logger.merr(e, "Could not open server");
 		}
@@ -101,7 +123,7 @@ public class WebServer {
 		
 		if(!staticUrlPath.equals("/")) {
 			// redirect '/connexion' to '/connexion/'
-			forks.add(new FkRegex(staticUrlPath, new TkRedirect(staticUrlPath+"/")).setRemoveTrailingSlash(false));
+			forks.add(new FkRegex(staticUrlPath, new TkRedirectDir()).setRemoveTrailingSlash(false));
 			// upon '/connexion', send '/connexion/index.html'
 			forks.add(new FkRegex(staticUrlPath+"/", new TkSpecificResource(staticUrlPath + "/index.html")).setRemoveTrailingSlash(false));
 			// send any other file in the directory directly
@@ -116,6 +138,15 @@ public class WebServer {
 		return new FkRegex(dirRegex,
 			// log requests to this path
 			new TkLog(Main.LOGGER_FACTORY.getLogger("path-"+staticUrlPath, Logger.LEVEL_DEBUG), new TkFork(forks.toArray(Fork[]::new))));
+	}
+	
+	private static boolean shouldStop() {
+		// stop the server when sending anything to the console
+		try {
+			return System.in.available() > 0;
+		} catch (IOException e) {
+			return false;
+		}
 	}
 	
 }

@@ -30,19 +30,19 @@ public class PsAuth implements Pass {
 	public Opt<Identity> enter(Request request) throws Exception {
 		RqForm form = new RqFormBase(request); // using POST form
 		
-		String userName, password;
+		String userId, password;
 		try {
-			userName = FormUtils.getParamString(form, "username", UserController.USER_NAME_FORMAT, true);
+			userId = FormUtils.getParamString(form, "username", UserController.USER_ID_FORMAT, true);
 			password = FormUtils.getParamString(form, "password", UserController.PASSWORD_FORMAT, true);
 		} catch (IllegalArgumentException e) {
 			return new Opt.Empty<>();
 		}
 		
-		if(userName == null || password == null)
+		if(userId == null || password == null)
 			return new Opt.Empty<>();
 		
-		User authentifiedUser = users.authentifyUser(userName, password);
-		logger.info("Trying to authentify " + userName + ", " + (authentifiedUser==null ? "invalid crendentials" : "success"));
+		User authentifiedUser = users.authentifyUser(userId, password);
+		logger.info("Trying to authentify " + userId + ", " + (authentifiedUser==null ? "invalid crendentials" : "success"));
 		
 		if(authentifiedUser == null)
 			return new Opt.Empty<>();

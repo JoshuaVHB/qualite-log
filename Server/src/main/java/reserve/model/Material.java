@@ -21,8 +21,12 @@ public class Material
     public Material() {
         this(OperatingSystem.XX, MaterialType.OTHER, "N/A", "N/A", 0);
     }
-
+    
     public Material(OperatingSystem os, MaterialType type, String name, String version, int numRef) {
+    	this(os, type, name, version, numRef, UUID.randomUUID());
+    }
+    
+    public Material(OperatingSystem os, MaterialType type, String name, String version, int numRef, UUID id) {
 
         Objects.requireNonNull(os);
         Objects.requireNonNull(type);
@@ -35,7 +39,7 @@ public class Material
         this.name = name;
         this.version = version;
         this.numRef = numRef;
-        this.id = UUID.randomUUID();
+        this.id = id;
     }
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
@@ -83,5 +87,20 @@ public class Material
     }
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+    
+    @Override
+    public String toString() {
+    	return String.format("Material(name=%s id=%s)", name, id);
+    }
+    
+    @Override
+    public int hashCode() {
+    	return numRef;
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+    	return obj instanceof Material && ((Material) obj).id.equals(id);
+    }
 
 }

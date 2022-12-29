@@ -20,7 +20,7 @@ public class Reservation {
         this.beginning = Objects.requireNonNull(beginning);
         this.ending = Objects.requireNonNull(ending);
 
-        if (ending.compareTo(beginning) <= 0) // reservation starts after or at the end ...
+        if (ending.compareTo(beginning) < 0) // reservation starts after the end ...
             throw new IllegalArgumentException("The reservation starting date must be before the ending date !");
     }
 
@@ -36,13 +36,9 @@ public class Reservation {
     public Reservation setBeginning(LocalDate beginning)   { this.beginning = beginning;    return this;}
     public Reservation setEnding(LocalDate ending)         { this.ending = ending;          return this;}
 
-
-
-
-
-
+    @Override
+    public String toString() {
+    	return String.format("Reservation(owner=%s material=%s begining=%s)", owner.getId(), material.getId(), beginning);
+    }
+    
 }
-
-
-
-

@@ -1,0 +1,25 @@
+#popup-frame {
+    top: 0;
+    margin-left: auto;
+    margin-right: auto;
+    width: 6em;
+    background-color: white;
+    
+}
+
+#popup {
+    position: absolute;
+    text-align: center;
+    vertical-align: middle;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border-radius: 5px;
+    padding: 8px;
+    padding-top: 0px;
+    padding-bottom: 20px;
+}
+
+#btn_popup{
+
+}

@@ -7,6 +7,11 @@
     <script src="https://kit.fontawesome.com/02544ac723.js" crossorigin="anonymous"></script>
 </head>
 <body>
+    <header>
+        <div id="user-tab">
+            $$LOGGED$$
+        </div>
+    </header>
     <h1 class="title">Inscription d'un utilisateur</h1>
     <div>
         <form class="forminscription" method="GET" id="addUser">
@@ -36,13 +41,11 @@
             </label>
         </form>
 
-            <button type="submit" id="submit" onclick="addUser();">
-                Valider
-            </button>
-
-        
-
+        <button type="submit" id="submit" onclick="addUser();">
+            Valider
+        </button>
     </div>
+    <div class="returnIndex"><a href="./index.html">Retour à l'acceuil</a></div>
 
 </body>
 </html>

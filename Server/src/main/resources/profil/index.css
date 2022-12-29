@@ -1,0 +1,86 @@
+a:link{
+	font-size: 20px;
+	color: #FFFFFF;
+	font-family: monospace;
+	font-weight: bold;
+	text-decoration: none;
+	margin-left:20px;
+}
+a:visited{
+	font-size: 20px;
+	color: #FFFFFF;
+	font-family: monospace;
+	font-weight: bold;
+	text-decoration: none;
+	margin-left:20px;
+}
+div.div1{
+	height:30px;
+	width:100%;
+	background-color:black;
+	margin-top:-10px;
+}
+
+li.test{
+	text-align:right;
+	text-align:bottom;
+	margin-right:20px;
+}
+
+h1 {
+  font-size: 40px;
+  text-align: center;
+  color: #8ADECD;
+  font-family: monospace;
+  font-weight: bold;
+  margin-top:30px;
+  margin-bottom:40px;
+}
+
+#container {
+	display: block;
+	height: 60vh;
+	background-color:#8ADECD;
+	border-radius:30px;
+	width:300px;
+	margin-left: auto;
+	margin-right: auto;
+	width: 500px; /* largeur obligatoire pour être centré */
+}
+label.lab1{
+	
+	font-size: 22px;
+	color: #FFFFFF;
+	font-family: monospace;
+	font-weight: bold;
+	padding-left:60px;
+	padding-bottom:20px;
+	padding-top:20px;
+	display:inline-block;
+}
+.connectButt {
+  background-color: white;
+  border-radius: 300px;
+  color: rgb(46, 164, 140 );
+  cursor: pointer;
+  display: inline-block;
+  font-family: monospace;
+  padding: 7px 20px;
+  text-align: center;
+  text-decoration: none;
+  transition: all 250ms;
+  border: 0;
+  font-size: 20px;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  width: 200px;
+  height:50px;
+  margin-top: 10px;
+  margin-left:150px;
+}
+select{
+	border:none;
+	outline:0;
+	border-color:transparent;
+}

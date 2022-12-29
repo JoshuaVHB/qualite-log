@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Donnees utilisateur</title>
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="../css/global.css">
+    <script src="https://kit.fontawesome.com/02544ac723.js" crossorigin="anonymous"></script>
+    <script src="/main.js" defer></script>
+</head>
+<body>
+	<div class="div div1">
+		<nav>
+			<li class="test"><a href="/accueil">Page d'accueil</a>
+			<a href="?logout">Déconnexion   <i class="fa-solid fa-arrow-right-from-bracket"></i></a></li>
+		</nav>
+	</div>
+    <p><h1 class="title">Données de l'utilisateur</h1></p>
+    <div id="container">
+        <div>
+            <form class="forminscription" id="changeUser">
+                <label class="label lab1" for="role">
+                    <input type="checkbox" id="role" class="inputData" disabled="disabled" name="is-admin">Utilisateur est un administrateur
+                </label><br />
+                <label class="label lab1" for="First-name">
+                    Matricule <input class="inputData" readonly type="text" name="id" id="matricule" disabled="disabled"><br>
+                </label>
+                <label class="label lab1" for="Last-name">
+                    Prenom <input class="inputData" type="text" name="first-name" id="prenom" disabled="disabled"><br>
+                </label>
+                <label class="label lab1" for="First-name">
+                    Nom <input class="inputData" type="text" name="last-name" id="nom" disabled="disabled"><br>
+                </label>
+                <label class="label lab1" for="email">
+                    Email <input class="inputData" type="email" name="mail" id="email" disabled="disabled"><br>
+                </label>
+            </form>
+        </div>
+        <div>
+            <button id="changeData" class="connectButt" onclick="onSubmitClick();">
+                Modifier
+            </button>
+        </div>
+        <div id="popup-frame" hidden>
+            <div id="popup">
+                <h5 id="popup-title"></h5>
+                <button onclick="popupFrame.hidden = true;">Ok</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script>
+const urlParams = new URLSearchParams(window.location.search);
+let id = urlParams.get('id');
+if (id) {
+    document.getElementById('matricule').value = id;
+} else {
+    document.getElementById('matricule').value = "";
+}
+
+const elements = document.querySelectorAll('.inputData:not(.final)');
+
+function populateData(users) {
+    for (let user of users) {
+        if (user.id == id) {
+            dataUser(user);
+        }
+    }
+}
+
+    function dataUser(user) {
+        if (user.isAdmin == "true") {
+            document.getElementById('role').checked = true;
+        }
+        else {
+            document.getElementById('role').checked = false;
+        }    
+        document.getElementById('matricule').value = user.id;
+        document.getElementById('prenom').value = user['first-name'];
+        document.getElementById('nom').value = user['last-name'];
+        document.getElementById('email').value = user.email;
+    }
+
+function fetchUsers() {
+
+    if (id) {
+        fetch('/api/list_users', {
+            method: 'POST',
+        }).then((response) => {
+            if (response.ok)
+                return response.json();
+            else
+                throw new Error('Could not fetch items');
+        }).then((data) => {
+            populateData(data.items);
+        }).catch(promptError);
+    }
+    else {
+        fetch('/profil_item', {
+            method: 'POST',
+        }).then((response) => {
+            if (response.ok)
+                return response.json();
+            else
+                throw new Error('Could not fetch items');
+        }).then((data) => {
+            dataUser(data.items);
+        }).catch(promptError);
+    }
+    
+}
+
+window.addEventListener('load', () => {
+    fetchUsers();
+});
+
+
+function onSubmitClick() {
+    if (document.getElementById('changeData').innerText == 'Modifier') {
+        document.getElementById('changeData').innerText = 'Valider';
+        for (let elem of elements) {
+            elem.disabled = false;
+        }
+    } else {
+        sendUserUpdate();
+        document.getElementById('changeData').innerText = 'Modifier';
+        for (let elem of elements) {
+            elem.disabled = true;
+        }
+    }
+    
+}
+
+function sendUserUpdate() {
+    var user = new FormData(document.getElementById("changeUser"));
+
+    let url = '/api/edit_user';
+    let params = formDataToObject(user);
+    let xhr = new XMLHttpRequest();
+    xhr.open('POST', url, true);
+    xhr.send(encodeFormOptions(params));
+    xhr.onload = () => {
+        if (xhr.status == 200) {
+            console.log("Response =", xhr.responseText);
+            // do something with the data
+        } else {
+            throw new Error("Could not fetch ");
+        }
+    };
+}
+</script>

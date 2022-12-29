@@ -1,5 +1,9 @@
 package reserve.controller;
 
+import static reserve.controller.T_Utils.dummyUser;
+
+import java.time.LocalDate;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,8 +15,6 @@ import reserve.model.Reservation;
 import reserve.model.User;
 import reserve.util.AnsiLogger;
 import reserve.util.Logger;
-
-import java.time.LocalDate;
 
 public class T_Reservation {
 
@@ -42,21 +44,21 @@ public class T_Reservation {
     @Test
     public void should_throw_exception_when_field_is_null_owned() {
         Assertions.assertThrows(NullPointerException.class, () -> {
-            reservations.addReservation(new Reservation(new User(), null, LocalDate.now(), LocalDate.now().plusDays(1)));
+            reservations.addReservation(new Reservation(dummyUser(), null, LocalDate.now(), LocalDate.now().plusDays(1)));
         });
     }
 
     @Test
     public void should_throw_exception_when_field_is_null_from() {
         Assertions.assertThrows(NullPointerException.class, () -> {
-            reservations.addReservation(new Reservation(new User(), new Material(), null, LocalDate.now().plusDays(1)));
+            reservations.addReservation(new Reservation(dummyUser(), new Material(), null, LocalDate.now().plusDays(1)));
         });
     }
 
     @Test
     public void should_throw_exception_when_field_is_null_to() {
         Assertions.assertThrows(NullPointerException.class, () -> {
-            reservations.addReservation(new Reservation(new User(), new Material(), LocalDate.now(), null));
+            reservations.addReservation(new Reservation(dummyUser(), new Material(), LocalDate.now(), null));
         });
     }
 
@@ -66,7 +68,7 @@ public class T_Reservation {
         // -- Setup
         Material owned = new Material();
 
-        User admin = new User();
+        User admin = dummyUser();
         admin.setAdmin(true);
 
         Reservation reservation = new Reservation(admin, owned, LocalDate.now(), LocalDate.now().plusDays(3));
@@ -89,7 +91,7 @@ public class T_Reservation {
 
         Assertions.assertThrows(RuntimeException.class, () -> {
 
-            reservations.addReservation(new Reservation(new User(),new Material(), LocalDate.now().plusDays(3), LocalDate.now()));
+            reservations.addReservation(new Reservation(dummyUser(),new Material(), LocalDate.now().plusDays(3), LocalDate.now()));
         });
 
 
@@ -100,7 +102,7 @@ public class T_Reservation {
 
         Assertions.assertThrows(RuntimeException.class, () -> {
 
-            reservations.addReservation(new Reservation(new User(),new Material(), LocalDate.now().minusDays(3),  LocalDate.now().minusDays(2)));
+            reservations.addReservation(new Reservation(dummyUser(),new Material(), LocalDate.now().minusDays(3),  LocalDate.now().minusDays(2)));
         });
 
 
@@ -109,7 +111,7 @@ public class T_Reservation {
     @Test
     public void should_add_reservation_to_current_when_begin_date_is_today() {
 
-        User admin = new User(); admin.setAdmin(true);
+        User admin = dummyUser(); admin.setAdmin(true);
 
         Reservation reservation = new Reservation(
                 admin,
@@ -127,7 +129,7 @@ public class T_Reservation {
     @Test
     public void should_add_reservation_to_incoming_when_begin_date_is_after_today() {
 
-        User admin = new User(); admin.setAdmin(true);
+        User admin = dummyUser(); admin.setAdmin(true);
 
         Reservation reservation = new Reservation(
                 admin,
@@ -147,7 +149,7 @@ public class T_Reservation {
     @Test
     public void should_not_add_reservation_to_current_when_begin_date_is_after_today() {
 
-        User admin = new User(); admin.setAdmin(true);
+        User admin = dummyUser(); admin.setAdmin(true);
 
         Reservation reservation = new Reservation(
                 admin,
@@ -168,7 +170,7 @@ public class T_Reservation {
     @Test
     public void should_not_add_reservation_to_incoming_when_begin_date_is_today() {
 
-        User admin = new User(); admin.setAdmin(true);
+        User admin = dummyUser(); admin.setAdmin(true);
 
         Reservation reservation = new Reservation(
                 admin,
@@ -189,7 +191,7 @@ public class T_Reservation {
     public void should_add_incoming_reservation_to_current_when_begin_date_is_today() {
 
         // -- Setup
-        Reservation reservation = new Reservation(new User(), new Material(), LocalDate.now().plusDays(1), LocalDate.now().plusDays(3));
+        Reservation reservation = new Reservation(dummyUser(), new Material(), LocalDate.now().plusDays(1), LocalDate.now().plusDays(3));
         reservations.addReservation(reservation);
         reservation.setBeginning(LocalDate.now());
 
@@ -199,14 +201,14 @@ public class T_Reservation {
 
         // -- Undo
 
-        reservations.closeReservation(new User(true,"na","na","na","na"),reservation);
+        reservations.closeReservation(dummyUser().setAdmin(true),reservation);
     }
 
     @Test
     public void should_remove_incoming_reservation_from_incoming_when_begin_date_is_today() {
 
         // -- Setup
-        Reservation reservation = new Reservation(new User(), new Material(), LocalDate.now().plusDays(1), LocalDate.now().plusDays(3));
+        Reservation reservation = new Reservation(dummyUser(), new Material(), LocalDate.now().plusDays(1), LocalDate.now().plusDays(3));
         reservations.addReservation(reservation);
         reservation.setBeginning(LocalDate.now());
 
@@ -216,14 +218,14 @@ public class T_Reservation {
 
         // -- Undo
 
-        reservations.closeReservation(new User(true,"na","na","na","na"),reservation);
+        reservations.closeReservation(dummyUser().setAdmin(true), reservation);
     }
 
     @Test
     public void should_change_state_of_owned_material_when_reservation_starts() {
 
         // -- Setup
-        Reservation reservation = new Reservation(new User(), new Material(), LocalDate.now().plusDays(1), LocalDate.now().plusDays(3));
+        Reservation reservation = new Reservation(dummyUser(), new Material(), LocalDate.now().plusDays(1), LocalDate.now().plusDays(3));
         reservations.addReservation(reservation);
         reservation.setBeginning(LocalDate.now());
 
@@ -233,7 +235,7 @@ public class T_Reservation {
 
         // -- Undo
 
-        reservations.closeReservation(new User().setAdmin(true), reservation);
+        reservations.closeReservation(dummyUser().setAdmin(true), reservation);
     }
 
     // --------- ReservationController.closeReservation() --------------- //
@@ -241,20 +243,20 @@ public class T_Reservation {
     @Test
     public void should_return_true_when_closing_valid_reservation() {
 
-        User admin = new User(); admin.setAdmin(true);
+        User admin = dummyUser(); admin.setAdmin(true);
         Reservation reservation = new Reservation(admin, new Material(), LocalDate.now(), LocalDate.now().plusDays(1));
         reservations.addReservation(reservation);
-        Assertions.assertTrue(reservations.closeReservation(admin, reservation));
+        reservations.closeReservation(admin, reservation);
 
     }
 
     @Test
     public void should_throw_exception_when_user_removing_is_not_admin() {
 
-        User notAdmin = new User();
+        User notAdmin = dummyUser();
         Reservation reservation = new Reservation(notAdmin, new Material(), LocalDate.now(), LocalDate.now().plusDays(1));
         reservations.addReservation(reservation);
-        Assertions.assertThrows(RuntimeException.class, () -> {
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
         	reservations.closeReservation(notAdmin, reservation);
         });
 
@@ -263,7 +265,7 @@ public class T_Reservation {
     @Test
     public void should_throw_exception_when_reservation_is_not_in_lists() {
 
-        User admin = new User(); admin.setAdmin(true);
+        User admin = dummyUser(); admin.setAdmin(true);
         Reservation notAValidReservation = new Reservation(admin, new Material(), LocalDate.now(), LocalDate.now().plusDays(1));
         Assertions.assertThrows(RuntimeException.class, () -> {
         	reservations.closeReservation(admin, notAValidReservation);
@@ -274,7 +276,7 @@ public class T_Reservation {
     @Test
     public void should_return_null_to_object_reservation_after_closing() {
 
-        User admin = new User(); admin.setAdmin(true);
+        User admin = dummyUser(); admin.setAdmin(true);
         Material object = new Material();
         Reservation reservation = new Reservation(admin, object, LocalDate.now(), LocalDate.now().plusDays(1));
         reservations.addReservation(reservation);
@@ -287,7 +289,7 @@ public class T_Reservation {
     @Test
     public void should_throw_exception_when_admin_field_is_null() {
 
-        User admin = new User(); admin.setAdmin(true);
+        User admin = dummyUser(); admin.setAdmin(true);
         Material object = new Material();
         Reservation reservation = new Reservation(admin, object, LocalDate.now(), LocalDate.now().plusDays(1));
         reservations.addReservation(reservation);
@@ -305,7 +307,7 @@ public class T_Reservation {
     @Test
     public void should_throw_exception_when_reservation_field_is_null() {
 
-        User admin = new User(); admin.setAdmin(true);
+        User admin = dummyUser(); admin.setAdmin(true);
 
         Assertions.assertThrows(NullPointerException.class, () -> {
             reservations.closeReservation(admin, null);

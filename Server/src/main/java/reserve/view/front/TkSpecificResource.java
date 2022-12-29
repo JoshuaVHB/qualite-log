@@ -48,12 +48,7 @@ public class TkSpecificResource implements Take {
 			String condPart = sb.substring(searchIndex+4, newLine).strip();
 			Matcher m = SSR_CONDITION_PATTERN.matcher(condPart);
 			int commentEnd = sb.indexOf("-->", searchIndex);
-			if(!m.matches())
-				continue;
-			String condition = m.group(1);
-			if(isConditionRespected(condition, req)) {
-//				String body = sb.substring(searchIndex+4+m.end(0), commentEnd);
-//				sb.replace(searchIndex, commentEnd+3, body);
+			if(m.matches() && isConditionRespected(m.group(1), req)) {
 				sb.delete(commentEnd, commentEnd+3);            // remove "-->"
 				sb.delete(searchIndex, searchIndex+4+m.end(0)); // remove "<!--{{...}}"
 			} else {
@@ -66,11 +61,14 @@ public class TkSpecificResource implements Take {
 	
 	private boolean isConditionRespected(String condition, Request request) throws IOException {
 		User user = FormUtils.getUserIdentity(request);
+		boolean authentified = user != null;
+		boolean admin = user != null && user.isAdmin();
 		
 		switch(condition) {
-		case "LOGGED":     return user != null;
-		case "NOT_LOGGED": return user == null;
-		case "ADMIN":      return user.isAdmin();
+		case "LOGGED":     return authentified;
+		case "NOT_LOGGED": return !authentified;
+		case "ADMIN":      return admin;
+		case "NOT_ADMIN":  return !admin;
 		default: logger.warn("Unknown condition '" + condition + "'"); return false;
 		}
 	}

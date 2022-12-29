@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="index.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/02544ac723.js" crossorigin="anonymous"></script>
+    <script src="/main.js" defer></script>
+</head>
+<body>
+    <header>
+        <div id="user-tab">
+            <div class="div div1">
+				<nav>
+					<li class="test"><a href="/accueil/">Page d'accueil</a>
+					<a href="?logout">Déconnexion   <i class="fa-solid fa-arrow-right-from-bracket"></i></a></li>
+				</nav>
+			</div>
+        </div>
+    </header>
+    <p><h1 class="title">Matériel emrpunté</h1></p>
+    <div id="page-content">
+        <div id="table">
+            <table id="materials-table">
+                <thead>
+                    <tr class="tr list">
+						<th class="void"> </th>
+                        <th>Type</th>
+                        <th>OS</th>
+                        <th>Nom</th>
+                        <th>Réference</th>
+                        <th>Réservé par</th>
+                        <th>Date de réservation</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Populated: devices -->
+                </tbody>
+            </table>
+            <template id="item-template" >
+                <tr class="tr content">
+					<td class="td void"> </td>
+                    <td id="t-type" class="td text"></td>
+                    <td id="t-os" class="td text"></td>
+                    <td id="t-name" class="td text"></td>
+                    <td id="t-reference" class="td text"></td>
+                    <td id="t-reservation" class="td text"></td>
+                    <td id="t-date" class="td text"></td>
+                    <td id="t-Rendre" class="td button">
+                            <p class="p butt"><button id="rendu-btn" class="buttButt"  onclick="rendreMateriel()">Rendre</button></p>
+
+                    </td>
+					
+                    <td id="t-retard" class="td late"></td>
+                </tr>
+            </template>
+        </div>
+    </div>
+
+    <div id="popup-frame" hidden>
+        <div id="popup">
+            <h5 id="popup-title"></h5>
+            <button onclick="popupFrame.hidden = true;">Ok</button>
+        </div>
+    </div>
+
+</body>
+</html>
+<script defer>
+
+    const table = document.getElementById('materials-table');
+    const itemTemplate = document.getElementById('item-template');
+
+    var fetchCooldown = null;
+
+    function rendreMateriel(item, ownerId, reservationBeginning) {
+        fetch('/api/end_reservation', {
+            method: 'POST',
+            body: encodeFormOptions({
+                'materialId': item.id,
+                'userId': ownerId,
+                'from-date': reservationBeginning
+            }),
+        }).then((response) => {
+            if (response.ok)
+                item.element.remove();
+            else
+                throw new Error('Could not end reservation');
+        }).catch(promptError);
+    }
+
+
+    function populateItemsTable(items) {
+        console.log(items);
+        const tbody = table.querySelector('tbody');
+        tbody.innerHTML = '';
+
+        for (let item of items) {
+            let element = document.importNode(itemTemplate.content, true).firstElementChild;
+            let it = {
+                id: item.id,
+                element: element
+            };
+            if (item.reservation) {
+                element.querySelector('#t-os').textContent = item.os;
+                element.querySelector('#t-type').textContent = item.type + ' ' + item.version;
+                element.querySelector('#t-name').textContent = item.name;
+                element.querySelector('#t-reference').textContent = item.numref;
+                element.querySelector('#t-reservation').textContent = item.reservation.userName;
+                element.querySelector('#t-date').textContent = dateToString(item.reservation.upToDate);
+                element.querySelector('#t-retard').textContent = retard(item.reservation.upToDate);
+                element.querySelector('#rendu-btn').onclick = () =>
+                    rendreMateriel(it, item.reservation.userId, item.reservation.fromDate);
+                element.querySelectorAll('[id]').forEach((el) => el.removeAttribute('id'));
+
+                tbody.appendChild(element);
+            }
+           
+        }
+    }
+
+    function retard(date) {
+        let now = new Date();
+        let dateRes = new Date(date);
+        
+        if (dateRes < now) {
+            console.log("retard");
+            return "En retard";
+        }
+        
+        return "";
+    }
+
+    function dateToString(date) {
+        return date.substr(6,2) + '/' + date.substr(4, 2) + '/' + date.substr(0,4);
+    }
+
+    function encodeFormOptions(options = {}) {
+        let params = new URLSearchParams();
+        for (let key in options) {
+            if (options[key] !== null && options[key] !== undefined)
+                params.append(key, options[key]);
+        }
+        return params.toString();
+    }
+
+    function fetchItems() {
+        let options = {};
+        options.includeReserved = true;
+
+        fetch('/api/list_items', {
+            method: 'POST',
+            body: encodeFormOptions(options),
+        }).then((response) => {
+            if (response.ok)
+                return response.json();
+            else
+                throw new Error('Could not fetch items');
+        }).then((data) => {
+            populateItemsTable(data.items);
+        }).catch((err) => {
+            console.error(err);
+            popupFrame.hidden = false;
+            popupFrame.querySelector('#popup-title').innerText = err.message;
+        });
+    }
+
+    function fetchItemsLater() {
+        if (fetchCooldown)
+            clearTimeout(fetchCooldown);
+        fetchCooldown = setTimeout(() => {
+            fetchItems();
+        }, 500);
+    }
+
+    window.addEventListener('load', () => {
+        fetchItems();
+    });
+</script>
