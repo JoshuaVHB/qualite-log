@@ -1,24 +1,16 @@
 package reserve.view.entry;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.takes.Request;
 import org.takes.Response;
 import org.takes.Take;
-import org.takes.rq.RqForm;
-import org.takes.rq.form.RqFormBase;
 import org.takes.rs.RsText;
 
-import reserve.controller.MaterialController;
 import reserve.controller.UserController;
 import reserve.controller.io.JsonSerializer;
-import reserve.model.Material;
-import reserve.model.MaterialType;
-import reserve.model.OperatingSystem;
 import reserve.model.User;
 
 public class TkListUsers implements Take {

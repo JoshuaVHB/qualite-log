@@ -6,8 +6,8 @@
     <title>Donnees utilisateur</title>
     <link rel="stylesheet" href="index.css">
     <link rel="stylesheet" href="../css/global.css">
-
     <script src="https://kit.fontawesome.com/02544ac723.js" crossorigin="anonymous"></script>
+    <script src="/main.js"></script>
 </head>
 <body>
 	<div class="div div1">
@@ -39,7 +39,7 @@
             </form>
         </div>
         <div>
-            <button id="changeData" class="connectButt" onclick="changeData();">
+            <button id="changeData" class="connectButt" onclick="onSubmitClick();">
                 Modifier
             </button>
         </div>
@@ -124,16 +124,14 @@
     });
 
     
-    function changeData() {
+    function onSubmitClick() {
         if (document.getElementById('changeData').innerText == 'Modifier') {
             document.getElementById('changeData').innerText = 'Valider';
-            
             for (let elem of elements) {
                 elem.disabled = false;
             }
-        }
-        else {
-            validateData();
+        } else {
+            sendUpdate();
             document.getElementById('changeData').innerText = 'Modifier';
             for (let elem of elements) {
                 elem.disabled = true;
@@ -142,14 +140,14 @@
         
     }
 
-    function validateData() {
+    function sendUpdate() {
         var user = new FormData(document.getElementById("changeUser"));
 
-        let url = '/api/updateMateriel';
-        let params = user;
+        let url = '/api/edit_user';
+        let params = formDataToObject(user);
         let xhr = new XMLHttpRequest();
         xhr.open('GET', url, true);
-        xhr.send(params);
+        xhr.send(encodeFormOptions(params));
         xhr.onload = () => {
             if (xhr.status == 200) {
                 console.log("Response =", xhr.responseText);
