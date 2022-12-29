@@ -43,7 +43,7 @@
             </label>
             <label class="label lab1">
                 Confirmer le mot de passe <label class="labelinscription" for="cmdp"></label>
-                <input class="inputinscription" type="password" placeholder="Confirmation le mot de passe" id="cmdp" onchange='check_pass();' required><br>
+                <input class="inputinscription" type="password" placeholder="Confirmation le mot de passe" id="cmdp" onkeyup='check_pass();' required><br>
             </label>
             <div>
                 <button type="submit" class="connectButt" id="submit">
@@ -73,6 +73,8 @@ function check_pass() {
 
 function addUser(ev) {
     ev.preventDefault();
+    console.log("debut validation");
+
     var user = new FormData(document.getElementById("addUser"));
     user.set('is-admin', user.get('is-admin') === 'on' ? 'true' : 'false');
 
@@ -87,9 +89,10 @@ function addUser(ev) {
     }).then((data) => {
         popupFrame.hidden = false;
         popupFrame.querySelector('#popup-title').innerText = "L'utilisateur a été créé avec succès";
-        popupFrame.querySelector('#btn_popup').onclick = window.location.href = '/accueil';
+        popupFrame.querySelector('#btn_popup').setAttribute("onClick", "window.location.href = '/accueil'");
     }).catch(promptError);
 
     return false;
 }
+
     </script>
