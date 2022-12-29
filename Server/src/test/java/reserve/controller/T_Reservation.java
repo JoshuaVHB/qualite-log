@@ -6,7 +6,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import reserve.Main;
-import reserve.controller.ReservationController;
 import reserve.model.Material;
 import reserve.model.Reservation;
 import reserve.model.User;

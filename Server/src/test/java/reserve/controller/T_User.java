@@ -6,7 +6,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import reserve.Main;
-import reserve.controller.UserController;
 import reserve.model.User;
 import reserve.util.AnsiLogger;
 import reserve.util.Logger;

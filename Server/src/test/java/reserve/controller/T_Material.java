@@ -90,7 +90,6 @@ public class T_Material {
     public void should_return_material_when_id_exists() {
 
         Material dummy = new Material();
-        Material dummy2 = new Material();
         materials.addMaterial(dummy);
 
         Assertions.assertEquals(dummy, materials.getMaterialById(dummy.getId()));
@@ -168,7 +167,7 @@ public class T_Material {
     @Test
     public void should_contain_all_materials_of_filter_by_os() {
 
-        Material dummies[] = new Material[] {
+        Material[] dummies = new Material[] {
 
           new Material(),
           new Material(),
@@ -183,14 +182,14 @@ public class T_Material {
         List<Material> allMats = materials.getAllMaterials();
         MaterialController.filterByOS(allMats, OperatingSystem.XX);
 
-        Assertions.assertTrue(allMats.size()==dummies.length );
+        Assertions.assertEquals(allMats.size(), dummies.length);
 
     }
 
     @Test
     public void should_return_empty_list_when_no_material_is_found_using_os() {
 
-        Material dummies[] = new Material[] {
+        Material[] dummies = new Material[] {
 
                 new Material(),
                 new Material(),
@@ -205,7 +204,7 @@ public class T_Material {
         List<Material> allMats = materials.getAllMaterials();
         MaterialController.filterByOS(allMats, OperatingSystem.AP);
 
-        Assertions.assertTrue(allMats.size() == 0 );
+        Assertions.assertEquals(0, allMats.size());
 
     }
 
@@ -243,7 +242,7 @@ public class T_Material {
     @Test
     public void should_contain_all_materials_of_filter_by_type() {
 
-        Material dummies[] = new Material[] {
+        Material[] dummies = new Material[] {
 
                 new Material(),
                 new Material(),
@@ -258,14 +257,14 @@ public class T_Material {
         List<Material> allMats = materials.getAllMaterials();
         MaterialController.filterByType(allMats, MaterialType.OTHER );
 
-        Assertions.assertTrue(allMats.size()==dummies.length );
+        Assertions.assertEquals(allMats.size(), dummies.length);
 
     }
 
     @Test
     public void should_return_empty_list_when_no_material_is_found_using_type() {
 
-        Material dummies[] = new Material[] {
+        Material[] dummies = new Material[] {
 
                 new Material(),
                 new Material(),
@@ -280,7 +279,7 @@ public class T_Material {
         List<Material> allMats = materials.getAllMaterials();
         MaterialController.filterByType(allMats, MaterialType.TABLET);
 
-        Assertions.assertTrue(allMats.size() == 0 );
+        Assertions.assertEquals(0, allMats.size());
     }
 
     // --------- MaterialController.filterByName() --------------- //
@@ -316,7 +315,7 @@ public class T_Material {
     @Test
     public void should_contain_all_materials_of_filter_by_name() {
 
-        Material dummies[] = new Material[] {
+        Material[] dummies = new Material[] {
 
                 new Material(),
                 new Material(),
@@ -343,7 +342,7 @@ public class T_Material {
     @Test
     public void should_return_empty_list_when_no_material_is_found_having_name() {
 
-        Material dummies[] = new Material[] {
+        Material[] dummies = new Material[] {
 
                 new Material(),
                 new Material(),
