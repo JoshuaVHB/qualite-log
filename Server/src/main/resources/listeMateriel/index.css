@@ -35,7 +35,7 @@ li.test{
 }
 
 h1 {
-  font-size: 30px;
+  font-size: 25px;
   text-align: center;
   color: #8ADECD;
   font-family: monospace;
@@ -84,7 +84,7 @@ template.content{
 
 label.lab2{
 	
-	font-size: 25px;
+	font-size: 15px;
 	color: #FFFFFF;
 	font-family: monospace;
 	font-weight: bold;
@@ -105,7 +105,7 @@ label.lab2{
   text-decoration: none;
   transition: all 250ms;
   border: 0;
-  font-size: 18px;
+  font-size: 15px;
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
@@ -127,7 +127,7 @@ label.lab2{
   text-decoration: none;
   transition: all 250ms;
   border: 0;
-  font-size: 18px;
+  font-size: 15px;
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
@@ -135,7 +135,6 @@ label.lab2{
   height:auto;
   margin-top: 10px;
   margin-bottom:10px;
-  margin-left:50px;
 }
 select{
 	border:none;
@@ -148,50 +147,45 @@ input{
 	border-color:transparent;
 }
 th{
-	font-size: 25px;
+	font-size: 15px;
 	font-family: monospace;
 	font-weight: bold;
-	padding-left:50px;
+	padding-left:30px;
 	display:flow;
-	padding-right:50px;
+	padding-right:30px;
 	padding-top:20px;
 	padding-bottom:20px;
 }
 th.void{
 	background-color:#8ADECD;
-	padding-left:10px;
-	padding-right:10px;
+	padding-left:5px;
+	padding-right:5px;
 	display:flow;
-	padding-bottom:20px;
-	padding-top:20px;
+	padding-bottom:10px;
+	padding-top:10px;
 }
 td.text{
 	font-family: monospace;
 	font-weight: bold;
 	text-align:center;
 	padding-left:60px;
-	padding-bottom:20px;
-	padding-top:20px;
+	padding-bottom:10px;
+	padding-top:10px;
 	display:flow;
 	padding-right:60px;
 }
 td.check{
 	text-align:center;
-	padding-left:60px;
-	padding-bottom:20px;
-	padding-top:20px;
-	display:flow;
-	padding-right:60px;
+	padding-bottom:10px;
+	padding-top:10px;
 	background-color:#8ADECD;
 }
 td.button{
 	text-align:left;
 	padding-bottom:0px;
 	padding-top:0px;
-	display:flow;
-	padding-left:30px;
-	padding-right:30px;
 	background-color:#8ADECD;
+	padding-right:40px;
 }
 td.void{
 	background-color:#8ADECD;
@@ -202,13 +196,13 @@ td.void{
 	padding-top:20px;
 }
 tr.content{
-	font-size: 20px;
+	font-size: 15px;
 	font-family: monospace;
 	font-weight: bold;
 	text-align:center;
 	background-color:white;
 	border-radius:20px;
-	height: 25px;
+	height: 15px;
 	width:100px;
 	
 }
