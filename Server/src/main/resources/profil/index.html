@@ -76,10 +76,9 @@
 
     function dataUser(user) {
         document.getElementById('role').checked = user.isAdmin;
-
         document.getElementById('matricule').value = user.id;
-        document.getElementById('prenom').value = user.name;
-        document.getElementById('nom').value = user.name;
+        document.getElementById('prenom').value = user.firstName;
+        document.getElementById('nom').value = user.lastName;
         document.getElementById('email').value = user.email;
     }
 

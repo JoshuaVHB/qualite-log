@@ -3,11 +3,11 @@ package reserve.view.front;
 import org.takes.Request;
 import org.takes.Response;
 import org.takes.Take;
-import org.takes.facets.auth.Identity;
-import org.takes.facets.auth.RqAuth;
 import org.takes.rq.RqHref;
 
+import reserve.model.User;
 import reserve.util.Logger;
+import reserve.view.entry.FormUtils;
 
 public class TkLog implements Take {
 	
@@ -22,8 +22,11 @@ public class TkLog implements Take {
 	@Override
 	public Response act(Request req) throws Exception {
 		String url = new RqHref.Base(req).href().path();
-		Identity identity = new RqAuth(req).identity();
-		logger.debug(String.format("req static=%s %s", url, (identity!=Identity.ANONYMOUS ? "identified" : "")));
+		User user = FormUtils.getUserIdentity(req);
+		logger.debug(String.format("req static=%s [%s%s]",
+				url,
+				(user!=null ? "identified " : ""),
+				(user!=null&&user.isAdmin() ? "admin " : "")));
 		return actor.act(req);
 	}
 	

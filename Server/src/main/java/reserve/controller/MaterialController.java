@@ -16,6 +16,8 @@ import reserve.util.Logger;
 public class MaterialController {
 	
     public static final String KEYWORD_FILTER_PATTERN = ".*";
+    public static final String MAT_NAME_FORMAT = ".*";
+    public static final String MAT_VERSION_FORMAT = ".*"; // TODO change regex to match specs
     
     private static final Logger logger = Main.LOGGER_FACTORY.getLogger("materials", Logger.LEVEL_DEBUG);
     

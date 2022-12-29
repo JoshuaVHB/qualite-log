@@ -33,6 +33,7 @@ import reserve.view.entry.FbError;
 import reserve.view.entry.FormUtils;
 import reserve.view.entry.PsAuth;
 import reserve.view.entry.PsLogout;
+import reserve.view.entry.TkCreateItem;
 import reserve.view.entry.TkListItems;
 import reserve.view.entry.TkListUsers;
 import reserve.view.entry.TkProfilUser;
@@ -72,6 +73,7 @@ public class WebServer {
 								new FkRegex("/api/list_users", new TkListUsers(application.getUsers())),
 								new FkRegex("/api/list_items", new TkListItems(application.getMaterials())),
 								new FkRegex("/api/reserve_items", new TkReserverItem(application)),
+								new FkRegex("/api/create_item", new TkCreateItem(application.getMaterials())),
 								new FkRegex("/connexion.*",
 									new TkFork(
 										new FkAuthenticated(new TkRedirect("/")),
@@ -79,7 +81,7 @@ public class WebServer {
 									)
 								),
 								new FkRegex("/profil_item", new TkProfilUser(application.getUsers())),
-								new FkRegex("/", new TkRedirect("/accueil")) ,
+								new FkRegex("/", new TkRedirect("/accueil")),
 								indexPage("/connexion"),
 								indexPage("/accueil"),
 								indexPage("/creerMateriel"),
@@ -88,8 +90,8 @@ public class WebServer {
 								indexPage("/modifieMateriel"),
 								indexPage("/profil"),
 								indexPage("/profils"),
-								indexPage("/materielReserve")
-								
+								indexPage("/materielReserve"),
+								indexPage("/")
 							)
 						),
 						new PsChain(
