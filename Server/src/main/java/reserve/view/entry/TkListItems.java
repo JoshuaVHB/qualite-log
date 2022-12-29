@@ -38,12 +38,10 @@ public class TkListItems implements Take {
 		boolean includeReserved = FormUtils.hasParam(href, "includeReserved");
 		
 		List<Material> res = materials.getAllMaterials();
-		System.out.println(res);
 		if(os != null)       MaterialController.filterByOS(res, os);
 		if(type != null)     MaterialController.filterByType(res, type);
 		if(keyword != null)  MaterialController.filterByName(res, keyword);
 		if(!includeReserved) MaterialController.filterByAvailability(res);
-		System.out.println(res);
 		
 		JSONArray serializedMaterials = JsonSerializer.serializeMaterialList(res, true);
 		JSONArray serializedTypesList = new JSONArray();

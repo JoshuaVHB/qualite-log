@@ -83,7 +83,7 @@
 						<th>Réservé par</th>
 						<th>
 							Réserver
-							<input type="checkbox" id="select-all">
+							<input type="checkbox" id="select-all" autocomplete="off">
 						</th>
 						<!--{{ADMIN}} <th> </th> <th> </th> -->
 					</tr>
@@ -104,7 +104,6 @@
                         <!--{{ADMIN}}
                         <td class="td button">
                             <form class="forminscription" method="GET" id="profilItem" action="/modifieMateriel?id=">
-                                <input type="hidden" id="profil_item" name="id" value="">
                                 <p class="p butt"><button class="buttButt" id="details-btn">Modifier</button></p>
                             </form>
                          </td>
@@ -176,7 +175,13 @@
                 input.addEventListener('input', fetchItems);
         });
 
-        function deleteMaterial (){
+        function promptError(message) {
+            console.error(message);
+            popupFrame.hidden = false;
+            popupFrame.querySelector('#popup-title').innerText = message;
+        }
+
+        function deleteMaterial () {
             //TODO
         }
 
@@ -243,8 +248,8 @@
                 element.querySelector('#t-name').textContent = item.name;
                 element.querySelector('#t-reference').textContent = item.numref;
                 element.querySelector('#t-reservation').textContent = item.reservation ? item.reservation.userName + ' jusqu\'au ' + item.reservation.upToDate : '-';
-                element.querySelector('#profil_item').value = item.id;
-                element.querySelector('#profilItem').action += item.id;
+                let profilItem = element.querySelector('#profilItem');
+                if(profilItem) profilItem.action += item.id;
 
                 element.querySelectorAll('[id]').forEach((el) => el.removeAttribute('id'));
                 let selectionCheckbox = element.querySelector('input[type=checkbox]');
@@ -277,7 +282,7 @@
             let params = new URLSearchParams();
             for (let key in options) {
                 if (options[key] !== null && options[key] !== undefined)
-                    params.append(key, options[key]);
+                    params.append(key, options[key].toString());
             }
             return params.toString();
         }
@@ -301,9 +306,7 @@
                 populateItemsTable(data.items);
                 populateFilters(data['type-list'], data['os-list']);
             }).catch((err) => {
-                console.error(err);
-                popupFrame.hidden = false;
-                popupFrame.querySelector('#popup-title').innerText = err.message;
+                promptError(err.message);
             });
         }
 
@@ -317,25 +320,32 @@
 
         function reserveSelectedItems() {
             fetch('/api/reserve_items', {
-                method: 'GET',
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
-                    items: reservedItemIds,
+                body: encodeFormOptions({
+                    // items: Array.from(reservedItemIds),
+                    items: Array.from(reservedItemIds).join(','),
                     from: inputReservationFrom.value,
                     to: inputReservationTo.value
                 })
             }).then((response) => {
                 if (response.status != 200) {
-                    console.log(`Error ${response.status}: ${response.statusText}`);
-                    // TODO prompt user with error
-                } else {
-                    response.json().then((data) => {
-                        console.log(data);
-                        // TODO prompt user with popup
-                    });
+                    promptError(`Could not reserve items: ${response.statusText}`);
+                    return;
                 }
+                response.json().then((data) => {
+                    console.log(data);
+                    for(let materialId in data.items) {
+                        let success = data.items[materialId] == 'ok';
+                        if(!success) {
+                            let error = data.items[materialId];
+                            // TODO prompt user with popup
+                            // promptError(`Could not reserve item ${materialId}: ${error}`);
+                        }
+                    }
+                });
             });
         }
 

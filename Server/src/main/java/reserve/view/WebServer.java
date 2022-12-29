@@ -1,6 +1,7 @@
 package reserve.view;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +29,7 @@ import org.takes.tk.TkRedirect;
 import reserve.Main;
 import reserve.controller.AppController;
 import reserve.util.Logger;
+import reserve.view.entry.FbError;
 import reserve.view.entry.FormUtils;
 import reserve.view.entry.PsAuth;
 import reserve.view.entry.PsLogout;
@@ -43,6 +45,7 @@ public class WebServer {
 	
 	private static final int PORT = 8080;
 	private static final boolean REDIRECT_ON_404 = false;
+	private static final boolean MASK_INTERNAL_ERRORS = false;
 	
 	public static final Logger logger = Main.LOGGER_FACTORY.getLogger("web-server", Logger.LEVEL_INFO);
 
@@ -68,7 +71,7 @@ public class WebServer {
 								new FkRegex("/media/.*", new TkClasspath()),
 								new FkRegex("/api/list_users", new TkListUsers(application.getUsers())),
 								new FkRegex("/api/list_items", new TkListItems(application.getMaterials())),
-								new FkRegex("/api/reserve_item", new TkReserverItem(application)),
+								new FkRegex("/api/reserve_items", new TkReserverItem(application)),
 								new FkRegex("/connexion.*",
 									new TkFork(
 										new FkAuthenticated(new TkRedirect("/")),
@@ -96,6 +99,10 @@ public class WebServer {
 					    )
 					),
 					new FbChain(
+						(MASK_INTERNAL_ERRORS ? new FbChain(
+							FbError.withStatus(IllegalArgumentException.class, HttpURLConnection.HTTP_BAD_REQUEST),
+							FbError.withStatus(IllegalStateException.class, HttpURLConnection.HTTP_BAD_REQUEST)
+						) : new FbChain()),
 						new FbStatus(404, REDIRECT_ON_404 ? new RsRedirect("/") : new RsText("404. No page to be seen here"))
 					)
 				), PORT).start(WebServer::shouldStop);

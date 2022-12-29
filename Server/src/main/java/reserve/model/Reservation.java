@@ -20,7 +20,7 @@ public class Reservation {
         this.beginning = Objects.requireNonNull(beginning);
         this.ending = Objects.requireNonNull(ending);
 
-        if (ending.compareTo(beginning) <= 0) // reservation starts after or at the end ...
+        if (ending.compareTo(beginning) < 0) // reservation starts after the end ...
             throw new IllegalArgumentException("The reservation starting date must be before the ending date !");
     }
 

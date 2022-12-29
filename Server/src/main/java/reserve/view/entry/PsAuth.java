@@ -34,7 +34,6 @@ public class PsAuth implements Pass {
 		try {
 			userId = FormUtils.getParamString(form, "username", UserController.USER_ID_FORMAT, true);
 			password = FormUtils.getParamString(form, "password", UserController.PASSWORD_FORMAT, true);
-			System.out.println(userId+" : "+password);
 		} catch (IllegalArgumentException e) {
 			return new Opt.Empty<>();
 		}
