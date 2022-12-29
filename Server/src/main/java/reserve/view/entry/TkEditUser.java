@@ -51,7 +51,7 @@ public class TkEditUser implements Take {
 			// create a new user
 			String password = FormUtils.getParamString(form, "password", ".*", false);
 			String newId = users.getNextUserId();
-			User user = new User(isAdmin, firstName, lastName, phone, editedUserId, mail, password);
+			User user = new User(isAdmin, firstName, lastName, phone, newId, mail, password);
 			try {
 				users.addUser(user);
 				return new RsText(newId);

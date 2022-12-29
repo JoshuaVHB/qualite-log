@@ -18,7 +18,9 @@ function encodeFormOptions(options = {}) {
         if (options[key] !== null && options[key] !== undefined) {
             if(options[key] == 'on')
                 params.append(key, 'true'); // prevent checkbox from being unchecked
-            else if(options[key] != 'off')
+            else if(options[key] == 'off')
+                params.append(key, 'false');
+            else
                 params.append(key, options[key].toString());
         }
     }
