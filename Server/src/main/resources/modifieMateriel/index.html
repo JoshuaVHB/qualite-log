@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>Ajouter un matériel</title>
+    <title>Modifier materiel</title>
     <link rel="stylesheet" href="index.css">
     <script src="https://kit.fontawesome.com/02544ac723.js" crossorigin="anonymous"></script>
 
@@ -19,7 +19,7 @@
         </nav>
     </div>
     <div>
-        <p><h1>Ajout d'un nouveau matériel</h1></p>
+        <p><h1>Modifier le materiel</h1></p>
     </div>
     <div id="container">
         <form class="form" method="GET" id="ModifieMateriel">
@@ -66,7 +66,6 @@
 
     function populateData(items) {
         for (let item of items) {
-            console.log(item);
             if (item.id == id) {
                 
                 dataItem(item);
@@ -74,9 +73,9 @@
         }
     }
 
-    function dataItem(item) {
-        //document.getElementById('type').value = item.type;
-        //document.getElementById('os').value = item.os;
+    function dataItem(item) {    
+        document.getElementById('type').value = item.type;
+        document.getElementById('OS').value = item.os;
         document.getElementById('nom').value = item.name;
         document.getElementById('version').value = item.version;
     }
