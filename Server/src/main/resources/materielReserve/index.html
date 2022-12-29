@@ -7,25 +7,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="index.css">
-    <link rel="stylesheet" href="/main.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
     <script src="https://kit.fontawesome.com/02544ac723.js" crossorigin="anonymous"></script>
 </head>
 <body>
     <header>
-        <nav>
-            <li class="test">
-                <a href="/accueil">Page d'accueil</a>
-                <a href="?logout">Déconnexion   <i class="fa-solid fa-arrow-right-from-bracket"></i></a>
-            </li>
-        </nav>
+        <div id="user-tab">
+            <div class="div div1">
+				<nav>
+					<li class="test"><a href="/accueil/">Page d'accueil</a>
+					<a href="?logout">Déconnexion   <i class="fa-solid fa-arrow-right-from-bracket"></i></a></li>
+				</nav>
+			</div>
+        </div>
     </header>
-    <h1 class="title">Materiel emrpunté</h1>
+    <p><h1 class="title">Matériel emrpunté</h1></p>
     <div id="page-content">
-        <div>
+        <div id="table">
             <table id="materials-table">
                 <thead>
-                    <tr>
+                    <tr class="tr list">
                         <th>Type</th>
                         <th>OS</th>
                         <th>Nom</th>
@@ -42,16 +43,17 @@
                     <!-- Populated: devices -->
                 </tbody>
             </table>
-            <template id="item-template">
-                <tr>
-                    <td id="t-type"></td>
-                    <td id="t-os"></td>
-                    <td id="t-name"></td>
-                    <td id="t-reference"></td>
-                    <td id="t-reservation"></td>
-                    <td id="t-date"></td>
-                    <td id="t-Rendre">
-                            <p class="p butt"><button id="rendu-btn" onclick="rendreMateriel()">Rendu</button></p>
+            <template id="item-template" >
+                <tr class="tr content">
+					<td class="td void"> </td>
+                    <td id="t-type" class="td text"></td>
+                    <td id="t-os" class="td text"></td>
+                    <td id="t-name" class="td text"></td>
+                    <td id="t-reference" class="td text"></td>
+                    <td id="t-reservation" class="td text"></td>
+                    <td id="t-date" class="td text"></td>
+                    <td id="t-Rendre" class="td button">
+                            <p class="p butt"><button id="rendu-btn" class="buttButt"  onclick="rendreMateriel()">Rendu</button></p>
                     </td>
                 </tr>
             </template>
