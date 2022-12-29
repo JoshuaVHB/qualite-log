@@ -43,78 +43,21 @@ h1 {
   margin-top:30px;
   margin-bottom:40px;
 }
-#container {
-	display: block;
-	min-height:50px;
-	height: auto;
-	background-color:#8ADECD;
-	border-radius:10px;
-	width:90%;
-	margin-left: auto;
-	margin-right: auto;
-	text-align:center;
-	margin-top:40px;
-}
+
 #table {
 	display: block;
 	min-height:100px;
 	height:auto;
 	background-color:#8ADECD;
 	border-radius:10px;
-	width:90%;
+	width:55%;
 	margin-left: auto;
 	margin-right: auto;
 	text-align:auto;
 	margin-top:40px
 	
 }
-template.content{
-	display: block;
-	height: auto;
-	min-height:50px;
-	background-color:white;
-	border-radius:10px;
-	width:98%;
-	margin-left: auto;
-	margin-right: auto;
-	padding-bottom:10px;
-	text-align:center;
-	content:center;
-}
 
-label.lab2{
-	
-	font-size: 15px;
-	color: #FFFFFF;
-	font-family: monospace;
-	font-weight: bold;
-	padding-left:15px;
-	padding-top:5px;
-	display:inline-block;
-}
-
-.reserverButt {
-  background-color: rgb(46, 164, 140 );
-  border-radius: 300px;
-  color: white;
-  cursor: pointer;
-  display: inline-block;
-  font-family: monospace;
-  padding: 7px 20px;
-  text-align: center;
-  text-decoration: none;
-  transition: all 250ms;
-  border: 0;
-  font-size: 15px;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-  width: auto;
-  height:auto;
-  margin-top: 10px;
-  margin-bottom:10px;
-  margin-left:50px;
-}
 .buttButt {
   background-color: rgb(46, 164, 140 );
   border-radius: 300px;
@@ -127,7 +70,7 @@ label.lab2{
   text-decoration: none;
   transition: all 250ms;
   border: 0;
-  font-size: 15px;
+  font-size: 17px;
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
@@ -136,18 +79,9 @@ label.lab2{
   margin-top: 5px;
   margin-bottom:5px;
 }
-select{
-	border:none;
-	outline:0;
-	border-color:transparent;
-}
-input{
-	border:none;
-	outline:0;
-	border-color:transparent;
-}
+
 th{
-	font-size: 15px;
+	font-size: 20px;
 	font-family: monospace;
 	font-weight: bold;
 	padding-left:30px;
@@ -159,10 +93,10 @@ th{
 th.void{
 	background-color:#8ADECD;
 	padding-left:5px;
-	padding-right:10px;
+	padding-right:5px;
 	display:flow;
 	padding-bottom:10px;
-	padding-top:5px;
+	padding-top:10px;
 }
 td.text{
 	font-family: monospace;
@@ -173,36 +107,39 @@ td.text{
 	padding-top:5px;
 	display:flow;
 	padding-right:60px;
+	color:black;
 }
+
 td.check{
 	text-align:center;
-	padding-bottom:5px;
-	padding-top:5px;
+	padding-bottom:10px;
+	padding-top:10px;
 	background-color:#8ADECD;
 }
 td.button{
 	text-align:left;
 	padding-bottom:0px;
 	padding-top:0px;
+	padding-left:10px;
+	padding-right:0px;
 	background-color:#8ADECD;
-	padding-right:40px;
 }
 td.void{
 	background-color:#8ADECD;
-	padding-left:10px;
-	padding-right:10px;
+	padding-left:5px;
+	padding-right:5px;
 	display:flow;
 	padding-bottom:5px;
 	padding-top:5px;
 }
 tr.content{
-	font-size: 15px;
+	font-size: 17px;
 	font-family: monospace;
 	font-weight: bold;
 	text-align:center;
 	background-color:white;
 	border-radius:20px;
-	height: 15px;
+	height: 10px;
 	width:100px;
 	
 }
