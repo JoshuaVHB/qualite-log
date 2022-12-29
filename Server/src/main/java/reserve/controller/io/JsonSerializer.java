@@ -45,7 +45,7 @@ public class JsonSerializer {
 		Reservation reservation = material.getReservation();
 		if(includeReservation && reservation != null) {
 			JSONObject jsonReservation = new JSONObject();
-			jsonReservation.put("userName", reservation.getOwner().getName());
+			jsonReservation.put("userName", reservation.getOwner().getFirstName() + " " + reservation.getOwner().getLastName());
 			jsonReservation.put("upToDate", reservation.getEnding().format(DATE_FORMATTER));
 			json.put("reservation", jsonReservation);
 		}
@@ -61,11 +61,12 @@ public class JsonSerializer {
 		String isAdmin = "false";
 		if(user.isAdmin()) isAdmin = "true";
 		json.put("isAdmin", isAdmin);
-		json.put("id",       user.getId().toString());
-		json.put("name",     user.getName());
-		json.put("email",    user.getEmail());
-		json.put("phone",    user.getPhone());
-		json.put("password", user.getPassword());
+		json.put("id",         user.getId().toString());
+		json.put("first-name", user.getFirstName());
+		json.put("last-name",  user.getLastName());
+		json.put("email",      user.getEmail());
+		json.put("phone",      user.getPhone());
+		json.put("password",   user.getPassword());
 		return json;
 	}
 
@@ -86,12 +87,13 @@ public class JsonSerializer {
 		// get fields form the JSON parser
 		boolean isAdmin = "true".equals(user.get("isAdmin"));
 		String id = (String) user.get("id");
-		String name = (String) user.get("name");
+		String firstName = (String) user.get("first-name");
+		String lastName = (String) user.get("last-name");
 		String phone = (String) user.get("phone");
 		String email = (String) user.get("email");
 		String password = (String) user.get("password");
 		
-		return new User(isAdmin, name, phone, id, email, password);
+		return new User(isAdmin, firstName, lastName, phone, id, email, password);
 	}
 
 	public static Material parseMaterial(JSONObject material) {

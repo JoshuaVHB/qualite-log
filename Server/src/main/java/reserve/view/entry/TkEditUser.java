@@ -29,7 +29,7 @@ public class TkEditUser implements Take {
 		if(editorUser == null || !editorUser.isAdmin())
 			return new RsWithStatus(HttpURLConnection.HTTP_UNAUTHORIZED);
 		
-		String editedUserId = FormUtils.getParamString(form, "edited-user", UserController.USER_ID_FORMAT, true);
+		String editedUserId = FormUtils.getParamString(form, "id", UserController.USER_ID_FORMAT, true);
 		
 		if(FormUtils.getParamBool(form, "delete", true) != null) {
 			// remove user
@@ -40,16 +40,18 @@ public class TkEditUser implements Take {
 			return new RsWithStatus(HttpURLConnection.HTTP_OK);
 		}
 		
-		boolean isAdmin = FormUtils.getParamBool(form, "isadmin", false);
-		String name = FormUtils.getParamString(form, "name", ".*", false); // TODO add regex to match specs
-		String phone = FormUtils.getParamString(form, "phone", ".*", false); // TODO add regex to match specs
-		String mail = FormUtils.getParamString(form, "mail", ".*", false); // TODO add regex to match specs
-		String password = FormUtils.getParamString(form, "password", ".*", false);
+		boolean isAdmin = FormUtils.getParamBool(form, "is-admin", false);
+		String firstName = FormUtils.getParamString(form, "first-name", ".*", false); // TODO add regex to match specs
+		String lastName = FormUtils.getParamString(form, "last-name", ".*", false);
+//		String phone = FormUtils.getParamString(form, "phone", ".*", false);
+		String phone = "-"; // not implemented on the front end
+		String mail = FormUtils.getParamString(form, "mail", ".*", false);
 		
 		if(editedUserId == null) {
 			// create a new user
+			String password = FormUtils.getParamString(form, "password", ".*", false);
 			String newId = users.getNextUserId();
-			User user = new User(isAdmin, name, phone, editedUserId, mail, password);
+			User user = new User(isAdmin, firstName, lastName, phone, editedUserId, mail, password);
 			try {
 				users.addUser(user);
 				return new RsText(newId);
@@ -59,12 +61,14 @@ public class TkEditUser implements Take {
 		} else {
 			// edit the user
 			User user = users.getById(editedUserId);
-			if(!editedUserId.equals(editorUser.getId()) && !isAdmin)
+			if(editedUserId.equals(editorUser.getId()) && !isAdmin)
 				return new RsWithStatus(new RsText("You cannot disown yourself of admin privileges"), HttpURLConnection.HTTP_BAD_REQUEST);
 			user.setEmail(mail);
-			user.setName(name);
+			user.setFirstName(firstName);
+			user.setLastName(lastName);
 			user.setPhone(phone);
 			user.setAdmin(isAdmin);
+			UserController.logger.debug("Edited user " + user);
 			return new RsWithStatus(HttpURLConnection.HTTP_OK);
 		}
 	}

@@ -15,8 +15,12 @@ function formDataToObject(formData) {
 function encodeFormOptions(options = {}) {
     let params = new URLSearchParams();
     for (let key in options) {
-        if (options[key] !== null && options[key] !== undefined)
-            params.append(key, options[key].toString());
+        if (options[key] !== null && options[key] !== undefined) {
+            if(options[key] == 'on')
+                params.append(key, 'true'); // prevent checkbox from being unchecked
+            else if(options[key] != 'off')
+                params.append(key, options[key].toString());
+        }
     }
     return params.toString();
 }

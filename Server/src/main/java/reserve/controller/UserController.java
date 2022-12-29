@@ -15,7 +15,7 @@ public class UserController {
 	public static final String USER_ID_FORMAT = "[0-9]+"; // TODO change regexes to match specs
 	public static final String PASSWORD_FORMAT = "[a-zA-Z]+";
 	
-	private static Logger logger = Main.LOGGER_FACTORY.getLogger("users", Logger.LEVEL_DEBUG);
+	public static Logger logger = Main.LOGGER_FACTORY.getLogger("users", Logger.LEVEL_DEBUG);
 	
     private final List<User> users = new ArrayList<>();
 

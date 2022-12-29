@@ -41,8 +41,8 @@ public class Main {
 	
 	/** Handles the first launch of the application by creating a dummy admin user */
 	private static void kickstartApp(AppController controller) {
-		User adminUser = new User(true, "admin", "-", "0000001", "-", "password");
-		User testUser = new User(false, "test", "-", "0000002", "-", "password");
+		User adminUser = new User(true, "admin", "-", "-", "0000001", "-", "password");
+		User testUser = new User(false, "test", "-", "-", "0000002", "-", "password");
 		
 		controller.getUsers().addUser(adminUser);
 		controller.getUsers().addUser(testUser);

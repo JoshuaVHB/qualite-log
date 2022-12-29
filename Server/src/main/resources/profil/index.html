@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="index.css">
     <link rel="stylesheet" href="../css/global.css">
     <script src="https://kit.fontawesome.com/02544ac723.js" crossorigin="anonymous"></script>
-    <script src="/main.js"></script>
+    <script src="/main.js" defer></script>
 </head>
 <body>
 	<div class="div div1">
@@ -19,22 +19,21 @@
     <p><h1 class="title">Données de l'utilisateur</h1></p>
     <div id="container">
         <div>
-            <form class="forminscription" method="GET" id="changeUser" action="UPDATE">
+            <form class="forminscription" id="changeUser">
                 <label class="label lab1" for="role">
-                    <input type="checkbox" id="role" class="inputData" disabled="disabled">Utilisateur est un administrateur
+                    <input type="checkbox" id="role" class="inputData" disabled="disabled" name="is-admin">Utilisateur est un administrateur
                 </label><br />
                 <label class="label lab1" for="First-name">
-                    Matricule <input class="inputData" type="text" name="matricule" id="matricule" disabled="disabled"><br>
+                    Matricule <input class="inputData" readonly type="text" name="id" id="matricule" disabled="disabled"><br>
                 </label>
                 <label class="label lab1" for="Last-name">
-                    Prenom <input class="inputData" type="text" name="prenom" id="prenom" disabled="disabled"><br>
+                    Prenom <input class="inputData" type="text" name="first-name" id="prenom" disabled="disabled"><br>
                 </label>
                 <label class="label lab1" for="First-name">
-                    Nom <input class="inputData" type="text" name="nom" id="nom" disabled="disabled"><br>
+                    Nom <input class="inputData" type="text" name="last-name" id="nom" disabled="disabled"><br>
                 </label>
-
                 <label class="label lab1" for="email">
-                    Email <input class="inputData" type="email" name="email" id="email" disabled="disabled"><br>
+                    Email <input class="inputData" type="email" name="mail" id="email" disabled="disabled"><br>
                 </label>
             </form>
         </div>
@@ -53,108 +52,97 @@
 </body>
 </html>
 <script>
-    const popupFrame = document.getElementById('popup-frame');
+const urlParams = new URLSearchParams(window.location.search);
+let id = urlParams.get('id');
+if (id) {
+    document.getElementById('matricule').value = id;
+} else {
+    document.getElementById('matricule').value = "";
+}
 
-    const urlParams = new URLSearchParams(window.location.search);
-    let id = urlParams.get('id');
+const elements = document.querySelectorAll('.inputData:not(.final)');
+
+function populateData(users) {
+    for (let user of users) {
+        if (user.id == id) {
+            console.log(user.id, id)
+        }
+    }
+}
+
+function dataUser(user) {
+    document.getElementById('role').checked = user.isAdmin;
+    document.getElementById('matricule').value = user.id;
+    document.getElementById('prenom').value = user['first-name'];
+    document.getElementById('nom').value = user['last-name'];
+    document.getElementById('email').value = user.email;
+}
+
+function fetchUsers() {
+
     if (id) {
-        document.getElementById('matricule').value = id;
+        fetch('/api/list_users', {
+            method: 'POST',
+        }).then((response) => {
+            if (response.ok)
+                return response.json();
+            else
+                throw new Error('Could not fetch items');
+        }).then((data) => {
+            populateData(data.items);
+        }).catch(promptError);
+    }
+    else {
+        fetch('/profil_item', {
+            method: 'POST',
+        }).then((response) => {
+            if (response.ok)
+                return response.json();
+            else
+                throw new Error('Could not fetch items');
+        }).then((data) => {
+            dataUser(data.items);
+        }).catch(promptError);
+    }
+    
+}
+
+window.addEventListener('load', () => {
+    fetchUsers();
+});
+
+
+function onSubmitClick() {
+    if (document.getElementById('changeData').innerText == 'Modifier') {
+        document.getElementById('changeData').innerText = 'Valider';
+        for (let elem of elements) {
+            elem.disabled = false;
+        }
     } else {
-        document.getElementById('matricule').value = "";
-    }
-    
-    
-    const elements = document.getElementsByClassName('inputData');
-
-    function populateData(users) {
-        for (let user of users) {
-            if (user.id == id) {
-                dataUser(user);
-            }
+        sendUserUpdate();
+        document.getElementById('changeData').innerText = 'Modifier';
+        for (let elem of elements) {
+            elem.disabled = true;
         }
     }
-
-    function dataUser(user) {
-        document.getElementById('role').checked = user.isAdmin;
-        document.getElementById('matricule').value = user.id;
-        document.getElementById('prenom').value = user.firstName;
-        document.getElementById('nom').value = user.lastName;
-        document.getElementById('email').value = user.email;
-    }
-
-    function fetchUsers() {
-
-        if (id) {
-            fetch('/api/list_users', {
-                method: 'POST',
-            }).then((response) => {
-                if (response.ok)
-                    return response.json();
-                else
-                    throw new Error('Could not fetch items');
-            }).then((data) => {
-                populateData(data.items);
-            }).catch((err) => {
-                console.error(err);
-                popupFrame.hidden = false;
-                popupFrame.querySelector('#popup-title').innerText = err.message;
-            });
-        }
-        else {
-            fetch('/profil_item', {
-                method: 'POST',
-            }).then((response) => {
-                if (response.ok)
-                    return response.json();
-                else
-                    throw new Error('Could not fetch items');
-            }).then((data) => {
-                dataUser(data.items);
-            }).catch((err) => {
-                console.error(err);
-                popupFrame.hidden = false;
-                popupFrame.querySelector('#popup-title').innerText = err.message;
-            });
-        }
-        
-    }
-
-    window.addEventListener('load', () => {
-        fetchUsers();
-    });
-
     
-    function onSubmitClick() {
-        if (document.getElementById('changeData').innerText == 'Modifier') {
-            document.getElementById('changeData').innerText = 'Valider';
-            for (let elem of elements) {
-                elem.disabled = false;
-            }
+}
+
+function sendUserUpdate() {
+    var user = new FormData(document.getElementById("changeUser"));
+
+    let url = '/api/edit_user';
+    let params = formDataToObject(user);
+    let xhr = new XMLHttpRequest();
+    xhr.open('POST', url, true);
+    xhr.send(encodeFormOptions(params));
+    xhr.onload = () => {
+        if (xhr.status == 200) {
+            console.log("Response =", xhr.responseText);
+            // do something with the data
         } else {
-            sendUpdate();
-            document.getElementById('changeData').innerText = 'Modifier';
-            for (let elem of elements) {
-                elem.disabled = true;
-            }
+            throw new Error("Could not fetch ");
         }
-        
-    }
-
-    function sendUpdate() {
-        var user = new FormData(document.getElementById("changeUser"));
-
-        let url = '/api/edit_user';
-        let params = formDataToObject(user);
-        let xhr = new XMLHttpRequest();
-        xhr.open('GET', url, true);
-        xhr.send(encodeFormOptions(params));
-        xhr.onload = () => {
-            if (xhr.status == 200) {
-                console.log("Response =", xhr.responseText);
-                // do something with the data
-            } else {
-                throw new Error("Could not fetch ");
-            }
-        };
-    }
+    };
+}
 </script>
