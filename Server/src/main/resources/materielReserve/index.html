@@ -57,7 +57,7 @@
 
                     </td>
 					
-                    <td id="t-reservation" class="td late">En retard</td>
+                    <td id="t-retard" class="td late"></td>
                 </tr>
             </template>
         </div>
@@ -114,6 +114,7 @@
                 element.querySelector('#t-reference').textContent = item.numref;
                 element.querySelector('#t-reservation').textContent = item.reservation.userName;
                 element.querySelector('#t-date').textContent = dateToString(item.reservation.upToDate);
+                element.querySelector('#t-retard').textContent = retard(item.reservation.upToDate);
                 element.querySelector('#rendu-btn').onclick = () =>
                     rendreMateriel(it, item.reservation.userId, item.reservation.fromDate);
                 element.querySelectorAll('[id]').forEach((el) => el.removeAttribute('id'));
@@ -122,6 +123,18 @@
             }
            
         }
+    }
+
+    function retard(date) {
+        let now = new Date();
+        let dateRes = new Date(date);
+        
+        if (dateRes < now) {
+            console.log("retard");
+            return "En retard";
+        }
+        
+        return "";
     }
 
     function dateToString(date) {
