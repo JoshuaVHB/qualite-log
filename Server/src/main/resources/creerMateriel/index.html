@@ -6,8 +6,9 @@
     <meta charset="utf-8" />
     <title>Ajouter un matériel</title>
     <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="../css/global.css">
     <script src="https://kit.fontawesome.com/02544ac723.js" crossorigin="anonymous"></script>
-
+    <script src="/main.js" defer></script>
 </head>
 <body>
     <div class="div div1">
@@ -32,7 +33,7 @@
                 </select>
             </label><br />
             <label class="label lab1" for="genre">
-                System d'operation <select name="OS" id="OS" required>
+                System d'operation <select name="os" id="OS" required>
                     <option value="AN">Android</option>
                     <option value="AP">Apple</option>
                     <option value="XX">Autre</option>
@@ -40,14 +41,17 @@
             </label><br />
 
             <label class="label lab1" for="name">
-                Nom de l'appareil <input class="input" type="text" name="nom" id="nom" placeholder="Samsung note 10" required><br>
+                Nom de l'appareil <input class="input" type="text" name="name" id="nom" placeholder="Samsung note 10" required><br>
             </label>
             <label class="label lab1">
                 Version <input class="input" type="text" name="version" id="version" placeholder="10.2" required><br>
             </label>
+            <label class="label lab1">
+                Référence <input class="input" type="text" name="ref" id="reference" placeholder="63416345" required><br>
+            </label>
 
             <div>
-                <button type="submit" class="connectButt" name="submit" value="registration" id="submit" oneclick="addMateriel();">
+                <button type="submit" class="connectButt" id="submit">
                     Valider
                 </button>
             </div>
@@ -62,24 +66,30 @@
 </body>
 </html>
 
-<script>
-    const popupFrame = document.getElementById('popup-frame');
-    function addMateriel() {
+<script defer>
+const form = document.getElementById("addMateriel");
 
-        var user = new FormData(document.getElementById("addUser"));
+function sendForm() {
+    var material = new FormData(form);
 
-        let url = './api/CreateMateriel';
-        let params = user;
-        let xhr = new XMLHttpRequest();
-        xhr.open('GET', url, true);
-        xhr.send(params);
-        xhr.onload = () => {
-            if (xhr.status == 200) {
-                console.log("Response =", xhr.responseText);
-                // do something with the data
-            } else {
-                throw new Error("Could not fetch ");
-            }
-        };
+    let url = '/api/edit_item';
+    let params = encodeFormOptions(formDataToObject(material));
+    let xhr = new XMLHttpRequest();
+    xhr.open('POST', url, true);
+    xhr.send(params);
+    xhr.onload = () => {
+        if (xhr.status == 200) {
+            console.log("Response =", xhr.responseText);
+            // TODO prompt with a success popup
+        } else {
+            throw new Error("Could not create a material: " + xhr.responseText);
+            // TODO prompt with an error popup
+        }
+    };
+}
 
-    }</script>
+form.onsubmit = ev => {
+    ev.preventDefault();
+    sendForm();
+}
+</script>

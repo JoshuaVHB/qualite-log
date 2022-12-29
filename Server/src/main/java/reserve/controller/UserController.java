@@ -15,7 +15,7 @@ public class UserController {
 	public static final String USER_ID_FORMAT = "[0-9]+"; // TODO change regexes to match specs
 	public static final String PASSWORD_FORMAT = "[a-zA-Z]+";
 	
-	private static Logger logger = Main.LOGGER_FACTORY.getLogger("users", Logger.LEVEL_DEBUG);
+	public static Logger logger = Main.LOGGER_FACTORY.getLogger("users", Logger.LEVEL_DEBUG);
 	
     private final List<User> users = new ArrayList<>();
 
@@ -48,23 +48,10 @@ public class UserController {
 	}
     
 
-    public boolean removeUser(User toRemove) {
-
-        Objects.requireNonNull(toRemove); // Make sure the user is coherent
-
-        if (users.remove(toRemove)) {
-
-            // Log successful
-            return true;
-
-        } else {
-
-            // Log
-
-            return false;
-
-        }
-
+    public void removeUser(User toRemove) {
+        if (!users.remove(toRemove))
+        	throw new IllegalArgumentException("Unknown user");
+        logger.debug("Removed user " + toRemove);
     }
     
     public User authentifyUser(String userId, String password) {
@@ -83,5 +70,17 @@ public class UserController {
     public List<User> getAllUsers() {
     	return new ArrayList<>(users);
     }
+
+	public String getNextUserId() {
+		while(true) {
+			int uid = (int) (Math.random() * 1E9);
+			String generated = String.format("%09d", uid);
+			if(users.stream().map(User::getId).allMatch(id->generated.equals(id)))
+				continue;
+			if(!generated.matches(USER_ID_FORMAT))
+				throw new RuntimeException("Invalid generated id");
+			return generated;
+		}
+	}
     
 }

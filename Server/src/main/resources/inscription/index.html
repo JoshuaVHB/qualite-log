@@ -5,7 +5,9 @@
     <meta charset="utf-8" />
     <title>Inscription</title>
     <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="../css/global.css">
     <script src="https://kit.fontawesome.com/02544ac723.js" crossorigin="anonymous"></script>
+    <script src="/main.js" defer></script>
 </head>
 <body>
     <div class="div div1">
@@ -18,33 +20,33 @@
     </div>
     <p><h1 class="title">Inscription d'un utilisateur</h1></p>
     <div id="container">
-        <form class="forminscription" method="GET" id="addUser" action="CREATE">
+        <form class="forminscription" id="addUser" onsubmit="return addUser(event)">
             <label class="label lab1" for="role">
-                <input type="checkbox" id="filter-include-role" class="filter-option">Utilisateur est un administrateur
+                <input type="checkbox" id="filter-include-role" name="is-admin" class="filter-option">Utilisateur est un administrateur
             </label><br />
-            <label class="label lab1" for="First-name">
+            <!-- <label class="label lab1" for="First-name">
                 Matricule <input class="inputinscription" type="text" name="matricule" id="matricule" placeholder="0000000" pattern="[0-9]{7}" required><br>
-            </label>
+            </label> -->
             <label class="label lab1" for="Last-name">
-                Prenom <input class="inputinscription" type="text" name="prenom" id="prenom" placeholder="Prenom" required><br>
+                Prenom <input class="inputinscription" type="text" name="first-name" id="prenom" placeholder="Prenom" required><br>
             </label>
             <label class="label lab1" for="First-name">
-                Nom <input class="inputinscription" type="text" name="nom" id="nom" placeholder="Nom" required><br>
+                Nom <input class="inputinscription" type="text" name="last-name" id="nom" placeholder="Nom" required><br>
             </label>
 
             <label class="label lab1" for="email">
-                Email <input class="inputinscription" type="email" name="email" id="email" placeholder="Email" required><br>
+                Email <input class="inputinscription" type="email" name="mail" id="email" placeholder="Email" required><br>
             </label>
 
             <label class="label lab1" for="password">
-                Mot de passe <input class="inputinscription" type="password" name="mdp" placeholder="Mot de passe" id="mdp" onchange='check_pass();' required><br>
+                Mot de passe <input class="inputinscription" type="password" name="password" placeholder="Mot de passe" id="mdp" onchange='check_pass();' required><br>
             </label>
             <label class="label lab1">
                 Confirmer le mot de passe <label class="labelinscription" for="cmdp"></label>
-                <input class="inputinscription" type="password" placeholder="Confirmation le mot de passe" name="cmdp" id="cmdp" onchange='check_pass();' required><br>
+                <input class="inputinscription" type="password" placeholder="Confirmation le mot de passe" id="cmdp" onchange='check_pass();' required><br>
             </label>
             <div>
-                <button type="submit" class="connectButt" id="submit" onclick="addUser();">
+                <button type="submit" class="connectButt" id="submit">
                     Valider
                 </button>
             </div>
@@ -58,47 +60,34 @@
     </div>
 </body>
 </html>
-<script>
-    const popupFrame = document.getElementById('popup-frame');
+<script defer>
 
-    function check_pass() {
-        if (document.getElementById('mdp').value ==
-            document.getElementById('cmdp').value) {
-            document.getElementById('submit').disabled = false;
-        } else {
-            document.getElementById('submit').disabled = true;
-        }
+function check_pass() {
+    if (document.getElementById('mdp').value ==
+        document.getElementById('cmdp').value) {
+        document.getElementById('submit').disabled = false;
+    } else {
+        document.getElementById('submit').disabled = true;
     }
-    function addUser() {
-        var user = new FormData(document.getElementById("addUser"));
+}
 
-        fetch('/api/user_Manager', {
-            method: 'GET'
-        }).then((response) => {
-            if (response.ok)
-                return response.json();
-            else
-                throw new Error('Could not fetch items');
-        }).then((data) => {
-            console.log(data);
-        }).catch((err) => {
-            console.error(err);
-            popupFrame.hidden = false;
-            popupFrame.querySelector('#popup-title').innerText = err.message;
-        });
+function addUser(ev) {
+    ev.preventDefault();
+    var user = new FormData(document.getElementById("addUser"));
+    user.set('is-admin', user.get('is-admin') === 'on' ? 'true' : 'false');
 
-        /*let url = '/api/user_Manager';
-        let params = user;
-        let xhr = new XMLHttpRequest();
-        xhr.open('GET', url, true);
-        xhr.send(params);
-        xhr.onload = () => {
-            if (xhr.status == 200) {
-                console.log("Response =", xhr.responseText);
-                // do something with the data
-            } else {
-                throw new Error("Could not fetch ");
-            }
-        };*/
+    fetch('/api/edit_user', {
+        method: 'POST',
+        body: encodeFormOptions(formDataToObject(user)),
+    }).then((response) => {
+        if (response.ok)
+            return response.text();
+        else
+            throw new Error('Could not fetch items');
+    }).then((data) => {
+        console.log(data);
+    }).catch(promptError);
 
-    }</script>
+    return false;
+}
+    </script>

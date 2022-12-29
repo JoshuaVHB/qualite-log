@@ -6,6 +6,7 @@
     <meta charset="utf-8" />
     <title>Modifier materiel</title>
     <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="../css/global.css">
     <script src="https://kit.fontawesome.com/02544ac723.js" crossorigin="anonymous"></script>
 
 </head>
@@ -14,7 +15,7 @@
         <nav>
             <li class="test">
                 <a href="/accueil/">Page d'accueil</a>
-                <a href="?logout">Déconnexion   <i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+                <a href="?logout">Dï¿½connexion   <i class="fa-solid fa-arrow-right-from-bracket"></i></a>
             </li>
         </nav>
     </div>
@@ -110,18 +111,12 @@
                 throw new Error('Could not fetch items');
         }).then((data) => {
             populateData(data.items);
-        }).catch((err) => {
-            console.error(err);
-            popupFrame.hidden = false;
-            popupFrame.querySelector('#popup-title').innerText = err.message;
-        });
+        }).catch(promptError);
     }
 
     window.addEventListener('load', () => {
         fetchItems();
     });
-
-
 
     function fetchItemsLater() {
         if (fetchCooldown)

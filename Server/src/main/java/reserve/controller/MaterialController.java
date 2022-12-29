@@ -16,6 +16,8 @@ import reserve.util.Logger;
 public class MaterialController {
 	
     public static final String KEYWORD_FILTER_PATTERN = ".*";
+    public static final String MAT_NAME_FORMAT = ".*";
+    public static final String MAT_VERSION_FORMAT = ".*"; // TODO change regex to match specs
     
     private static final Logger logger = Main.LOGGER_FACTORY.getLogger("materials", Logger.LEVEL_DEBUG);
     
@@ -54,26 +56,13 @@ public class MaterialController {
     }
 
     /**
-     * @brief Removes a certain material if it's present in the list, does nothing otherwise.
-     * @param toRemove
-     * @return True if the material was removed successfully, false otherwise.
-     * @throws NullPointerException {@code} toRemove is null
+     * Removes a certain material
+     * @throws IllegalArgumentException if the element was not known
      */
-    public boolean removeMaterial(Material toRemove) {
-
-        Objects.requireNonNull(toRemove); // Make sure the user is coherent
-
-        if (materials.remove(toRemove)) {
-
-            // Log sucessful
-            return true;
-
-        } else {
-
-            // Log
-            return false;
-        }
-
+    public void removeMaterial(Material toRemove) {
+        if (!materials.remove(toRemove))
+        	throw new IllegalArgumentException("Unknown material");
+        logger.debug("Deleted material " + toRemove);
     }
     
     /**

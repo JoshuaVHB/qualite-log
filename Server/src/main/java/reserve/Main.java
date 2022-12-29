@@ -34,17 +34,15 @@ public class Main {
 			kickstartApp(controller);
 		
 		Runtime.getRuntime().addShutdownHook(new Thread(controller::endApplication, "shutdown-hook"));
-		User adminUser = new User(true, "machin truc", "-", "0000003", "-", "password");
-
-        controller.getUsers().addUser(adminUser);
+		
 		WebServer server = new WebServer(controller);
 		server.open();
 	}
 	
 	/** Handles the first launch of the application by creating a dummy admin user */
 	private static void kickstartApp(AppController controller) {
-		User adminUser = new User(true, "admin", "-", "0000001", "-", "password");
-		User testUser = new User(false, "test", "-", "0000002", "-", "password");
+		User adminUser = new User(true, "admin", "-", "-", "0000001", "-", "password");
+		User testUser = new User(false, "test", "-", "-", "0000002", "-", "password");
 		
 		controller.getUsers().addUser(adminUser);
 		controller.getUsers().addUser(testUser);
