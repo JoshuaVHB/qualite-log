@@ -52,11 +52,19 @@
                 </button>
             </div>
         </form>
+        <div id="popup-frame" hidden>
+            <div id="popup">
+                <h5 id="popup-title"></h5>
+                <button onclick="popupFrame.hidden = true;">Ok</button>
+            </div>
+        </div>
     </div>
 </body>
 </html>
 
-<script>function addMateriel() {
+<script>
+    const popupFrame = document.getElementById('popup-frame');
+    function addMateriel() {
 
         var user = new FormData(document.getElementById("addUser"));
 
