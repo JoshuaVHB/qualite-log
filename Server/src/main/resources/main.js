@@ -24,3 +24,7 @@ function encodeFormOptions(options = {}) {
     }
     return params.toString();
 }
+
+function dateToString(date) {
+    return date.substr(6, 2) + '/' + date.substr(4, 2) + '/' + date.substr(0, 4);
+}
