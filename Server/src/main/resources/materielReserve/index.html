@@ -23,13 +23,6 @@
     <h1 class="title">Materiel emrpunté</h1>
     <div id="page-content">
         <div>
-            <div id="material-filter">
-                <label>
-                    Nom :
-                    <input type="text" id="filter-name" class="filter-option">
-                </label>
-            </div>
-
             <table id="materials-table">
                 <thead>
                     <tr>
@@ -104,13 +97,18 @@
                 element.querySelector('#t-type').textContent = item.type + ' ' + item.version;
                 element.querySelector('#t-name').textContent = item.name;
                 element.querySelector('#t-reference').textContent = item.numref;
-                element.querySelector('#t-reservation').textContent = item.reservation.userName + ' jusqu\'au ' + item.reservation.upToDate;
+                element.querySelector('#t-reservation').textContent = item.reservation.userName;
+                element.querySelector('#t-date').textContent = dateToString(item.reservation.upToDate);
                 element.querySelectorAll('[id]').forEach((el) => el.removeAttribute('id'));
 
                 tbody.appendChild(element);
             }
            
         }
+    }
+
+    function dateToString(date) {
+        return date.substr(6,2) + '/' + date.substr(4, 2) + '/' + date.substr(0,4);
     }
 
     function encodeFormOptions(options = {}) {
