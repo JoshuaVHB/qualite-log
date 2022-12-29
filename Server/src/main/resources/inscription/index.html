@@ -54,7 +54,7 @@
         <div id="popup-frame" hidden>
             <div id="popup">
                 <h5 id="popup-title"></h5>
-                <button onclick="popupFrame.hidden = true;">Ok</button>
+                <button onclick="popupFrame.hidden = true;" id="btn_popup">Ok</button>
             </div>
         </div>
     </div>
@@ -85,7 +85,9 @@ function addUser(ev) {
         else
             throw new Error('Could not fetch items');
     }).then((data) => {
-        console.log(data);
+        popupFrame.hidden = false;
+        popupFrame.querySelector('#popup-title').innerText = "L'utilisateur a été créé avec succès";
+        popupFrame.querySelector('#btn_popup').onclick = window.location.href = '/accueil';
     }).catch(promptError);
 
     return false;

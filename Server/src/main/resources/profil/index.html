@@ -70,13 +70,18 @@ function populateData(users) {
     }
 }
 
-function dataUser(user) {
-    document.getElementById('role').checked = user.isAdmin;
-    document.getElementById('matricule').value = user.id;
-    document.getElementById('prenom').value = user['first-name'];
-    document.getElementById('nom').value = user['last-name'];
-    document.getElementById('email').value = user.email;
-}
+    function dataUser(user) {
+        if (user.isAdmin == "true") {
+            document.getElementById('role').checked = true;
+        }
+        else {
+            document.getElementById('role').checked = false;
+        }    
+        document.getElementById('matricule').value = user.id;
+        document.getElementById('prenom').value = user['first-name'];
+        document.getElementById('nom').value = user['last-name'];
+        document.getElementById('email').value = user.email;
+    }
 
 function fetchUsers() {
 

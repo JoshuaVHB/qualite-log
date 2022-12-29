@@ -89,7 +89,7 @@
                 id: user.id,
                 element: element
             };
-            element.querySelector('#t-nom').textContent = user.name;
+            element.querySelector('#t-nom').textContent = user['first-name']; + ' ' + user['last-name'];;
             element.querySelector('#t-matricule').textContent = user.id;
             element.querySelector('#profil_item').value = user.id;
             element.querySelector('#profilUser').action += user.id;
