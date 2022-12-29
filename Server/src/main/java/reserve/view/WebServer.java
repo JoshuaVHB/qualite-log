@@ -35,6 +35,7 @@ import reserve.view.entry.PsAuth;
 import reserve.view.entry.PsLogout;
 import reserve.view.entry.TkEditItem;
 import reserve.view.entry.TkEditUser;
+import reserve.view.entry.TkEndReservation;
 import reserve.view.entry.TkListItems;
 import reserve.view.entry.TkListUsers;
 import reserve.view.entry.TkProfilUser;
@@ -74,6 +75,7 @@ public class WebServer {
 								new FkRegex("/api/list_users", new TkListUsers(application.getUsers())),
 								new FkRegex("/api/list_items", new TkListItems(application.getMaterials())),
 								new FkRegex("/api/reserve_items", new TkReserverItem(application)),
+								new FkRegex("/api/end_reservation", new TkEndReservation(application.getReservations())),
 								new FkRegex("/api/edit_item", new TkEditItem(application.getMaterials())),
 								new FkRegex("/api/edit_user", new TkEditUser(application.getUsers())),
 								new FkRegex("/connexion.*",

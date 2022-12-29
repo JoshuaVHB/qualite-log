@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="/main.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
     <script src="https://kit.fontawesome.com/02544ac723.js" crossorigin="anonymous"></script>
+    <script src="/main.js" defer></script>
 </head>
 <body>
     <header>
@@ -51,7 +52,7 @@
                     <td id="t-reservation"></td>
                     <td id="t-date"></td>
                     <td id="t-Rendre">
-                            <p class="p butt"><button id="rendu-btn" onclick="rendreMateriel()">Rendu</button></p>
+                        <p class="p butt"><button id="rendu-btn">Rendu</button></p>
                     </td>
                 </tr>
             </template>
@@ -71,12 +72,23 @@
 
     const table = document.getElementById('materials-table');
     const itemTemplate = document.getElementById('item-template');
-    const popupFrame = document.getElementById('popup-frame');
 
     var fetchCooldown = null;
 
-    function rendreMateriel() {
-        //TODO
+    function rendreMateriel(item, ownerId, reservationBeginning) {
+        fetch('/api/end_reservation', {
+            method: 'POST',
+            body: encodeFormOptions({
+                'materialId': item.id,
+                'userId': ownerId,
+                'from-date': reservationBeginning
+            }),
+        }).then((response) => {
+            if (response.ok)
+                item.element.remove();
+            else
+                throw new Error('Could not end reservation');
+        }).catch(promptError);
     }
 
 
@@ -84,7 +96,6 @@
         console.log(items);
         const tbody = table.querySelector('tbody');
         tbody.innerHTML = '';
-
 
         for (let item of items) {
             let element = document.importNode(itemTemplate.content, true).firstElementChild;
@@ -99,6 +110,8 @@
                 element.querySelector('#t-reference').textContent = item.numref;
                 element.querySelector('#t-reservation').textContent = item.reservation.userName;
                 element.querySelector('#t-date').textContent = dateToString(item.reservation.upToDate);
+                element.querySelector('#rendu-btn').onclick = () =>
+                    rendreMateriel(it, item.reservation.userId, item.reservation.fromDate);
                 element.querySelectorAll('[id]').forEach((el) => el.removeAttribute('id'));
 
                 tbody.appendChild(element);
@@ -148,7 +161,6 @@
             fetchItems();
         }, 500);
     }
-
 
     window.addEventListener('load', () => {
         fetchItems();

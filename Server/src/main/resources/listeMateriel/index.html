@@ -111,7 +111,7 @@
                             </form>
                          </td>
                          <td class="td button">
-                                <button class="buttButt" onclik="deleteMaterial();">Supprimer</button>
+                                <button id="t-delete-btn" class="buttButt">Supprimer</button>
                          </td>
                          -->
                     </tr>
@@ -177,8 +177,20 @@ filterInputs.forEach((input) => {
         input.addEventListener('input', fetchItems);
 });
 
-function deleteMaterial() {
-    //TODO
+function deleteMaterial(item) {
+    fetch('/api/edit_item', {
+        method: 'POST',
+        body: encodeFormOptions({
+            materialId: item.id,
+            delete: 'true'
+        }),
+    }).then((response) => {
+        if (response.ok) {
+            item.element.remove();
+        } else {
+            throw new Error('Erreur lors de la suppression du matériel');
+        }
+    }).catch(promptError);
 }
 
 function refreshSelectionButtons() {
@@ -246,6 +258,8 @@ function populateItemsTable(items) {
         element.querySelector('#t-reservation').textContent = item.reservation ? item.reservation.userName + ' jusqu\'au ' + item.reservation.upToDate : '-';
         element.querySelector('#profil_item').value = item.id;
         element.querySelector('#profilItem').action += item.id;
+        let deleteBtn = element.querySelector('#t-delete-btn');
+        if(deleteBtn) deleteBtn.onclick = () => deleteMaterial(it);
 
         element.querySelectorAll('[id]').forEach((el) => el.removeAttribute('id'));
         let selectionCheckbox = element.querySelector('input[type=checkbox]');

@@ -72,7 +72,7 @@ const form = document.getElementById("addMateriel");
 function sendForm() {
     var material = new FormData(form);
 
-    let url = '/api/create_item';
+    let url = '/api/edit_item';
     let params = encodeFormOptions(formDataToObject(material));
     let xhr = new XMLHttpRequest();
     xhr.open('POST', url, true);

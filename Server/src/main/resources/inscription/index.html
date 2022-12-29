@@ -20,7 +20,7 @@
     </div>
     <p><h1 class="title">Inscription d'un utilisateur</h1></p>
     <div id="container">
-        <form class="forminscription" method="GET" id="addUser" action="CREATE">
+        <form class="forminscription" id="addUser" onsubmit="return addUser(event)">
             <label class="label lab1" for="role">
                 <input type="checkbox" id="filter-include-role" name="is-admin" class="filter-option">Utilisateur est un administrateur
             </label><br />
@@ -46,7 +46,7 @@
                 <input class="inputinscription" type="password" placeholder="Confirmation le mot de passe" id="cmdp" onchange='check_pass();' required><br>
             </label>
             <div>
-                <button type="submit" class="connectButt" id="submit" onclick="addUser();">
+                <button type="submit" class="connectButt" id="submit">
                     Valider
                 </button>
             </div>
@@ -61,6 +61,7 @@
 </body>
 </html>
 <script defer>
+
 function check_pass() {
     if (document.getElementById('mdp').value ==
         document.getElementById('cmdp').value) {
@@ -69,7 +70,9 @@ function check_pass() {
         document.getElementById('submit').disabled = true;
     }
 }
-function addUser() {
+
+function addUser(ev) {
+    ev.preventDefault();
     var user = new FormData(document.getElementById("addUser"));
     user.set('is-admin', user.get('is-admin') === 'on' ? 'true' : 'false');
 
@@ -78,12 +81,13 @@ function addUser() {
         body: encodeFormOptions(formDataToObject(user)),
     }).then((response) => {
         if (response.ok)
-            return response.json();
+            return response.text();
         else
             throw new Error('Could not fetch items');
     }).then((data) => {
         console.log(data);
     }).catch(promptError);
 
+    return false;
 }
     </script>

@@ -21,7 +21,7 @@ import reserve.model.User;
 @SuppressWarnings("unchecked")
 public class JsonSerializer {
 	
-	private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.BASIC_ISO_DATE;
+	private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ISO_DATE;
 	
 	private static <T> JSONArray serializeList(List<T> list, Function<T, JSONObject> serializer) {
 		JSONArray jsonMaterials = new JSONArray();
@@ -46,7 +46,9 @@ public class JsonSerializer {
 		if(includeReservation && reservation != null) {
 			JSONObject jsonReservation = new JSONObject();
 			jsonReservation.put("userName", reservation.getOwner().getFirstName() + " " + reservation.getOwner().getLastName());
+			jsonReservation.put("userId", reservation.getOwner().getId());
 			jsonReservation.put("upToDate", reservation.getEnding().format(DATE_FORMATTER));
+			jsonReservation.put("fromDate", reservation.getBeginning().format(DATE_FORMATTER));
 			json.put("reservation", jsonReservation);
 		}
 		return json;

@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 import reserve.Main;
 import reserve.model.Reservation;
@@ -117,6 +118,14 @@ public class ReservationController {
 		all.addAll(current);
 		all.addAll(incoming);
 		return all;
+	}
+
+	public Reservation getReservation(UUID materialID, String userId, LocalDate fromDate) {
+		return getAllReservations().stream()
+				.filter(r -> r.getMaterial().getId().equals(materialID))
+				.filter(r -> r.getOwner().getId().contentEquals(userId))
+				.filter(r -> r.getBeginning().equals(fromDate))
+				.findAny().orElse(null);
 	}
 
 }

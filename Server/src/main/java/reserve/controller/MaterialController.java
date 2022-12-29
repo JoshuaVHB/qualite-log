@@ -56,26 +56,13 @@ public class MaterialController {
     }
 
     /**
-     * @brief Removes a certain material if it's present in the list, does nothing otherwise.
-     * @param toRemove
-     * @return True if the material was removed successfully, false otherwise.
-     * @throws NullPointerException {@code} toRemove is null
+     * Removes a certain material
+     * @throws IllegalArgumentException if the element was not known
      */
-    public boolean removeMaterial(Material toRemove) {
-
-        Objects.requireNonNull(toRemove); // Make sure the user is coherent
-
-        if (materials.remove(toRemove)) {
-
-            // Log sucessful
-            return true;
-
-        } else {
-
-            // Log
-            return false;
-        }
-
+    public void removeMaterial(Material toRemove) {
+        if (!materials.remove(toRemove))
+        	throw new IllegalArgumentException("Unknown material");
+        logger.debug("Deleted material " + toRemove);
     }
     
     /**
