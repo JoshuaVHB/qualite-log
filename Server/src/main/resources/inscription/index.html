@@ -12,18 +12,18 @@
         <nav>
             <li class="test">
                 <a href="/accueil">Page d'accueil</a>
-                <a href="?logout">Déconnexion   <i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+                <a href="?logout">Deconnexion   <i class="fa-solid fa-arrow-right-from-bracket"></i></a>
             </li>
         </nav>
     </div>
     <p><h1 class="title">Inscription d'un utilisateur</h1></p>
     <div id="container">
-        <form class="forminscription" method="GET" id="addUser">
+        <form class="forminscription" method="GET" id="addUser" action="CREATE">
             <label class="label lab1" for="role">
                 <input type="checkbox" id="filter-include-role" class="filter-option">Utilisateur est un administrateur
             </label><br />
             <label class="label lab1" for="First-name">
-                Matricule <input class="inputinscription" type="text" name="matricule" id="matricule" placeholder="Matricule" pattern="[0-9]{7}" required><br>
+                Matricule <input class="inputinscription" type="text" name="matricule" id="matricule" placeholder="0000000" pattern="[0-9]{7}" required><br>
             </label>
             <label class="label lab1" for="Last-name">
                 Prenom <input class="inputinscription" type="text" name="prenom" id="prenom" placeholder="Prenom" required><br>
@@ -49,10 +49,19 @@
                 </button>
             </div>
         </form>
+        <div id="popup-frame" hidden>
+            <div id="popup">
+                <h5 id="popup-title"></h5>
+                <button onclick="popupFrame.hidden = true;">Ok</button>
+            </div>
+        </div>
     </div>
 </body>
 </html>
-<script>function check_pass() {
+<script>
+    const popupFrame = document.getElementById('popup-frame');
+
+    function check_pass() {
         if (document.getElementById('mdp').value ==
             document.getElementById('cmdp').value) {
             document.getElementById('submit').disabled = false;
@@ -63,7 +72,22 @@
     function addUser() {
         var user = new FormData(document.getElementById("addUser"));
 
-        let url = '/api/CreateUser';
+        fetch('/api/user_Manager', {
+            method: 'GET'
+        }).then((response) => {
+            if (response.ok)
+                return response.json();
+            else
+                throw new Error('Could not fetch items');
+        }).then((data) => {
+            console.log(data);
+        }).catch((err) => {
+            console.error(err);
+            popupFrame.hidden = false;
+            popupFrame.querySelector('#popup-title').innerText = err.message;
+        });
+
+        /*let url = '/api/user_Manager';
         let params = user;
         let xhr = new XMLHttpRequest();
         xhr.open('GET', url, true);
@@ -75,6 +99,6 @@
             } else {
                 throw new Error("Could not fetch ");
             }
-        };
+        };*/
 
     }</script>

@@ -18,7 +18,7 @@
     <p><h1 class="title">Données de l'utilisateur</h1></p>
     <div id="container">
         <div>
-            <form class="forminscription" method="GET" id="changeUser">
+            <form class="forminscription" method="GET" id="changeUser" action="UPDATE">
                 <label class="label lab1" for="role">
                     <input type="checkbox" id="role" class="inputData" disabled="disabled">Utilisateur est un administrateur
                 </label><br />
@@ -145,7 +145,7 @@
     function validateData() {
         var user = new FormData(document.getElementById("changeUser"));
 
-        let url = '/api/CreateUser';
+        let url = '/api/updateMateriel';
         let params = user;
         let xhr = new XMLHttpRequest();
         xhr.open('GET', url, true);

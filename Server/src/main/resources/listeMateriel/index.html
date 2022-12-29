@@ -336,6 +336,10 @@
                         // TODO prompt user with popup
                     });
                 }
+            }).catch((err) => {
+                console.error(err);
+                popupFrame.hidden = false;
+                popupFrame.querySelector('#popup-title').innerText = err.message;
             });
         }
 

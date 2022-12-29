@@ -27,11 +27,20 @@
                 </div>
             </form>
         </div>
+        <div id="popup-frame" hidden>
+            <div id="popup">
+                <h5 id="popup-title"></h5>
+                <button onclick="popupFrame.hidden = true;">Ok</button>
+            </div>
+        </div>
     </div>
 </body>
 
 </html>
 <script>
+    const popupFrame = document.getElementById('popup-frame');
+
+
     function show_hide_password(target) {
         var input = document.getElementById('password');
         if (input.getAttribute('type') == 'password') {

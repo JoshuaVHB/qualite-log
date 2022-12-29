@@ -22,7 +22,7 @@
         <p><h1>Modifier le materiel</h1></p>
     </div>
     <div id="container">
-        <form class="form" method="GET" id="ModifieMateriel">
+        <form class="form" method="GET" id="ModifieMateriel" action="UPDATE">
             <label class="label lab1" for="genre">
                 Type du materiel <select name="type" id="type" required>
                     <option value="MOBILE">Telephone</option>
@@ -40,7 +40,7 @@
             </label><br />
 
             <label class="label lab1" for="name">
-                Nom de l'appareil <input class="input" type="text" name="nom" id="nom"  required><br>
+                Nom de l'appareil <input class="input" type="text" name="nom" id="nom" required><br>
             </label>
             <label class="label lab1">
                 Version <input class="input" type="text" name="version" id="version" required><br>
@@ -52,11 +52,19 @@
                 </button>
             </div>
         </form>
+        <div id="popup-frame" hidden>
+            <div id="popup">
+                <h5 id="popup-title"></h5>
+                <button onclick="popupFrame.hidden = true;">Ok</button>
+            </div>
+        </div>
     </div>
 </body>
 </html>
 
 <script>
+    const popupFrame = document.getElementById('popup-frame');
+
     function updateMateriel() {
         //TODO
     }
