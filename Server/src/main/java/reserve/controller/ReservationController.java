@@ -56,16 +56,15 @@ public class ReservationController {
     }
 
     /**
-     * @brief Checks that the incoming reservations have not started yet.
+     * Checks that the incoming reservations have not started yet.
+     * 
      * This method has to be called before any operations on reservations.
      */
     public void recalculateReservations() {
-
         // Loop through incoming reservation and compare to today's date.
         for (Reservation reservation : incoming) {
 
-            if (reservation.getBeginning().compareTo(LocalDate.now()) <= 0)
-            {
+            if (reservation.getBeginning().compareTo(LocalDate.now()) <= 0) {
                 // Move the reservation to the current
                 reservation.getMaterial().setReservation(reservation); // FIX : i forgot this
                 current.add(reservation);
@@ -76,18 +75,15 @@ public class ReservationController {
         for (Reservation reservation : current) {
             incoming.remove(reservation);
         }
-
     }
 
     /**
-     * @brief This method is to be called by an admin to close a reservation.
+     * This method is to be called by an admin to close a reservation.
      * // TODO semantically it does not make much sense to call this method w/ a user object
      * // the check should be done by the caller, also currently a user cannot close one of
      * // their reservations
-     * @param admin
-     * @param reservation
-     * @throws IllegalArgumentException {@code user is not admin OR reservation is not in the lists}
-     * @throws NullPointerException {@code admin or reservation is null}
+     * @throws IllegalArgumentException {@code user} is not admin OR {@code reservation} is not known
+     * @throws NullPointerException {@code admin} or {@code reservation} is null
      */
     public void closeReservation(User admin, Reservation reservation) throws IllegalArgumentException {
 
@@ -109,7 +105,6 @@ public class ReservationController {
         incoming.remove(reservation);
     	logger.debug("Closed reservation " + reservation);
     }
-
 
     public List<Reservation> getIncomingReservation() { return incoming; }
     public List<Reservation> getCurrentReservation() { return current; }
