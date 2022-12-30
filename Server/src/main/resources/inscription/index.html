@@ -89,9 +89,7 @@ function addUser(ev) {
         else
             throw new Error('Could not fetch items');
     }).then((data) => {
-        popupFrame.hidden = false;
-        popupFrame.querySelector('#popup-title').innerText = "L'utilisateur a été créé avec succès";
-        popupFrame.querySelector('#btn_popup').setAttribute("onClick", "window.location.href = '/accueil'");
+        popupValid("L'utilisateur a été créé avec succès");
     }).catch(promptError);
 
     return false;

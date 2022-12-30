@@ -1,5 +1,11 @@
 const popupFrame = document.getElementById('popup-frame');
 
+function popupValid(string) {
+    popupFrame.hidden = false;
+    popupFrame.querySelector('#popup-title').innerText = string;
+    popupFrame.querySelector('#btn_popup').setAttribute("onClick", "window.location.href = '/accueil'");
+}
+
 function promptError(err) {
     console.error(err);
     popupFrame.hidden = false;

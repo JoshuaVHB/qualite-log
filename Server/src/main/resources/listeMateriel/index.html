@@ -255,7 +255,7 @@ function populateItemsTable(items) {
         element.querySelector('#t-type').textContent = item.type + ' ' + item.version;
         element.querySelector('#t-name').textContent = item.name;
         element.querySelector('#t-reference').textContent = item.numref;
-        element.querySelector('#t-reservation').textContent = item.reservation ? item.reservation.userName + ' jusqu\'au ' + item.reservation.upToDate : '-';
+        element.querySelector('#t-reservation').textContent = item.reservation ? item.reservation.userName + ' jusqu\'au ' + dateToString(item.reservation.upToDate) : '-';
         let profileItem = element.querySelector('#profil_item');
         if(profileItem) profileItem.value = item.id;
         let detailsBtn = element.querySelector('#details-btn');
@@ -337,12 +337,13 @@ function reserveSelectedItems() {
         }),
     }).then((response) => {
         if (response.status != 200) {
-            console.log(`Error ${response.status}: ${response.statusText}`);
-            // TODO prompt user with error
+            let err = `Error ${response.status}: ${response.statusText}`;
+            console.log(err);
+            promptError(err);
         } else {
             response.json().then((data) => {
                 console.log(data);
-                // TODO prompt user with popup
+                popupValid("Le(s) matériel(s) a(ont) été(s) réservé(s) avec succès");
             });
         }
     }).catch(promptError);
