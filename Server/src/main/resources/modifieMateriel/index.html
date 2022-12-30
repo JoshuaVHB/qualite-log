@@ -8,14 +8,14 @@
     <link rel="stylesheet" href="index.css">
     <link rel="stylesheet" href="../css/global.css">
     <script src="https://kit.fontawesome.com/02544ac723.js" crossorigin="anonymous"></script>
-
+    <script src="/main.js" defer></script>
 </head>
 <body>
     <div class="div div1">
         <nav>
             <li class="test">
                 <a href="/accueil/">Page d'accueil</a>
-                <a href="?logout">D�connexion   <i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+                <a href="?logout">Déconnexion   <i class="fa-solid fa-arrow-right-from-bracket"></i></a>
             </li>
         </nav>
     </div>
@@ -23,7 +23,7 @@
         <p><h1>Modifier le materiel</h1></p>
     </div>
     <div id="container">
-        <form class="form" method="GET" id="ModifieMateriel" action="UPDATE">
+        <form class="form" id="ModifieMateriel" onsubmit="return updateMateriel(event)">
             <label class="label lab1" for="genre">
                 Type du materiel <select name="type" id="type" required>
                     <option value="MOBILE">Telephone</option>
@@ -46,6 +46,9 @@
             <label class="label lab1">
                 Version <input class="input" type="text" name="version" id="version" required><br>
             </label>
+            <label class="label lab1">
+                Référence <input class="input" type="text" name="ref" id="ref" required><br>
+            </label>
 
             <div>
                 <button type="submit" class="connectButt" name="submit" value="registration" id="submit" oneclick="updateMateriel()">
@@ -63,15 +66,37 @@
 </body>
 </html>
 
-<script>
-    const popupFrame = document.getElementById('popup-frame');
+<script defer>
+    function updateMateriel(ev) {
+        ev.preventDefault();
 
-    function updateMateriel() {
-        //TODO
+        fetch('/api/edit_item', {
+            method: 'POST',
+            body: encodeFormOptions({
+                materialId: id,
+                type: document.getElementById('type').value,
+                os: document.getElementById('OS').value,
+                name: document.getElementById('nom').value,
+                version: document.getElementById('version').value,
+                ref: document.getElementById('ref').value,
+            }),
+        }).then((response) => {
+            console.log(response);
+            if (response.ok)
+                window.location.href = '/listeMateriel/';
+            else
+                throw new Error('Could not update item: ' + response.text());
+        }).catch(promptError);
+
+        return false;
     }
 
     const urlParams = new URLSearchParams(window.location.search);
     let id = urlParams.get('id');
+
+    if(id == null) {
+        window.location.href = '/listeMateriel/';
+    }
 
     function populateData(items) {
         for (let item of items) {
@@ -87,6 +112,7 @@
         document.getElementById('OS').value = item.os;
         document.getElementById('nom').value = item.name;
         document.getElementById('version').value = item.version;
+        document.getElementById('ref').value = item.numref;
     }
 
     function encodeFormOptions(options = {}) {
@@ -97,6 +123,7 @@
         }
         return params.toString();
     }
+
     function fetchItems() {
         let options = {};
         options.includeReserved = true;

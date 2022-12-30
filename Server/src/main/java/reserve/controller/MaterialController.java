@@ -11,15 +11,13 @@ import reserve.model.MaterialType;
 import reserve.model.OperatingSystem;
 import reserve.util.Logger;
 
-// TODO LOG EVERYTHING
-
 public class MaterialController {
 	
     public static final String KEYWORD_FILTER_PATTERN = ".*";
     public static final String MAT_NAME_FORMAT = ".*";
     public static final String MAT_VERSION_FORMAT = ".*"; // TODO change regex to match specs
     
-    private static final Logger logger = Main.LOGGER_FACTORY.getLogger("materials", Logger.LEVEL_DEBUG);
+    public static final Logger logger = Main.LOGGER_FACTORY.getLogger("materials", Logger.LEVEL_DEBUG);
     
     private final List<Material> materials = new ArrayList<>();
     
@@ -31,19 +29,19 @@ public class MaterialController {
      * @throws NullPointerException {@code material} is null
      * @throws IllegalArgumentException {@code material} is already in the list
      */
-    public boolean addMaterial(Material material) throws IllegalArgumentException, NullPointerException {
+    public void addMaterial(Material material) throws IllegalArgumentException, NullPointerException {
 
         // ------ Error checking ----- //
         Objects.requireNonNull(material);
 
         boolean exists = materials  .stream()
-                                    .anyMatch(m -> m.getId() == material.getId());
+                                    .anyMatch(m -> m.getId().equals(material.getId()));
 
         if (exists) throw new IllegalArgumentException("The material is already present in the list");
         // -------------------------//
 
         logger.debug("Created material " + material);
-        return (materials.add(material));
+        materials.add(material);
     }
 
     /**
@@ -52,7 +50,9 @@ public class MaterialController {
      */
     public Material getMaterialById(UUID id) {
         Objects.requireNonNull(id);
-        return materials.stream().filter(m -> m.getId().equals(id)).findAny().orElse(null);
+        return materials.stream()
+        		.filter(m -> m.getId().equals(id))
+        		.findAny().orElse(null);
     }
 
     /**

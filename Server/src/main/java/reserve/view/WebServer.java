@@ -23,7 +23,7 @@ import org.takes.facets.fork.TkFork;
 import org.takes.http.FtBasic;
 import org.takes.rs.RsRedirect;
 import org.takes.rs.RsText;
-import org.takes.tk.TkClasspath;
+import org.takes.rs.RsWithStatus;
 import org.takes.tk.TkRedirect;
 
 import reserve.Main;
@@ -40,6 +40,7 @@ import reserve.view.entry.TkListItems;
 import reserve.view.entry.TkListUsers;
 import reserve.view.entry.TkProfilUser;
 import reserve.view.entry.TkReserverItem;
+import reserve.view.front.TkClassPathWithType;
 import reserve.view.front.TkLog;
 import reserve.view.front.TkRedirectDir;
 import reserve.view.front.TkSpecificResource;
@@ -71,7 +72,8 @@ public class WebServer {
 					new TkAuth(
 						new TkLog(Main.LOGGER_FACTORY.getLogger("route", Logger.LEVEL_DEBUG),
 							new TkFork(
-								new FkRegex("/media/.*", new TkClasspath()),
+								new FkRegex("/media/.*", new TkClassPathWithType()),
+								new FkRegex("/css/.*", new TkClassPathWithType()),
 								new FkRegex("/api/list_users", new TkListUsers(application.getUsers())),
 								new FkRegex("/api/list_items", new TkListItems(application.getMaterials())),
 								new FkRegex("/api/reserve_items", new TkReserverItem(application)),
@@ -109,7 +111,8 @@ public class WebServer {
 							FbError.withStatus(IllegalArgumentException.class, HttpURLConnection.HTTP_BAD_REQUEST),
 							FbError.withStatus(IllegalStateException.class, HttpURLConnection.HTTP_BAD_REQUEST)
 						) : new FbChain()),
-						new FbStatus(404, REDIRECT_ON_404 ? new RsRedirect("/") : new RsText("404. No page to be seen here"))
+						new FbStatus(404, REDIRECT_ON_404 ? new RsRedirect("/") : new RsWithStatus(
+								new RsText("404. No page to be seen here"), HttpURLConnection.HTTP_NOT_FOUND))
 					)
 				), PORT).start(WebServer::shouldStop);
 		} catch (IOException e) {
@@ -127,11 +130,11 @@ public class WebServer {
 			// upon '/connexion', send '/connexion/index.html'
 			forks.add(new FkRegex(staticUrlPath+"/", new TkSpecificResource(staticUrlPath + "/index.html")).setRemoveTrailingSlash(false));
 			// send any other file in the directory directly
-			forks.add(new FkRegex(staticUrlPath+"/\\w+\\.\\w+", new TkClasspath()));
+			forks.add(new FkRegex(staticUrlPath+"/\\w+\\.\\w+", new TkClassPathWithType()));
 			dirRegex = staticUrlPath+"(/\\w+\\.\\w+|)";
 		} else {
 			forks.add(new FkRegex("/", new TkSpecificResource("/index.html")));
-			forks.add(new FkRegex("/\\w+\\.\\w+", new TkClasspath()));
+			forks.add(new FkRegex("/\\w+\\.\\w+", new TkClassPathWithType()));
 			dirRegex = "/(\\w+\\.\\w+|)";
 		}
 		// match all paths that begin with the static part
