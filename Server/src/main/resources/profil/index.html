@@ -139,6 +139,7 @@ function onSubmitClick() {
 
 function sendUserUpdate() {
     var user = new FormData(document.getElementById("changeUser"));
+    user.set('is-admin', document.getElementById('role').checked);
 
     let url = '/api/edit_user';
     let params = formDataToObject(user);
@@ -150,7 +151,7 @@ function sendUserUpdate() {
             console.log("Response =", xhr.responseText);
             // do something with the data
         } else {
-            throw new Error("Could not fetch ");
+            promptError(xhr.responseText);
         }
     };
 }
