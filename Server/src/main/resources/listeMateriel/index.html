@@ -121,6 +121,7 @@
     <div id="popup-frame" hidden>
         <div id="popup">
             <h5 id="popup-title"></h5>
+            <p id="popup-message"></p>
             <button onclick="popupFrame.hidden = true;">Ok</button>
         </div>
     </div>
@@ -249,7 +250,8 @@ function populateItemsTable(items) {
         let element = document.importNode(itemTemplate.content, true).firstElementChild;
         let it = {
             id: item.id,
-            element: element
+            name: item.name,
+            element: element,
         };
         element.querySelector('#t-os').textContent = item.os;
         element.querySelector('#t-type').textContent = item.type + ' ' + item.version;
@@ -337,13 +339,18 @@ function reserveSelectedItems() {
         }),
     }).then((response) => {
         if (response.status != 200) {
-            let err = `Error ${response.status}: ${response.statusText}`;
-            console.log(err);
-            promptError(err);
+            promptError(`Error ${response.status}: ${response.statusText}`);
         } else {
             response.json().then((data) => {
                 console.log(data);
-                popupValid("Le(s) matériel(s) a(ont) été(s) réservé(s) avec succès");
+                let message = '';
+                for(let id in data) {
+                    let item = currentItems.find((i) => i.id == id);
+                    if (item)
+                        message += `${item.name} : ${data[id]}<br>`;
+                }
+                promptError("Reservation", message); // not an actual error
+                fetchItems();
             });
         }
     }).catch(promptError);

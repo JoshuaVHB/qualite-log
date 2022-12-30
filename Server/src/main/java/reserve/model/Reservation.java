@@ -40,5 +40,9 @@ public class Reservation {
     public String toString() {
     	return String.format("Reservation(owner=%s material=%s begining=%s)", owner.getId(), material.getId(), beginning);
     }
+
+	public boolean overlap(Reservation reservation) {
+		return beginning.compareTo(reservation.ending) <= 0 && ending.compareTo(reservation.beginning) >= 0;
+	}
     
 }

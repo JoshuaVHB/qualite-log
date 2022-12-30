@@ -27,8 +27,6 @@ public class ReservationController {
      * This method makes sure that the dates are coherent, and stores it in the right list.
      */
     public void addReservation(Reservation reservation) throws IllegalStateException {
-
-        // ------ ERROR CHECKING ------ //
     	LocalDate from = reservation.getBeginning();
     	LocalDate to = reservation.getEnding();
 
@@ -36,13 +34,10 @@ public class ReservationController {
         LocalDate today = LocalDate.now();
 
         // Makes sure the reservation end date is coherent
-        if (to.compareTo(today) < 0) {
+        if (to.compareTo(today) < 0)
             throw new IllegalStateException("Reservation end date is before current day !");
-        }
-        
-    	if (reservation.getMaterial().getReservation() != null) { // The object is already owned
-    		throw new IllegalStateException("The material asked for is already owned.");
-    	}
+        if(getAllReservations().stream().anyMatch(r -> r.getMaterial().equals(reservation.getMaterial()) && r.overlap(reservation)))
+    		throw new IllegalStateException("The material asked for is already reserved on this period.");
 
         // ------ CODE ------- //
 
