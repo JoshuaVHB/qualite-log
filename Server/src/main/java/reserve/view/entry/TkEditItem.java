@@ -49,6 +49,7 @@ public class TkEditItem implements Take {
 		String name = FormUtils.getParamString(form, "name", MaterialController.MAT_NAME_FORMAT, false);
 		String version = FormUtils.getParamString(form, "version", MaterialController.MAT_VERSION_FORMAT, false);
 		int numRef = FormUtils.getParamInt(form, "ref", false);
+		version = "V"+version;
 		if(numRef>999)
 			throw new IllegalArgumentException("Invalid value for 'numRef', expected an int smaller than 1000");
 		
