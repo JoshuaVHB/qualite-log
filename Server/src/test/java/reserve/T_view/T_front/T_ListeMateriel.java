@@ -5,21 +5,15 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import reserve.controller.AppController;
 import reserve.controller.MaterialController;
-import reserve.controller.ReservationController;
-import reserve.controller.UserController;
-import reserve.controller.io.AppStorage;
-import reserve.controller.io.FileStorage;
 import reserve.model.Material;
-import reserve.view.WebServer;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-import static reserve.T_view.T_front.T_serverLauncher.controller;
-import static reserve.T_view.T_front.T_serverLauncher.launch_server;
+import static reserve.T_view.T_front.serverLauncher_Tests.controller;
+import static reserve.T_view.T_front.serverLauncher_Tests.launch_server;
 
 public class T_ListeMateriel {
 
@@ -63,14 +57,18 @@ public class T_ListeMateriel {
     @Test
     public void should_remove_material_from_back_when_remove_button_pressed() {
 
+
         int size = controller.getMaterials().getAllMaterials().size();
+        if (size==0) {
+            controller.getMaterials().addMaterial(new Material());
+        }
         Material dummy = controller.getMaterials().getAllMaterials().get(size-1);
         WebElement deleteButton = driver.findElement(By.id(""+dummy.getId()));
 
         deleteButton.click();
 
         try {
-            Thread.sleep(100);
+            Thread.sleep(500);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -82,6 +80,7 @@ public class T_ListeMateriel {
     @Test
     public void should_make_reservation_when_valid_dates() {
 
+
         List<Material> mats = controller.getMaterials().getAllMaterials();
         MaterialController.filterByAvailability(mats);
 
@@ -90,6 +89,7 @@ public class T_ListeMateriel {
         if (mats.size()>0) {
             Material mat = mats.get(0);
             WebElement reservation_checkbox = driver.findElement(By.id("cbox-" + mat.getId()));
+            reservation_checkbox.click();
 
             WebElement begin = driver.findElement(By.id("reservation-from"));
             WebElement end = driver.findElement(By.id("reservation-to"));
@@ -104,6 +104,11 @@ public class T_ListeMateriel {
 
             driver.findElement(By.id("reserve-submit-btn")).click();
 
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
             Assertions.assertEquals(start + 1, controller.getReservations().getNumberOfReservations());
         }
     }

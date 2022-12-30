@@ -10,8 +10,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import reserve.model.User;
 
-import static reserve.T_view.T_front.T_serverLauncher.controller;
-import static reserve.T_view.T_front.T_serverLauncher.launch_server;
+import static reserve.T_view.T_front.serverLauncher_Tests.controller;
+import static reserve.T_view.T_front.serverLauncher_Tests.launch_server;
 
 public class T_createAccount {
 
@@ -59,9 +59,9 @@ public class T_createAccount {
                 "dummy",
                 "dummy",
                 "dummy",
-                "727",
-                "dummy@dummy",
-                "dummy");
+                "1234567",
+                "dummy@dummy.dummy",
+                "dummy123");
 
         WebElement admin_check = driver.findElement(By.id("filter-include-role"));
         WebElement prenom_field = driver.findElement(By.id("prenom"));
@@ -80,7 +80,6 @@ public class T_createAccount {
 
         submit_button.click();
 
-        driver.findElement(By.id("btn_popup")).click();
 
         // -- Check
         try {
@@ -88,6 +87,8 @@ public class T_createAccount {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+
+        driver.findElement(By.id("btn_popup")).click();
 
         Assertions.assertEquals(start+1,  controller.getUsers().getUsers().size());
 

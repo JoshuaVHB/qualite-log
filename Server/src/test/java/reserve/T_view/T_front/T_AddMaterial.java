@@ -1,7 +1,7 @@
 package reserve.T_view.T_front;
 
-import static reserve.T_view.T_front.T_serverLauncher.controller;
-import static reserve.T_view.T_front.T_serverLauncher.launch_server;
+import static reserve.T_view.T_front.serverLauncher_Tests.controller;
+import static reserve.T_view.T_front.serverLauncher_Tests.launch_server;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
@@ -57,7 +57,7 @@ public class T_AddMaterial {
     @Test
     public void should_create_material_when_form_is_filled_correctly() {
 
-        Material dummy = new Material(OperatingSystem.AN, MaterialType.LAPTOP, "DummyName", "DummyVersion", 727);
+        Material dummy = new Material(OperatingSystem.AN, MaterialType.LAPTOP, "DummyName", "10.0", 727);
         int start = controller.getMaterials().getAllMaterials().size();
 
         // -- Fill the form
@@ -82,11 +82,10 @@ public class T_AddMaterial {
         // -- Check if the back-end list has increased
 
         try {
-            Thread.sleep(1000);
+            Thread.sleep(100);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        System.out.println(controller.getMaterials().getAllMaterials().size());
         Assertions.assertEquals(
                 start+1,controller.getMaterials().getAllMaterials().size()
         );

@@ -12,7 +12,7 @@ import reserve.view.WebServer;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
-public class T_serverLauncher {
+public class serverLauncher_Tests {
 
     public static AppController controller;
     static boolean launched = false;

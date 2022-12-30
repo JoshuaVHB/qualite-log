@@ -11,8 +11,8 @@ import org.openqa.selenium.chrome.ChromeDriver;
 
 import java.util.List;
 
-import static reserve.T_view.T_front.T_serverLauncher.controller;
-import static reserve.T_view.T_front.T_serverLauncher.launch_server;
+import static reserve.T_view.T_front.serverLauncher_Tests.controller;
+import static reserve.T_view.T_front.serverLauncher_Tests.launch_server;
 
 public class T_ListeProfiles {
 

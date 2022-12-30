@@ -1,7 +1,7 @@
 package reserve.T_view.T_front;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static reserve.T_view.T_front.T_serverLauncher.launch_server;
+import static reserve.T_view.T_front.serverLauncher_Tests.launch_server;
 
 import org.junit.After;
 import org.junit.jupiter.api.*;
@@ -9,11 +9,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import reserve.controller.AppController;
-import reserve.model.*;
-
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 
 /**
  * This should work on CHROME
@@ -61,6 +56,13 @@ public class T_Accueil {
         @Test()
         //@Disabled // For some reasons, it doesnt work, but works on its own
         public void should_redirect_to_connexion_page_on_button_press() {
+            driver.manage().deleteAllCookies();
+            driver.navigate().refresh();
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
             WebElement connexionButton = driver.findElement(By.id("sel-conButton"));
             connexionButton.click();
             String url = driver.getCurrentUrl();
