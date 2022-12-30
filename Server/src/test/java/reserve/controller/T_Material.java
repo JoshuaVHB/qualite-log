@@ -107,7 +107,7 @@ public class T_Material {
     @Test
     public void should_throw_exception_when_removed_object_is_null() {
 
-        Assertions.assertThrows(NullPointerException.class, ()-> {
+        Assertions.assertThrows(IllegalArgumentException.class, ()-> {
             materials.removeMaterial(null);
         });
     }
@@ -115,17 +115,9 @@ public class T_Material {
     @Test
     public void should_return_false_when_removing_non_existent_material() {
 
-        Assertions.assertFalse(materials.removeMaterial(new Material()));
-
-    }
-
-    @Test
-    public void should_return_true_when_removing_valid_material() {
-
-
-        Material dummy = new Material();
-        materials.addMaterial(dummy);
-        Assertions.assertTrue(materials.removeMaterial(dummy));
+        Assertions.assertThrows(IllegalArgumentException.class, ()-> {
+            materials.removeMaterial(new Material());
+        });
 
     }
 

@@ -256,7 +256,7 @@ public class T_Reservation {
         User notAdmin = dummyUser();
         Reservation reservation = new Reservation(notAdmin, new Material(), LocalDate.now(), LocalDate.now().plusDays(1));
         reservations.addReservation(reservation);
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+        Assertions.assertThrows(RuntimeException.class, () -> {
         	reservations.closeReservation(notAdmin, reservation);
         });
 
