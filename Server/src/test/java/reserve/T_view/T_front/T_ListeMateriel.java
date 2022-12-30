@@ -14,6 +14,10 @@ import reserve.controller.io.FileStorage;
 import reserve.model.Material;
 import reserve.view.WebServer;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+
 import static reserve.T_view.T_front.T_serverLauncher.controller;
 import static reserve.T_view.T_front.T_serverLauncher.launch_server;
 
@@ -66,7 +70,7 @@ public class T_ListeMateriel {
         deleteButton.click();
 
         try {
-            Thread.sleep(500);
+            Thread.sleep(100);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -74,22 +78,34 @@ public class T_ListeMateriel {
 
     }
 
-    @Test
-    public void should_filter_by_type() {}
-
-
-    @Test
-    public void should_filter_by_OS() {}
 
     @Test
     public void should_make_reservation_when_valid_dates() {
 
+        List<Material> mats = controller.getMaterials().getAllMaterials();
+        MaterialController.filterByAvailability(mats);
+
+        int start = controller.getReservations().getNumberOfReservations();
+
+        if (mats.size()>0) {
+            Material mat = mats.get(0);
+            WebElement reservation_checkbox = driver.findElement(By.id("cbox-" + mat.getId()));
+
+            WebElement begin = driver.findElement(By.id("reservation-from"));
+            WebElement end = driver.findElement(By.id("reservation-to"));
+
+            LocalDate today = LocalDate.now();
+            LocalDate tomorrow = LocalDate.now().plusDays(1);
+
+            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+            begin.sendKeys(today.format(dateTimeFormatter));
+            end.sendKeys(tomorrow.format(dateTimeFormatter));
+
+            driver.findElement(By.id("reserve-submit-btn")).click();
+
+            Assertions.assertEquals(start + 1, controller.getReservations().getNumberOfReservations());
+        }
     }
 
-    @Test
-    public void should_not_make_reservation_when_invalid_dates() {
-
-
-
-    }
 }

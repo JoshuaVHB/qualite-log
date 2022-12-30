@@ -266,6 +266,7 @@ function populateItemsTable(items) {
         element.querySelectorAll('[id]').forEach((el) => el.removeAttribute('id'));
         if(machin) machin.id += item.id;
         let selectionCheckbox = element.querySelector('input[type=checkbox]');
+        selectionCheckbox.id = "cbox-" + it.id;
         selectionCheckbox.addEventListener('change', (e) => {
             setReserved(it, !isReserved(it));
         });

@@ -128,4 +128,8 @@ public class ReservationController {
 				.findAny().orElse(null);
 	}
 
+    public int getNumberOfReservations() {
+        return current.size() + incoming.size();
+    }
+
 }

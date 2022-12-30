@@ -15,10 +15,11 @@ import java.time.temporal.ChronoUnit;
 public class T_serverLauncher {
 
     public static AppController controller;
+    static boolean launched = false;
 
     public static void launch_server(){
 
-
+        if (launched) return;
         AppStorage storage = new FileStorage();
         MaterialController materials = new MaterialController();
         ReservationController reservations = new ReservationController();
@@ -34,10 +35,11 @@ public class T_serverLauncher {
         WebServer server = new WebServer(controller);
         new Thread(() -> server.open()).start();
         try {
-            Thread.sleep(500);
+            Thread.sleep(100);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+        launched = true;
     }
 
     private static void kickstartApp(AppController controller) {

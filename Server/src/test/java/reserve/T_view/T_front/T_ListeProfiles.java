@@ -54,7 +54,7 @@ public class T_ListeProfiles {
     @Test
     public void should_display_all_profiles() {
 
-        List<WebElement> profiles = driver.findElements(By.cssSelector("div[class='tr content'"));
+        List<WebElement> profiles = driver.findElements(By.className("content"));
 
         Assertions.assertEquals(controller.getUsers().getUsers().size(), profiles.size());
 

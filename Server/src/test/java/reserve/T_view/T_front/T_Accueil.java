@@ -1,6 +1,7 @@
 package reserve.T_view.T_front;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static reserve.T_view.T_front.T_serverLauncher.launch_server;
 
 import org.junit.After;
 import org.junit.jupiter.api.*;
@@ -24,6 +25,7 @@ public class T_Accueil {
     @BeforeAll
     public static void setupDriver() {
 
+        launch_server();
         driver = new ChromeDriver();
         driver.get("http://127.0.0.1:8080/");
 
@@ -57,9 +59,8 @@ public class T_Accueil {
     public class NotLogged {
 
         @Test()
-        @Disabled // For some reasons, it doesnt work, but works on its own
+        //@Disabled // For some reasons, it doesnt work, but works on its own
         public void should_redirect_to_connexion_page_on_button_press() {
-            //driver.manage().deleteAllCookies();
             WebElement connexionButton = driver.findElement(By.id("sel-conButton"));
             connexionButton.click();
             String url = driver.getCurrentUrl();

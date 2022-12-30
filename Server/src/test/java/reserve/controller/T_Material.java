@@ -59,13 +59,6 @@ public class T_Material {
         });
     }
 
-    @Test
-    public void should_return_true_when_adding_material_to_materials_list(){
-
-        Material dummy = new Material();
-        Assertions.assertTrue(materials.addMaterial(dummy));
-
-    }
 
     @Test
     public void should_contain_material_in_list_after_adding_material(){
