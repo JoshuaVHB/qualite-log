@@ -10,14 +10,16 @@
     <script src="/main.js" defer></script>
 </head>
 <body>
-    <div class="div div1">
-        <nav>
-            <li class="test">
-                <a href="/accueil">Page d'accueil</a>
-                <a href="?logout">Deconnexion   <i class="fa-solid fa-arrow-right-from-bracket"></i></a>
-            </li>
-        </nav>
-    </div>
+    <header>
+        <div id="user-tab">
+            <div class="div div1">
+				<nav>
+					<li class="test"><a href="/accueil/">Page d'accueil</a>
+					<a href="?logout">Déconnexion   <i class="fa-solid fa-arrow-right-from-bracket"></i></a></li>
+				</nav>
+			</div>
+        </div>
+    </header>
     <p><h1 class="title">Inscription d'un utilisateur</h1></p>
     <div id="container">
         <form class="forminscription" id="addUser" onsubmit="return addUser(event)">

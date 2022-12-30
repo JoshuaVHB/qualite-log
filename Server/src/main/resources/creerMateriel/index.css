@@ -1,3 +1,12 @@
+@font-face {
+    font-family: "Questrial";
+    src: url(https://fonts.gstatic.com/s/questrial/v9/QdVUSTchPBm7nuUeVf70viFluW44JQ.woff2);
+}
+
+body {
+    margin: 0;
+    font-family: "Questrial";
+}
 a:link{
 	font-size: 20px;
 	color: #FFFFFF;
@@ -18,7 +27,6 @@ div.div1{
 	height:30px;
 	width:100%;
 	background-color:black;
-	margin-top:-10px;
 }
 li.test{
 	text-align:right;
@@ -38,7 +46,7 @@ h1 {
 
 #container {
 	display: flex;
-	height: 50vh;
+	height: 60vh;
 	background-color:#8ADECD;
 	border-radius:30px;
 	width:300px;

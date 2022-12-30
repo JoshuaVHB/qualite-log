@@ -53,45 +53,50 @@ p.butt{
   text-align:center;
 }
 
-a:link {
+@font-face {
+    font-family: "Questrial";
+    src: url(https://fonts.gstatic.com/s/questrial/v9/QdVUSTchPBm7nuUeVf70viFluW44JQ.woff2);
+}
+
+body {
+    margin: 0;
+    font-family: "Questrial";
+}
+a:link{
 	font-size: 20px;
 	color: #FFFFFF;
 	font-family: monospace;
 	font-weight: bold;
 	text-decoration: none;
-	margin-left: 20px;
+	margin-left:20px;
 }
-
-a:visited {
+a:visited{
 	font-size: 20px;
 	color: #FFFFFF;
 	font-family: monospace;
 	font-weight: bold;
 	text-decoration: none;
-	margin-left: 20px;
+	margin-left:20px;
 }
-
-div.div1 {
-	height: 30px;
-	width: 100%;
-	background-color: black;
-	margin-top: -10px;
+div.div1{
+	height:30px;
+	width:100%;
+	background-color:black;
 }
-
-li.test {
-	text-align: right;
-	text-align: bottom;
-	margin-right: 20px;
+li.test{
+	text-align:right;
+	text-align:bottom;
+	margin-right:20px;
 }
 
 h1 {
-	font-size: 40px;
-	text-align: center;
-	color: #8ADECD;
-	font-family: monospace;
-	font-weight: bold;
-	margin-top: 30px;
-	margin-bottom: 40px;
+  font-size: 25px;
+  text-align: center;
+  color: #8ADECD;
+  font-family: monospace;
+  font-weight: bold;
+  margin-top:30px;
+  margin-bottom:40px;
 }
 
 p {
