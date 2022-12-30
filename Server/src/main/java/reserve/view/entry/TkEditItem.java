@@ -34,7 +34,7 @@ public class TkEditItem implements Take {
 			return new RsWithStatus(HttpURLConnection.HTTP_UNAUTHORIZED);
 		
 		UUID editedMaterialID = FormUtils.getParamUUID(form, "materialId", true);
-
+		System.out.println(editedMaterialID);
 		if(FormUtils.getParamBool(form, "delete", true) != null) {
 			// delete the material
 			Material material = materials.getMaterialById(editedMaterialID);
@@ -63,6 +63,7 @@ public class TkEditItem implements Take {
 			material.setOs(os);
 			material.setType(type);
 			material.setVersion(version);
+			MaterialController.logger.debug("Edited material " + material);
 			return new RsWithStatus(HttpURLConnection.HTTP_OK);
 		}
 	}
