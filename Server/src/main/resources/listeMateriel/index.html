@@ -105,7 +105,7 @@
                         <td class="td check"><input type="checkbox" /></td>
                         <!--{{ADMIN}}
                         <td class="td button">
-                            <form class="forminscription" method="GET" id="profilItem" action="/modifieMateriel?id=">
+                            <form class="forminscription" method="GET" action="/modifieMateriel">
                                 <input type="hidden" id="profil_item" name="id" value="">
                                 <p class="p butt"><button class="buttButt" id="details-btn">Modifier</button></p>
                             </form>
@@ -256,8 +256,8 @@ function populateItemsTable(items) {
         element.querySelector('#t-name').textContent = item.name;
         element.querySelector('#t-reference').textContent = item.numref;
         element.querySelector('#t-reservation').textContent = item.reservation ? item.reservation.userName + ' jusqu\'au ' + item.reservation.upToDate : '-';
-        element.querySelector('#profil_item').value = item.id;
-        element.querySelector('#profilItem').action += item.id;
+        let profilItem = element.querySelector('#profil_item');
+        if(profilItem) profilItem.value = item.id;
         let deleteBtn = element.querySelector('#t-delete-btn');
         if(deleteBtn) deleteBtn.onclick = () => deleteMaterial(it);
 
