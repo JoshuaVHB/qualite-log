@@ -34,13 +34,13 @@ public class TkListItems implements Take {
 		
 		MaterialType type = FormUtils.getParamEnum(href, "type", MaterialType.class, true);
 		OperatingSystem os = FormUtils.getParamEnum(href, "os", OperatingSystem.class, true);
-		String keyword = FormUtils.getParamString(href, "name", MaterialController.KEYWORD_FILTER_PATTERN, true);
+		String name = FormUtils.getParamString(href, "name", null, true);
 		boolean includeReserved = FormUtils.hasParam(href, "includeReserved");
 		
 		List<Material> res = materials.getAllMaterials();
 		if(os != null)       MaterialController.filterByOS(res, os);
 		if(type != null)     MaterialController.filterByType(res, type);
-		if(keyword != null)  MaterialController.filterByName(res, keyword);
+		if(name != null)  MaterialController.filterByName(res, name);
 		if(!includeReserved) MaterialController.filterByAvailability(res);
 		
 		JSONArray serializedMaterials = JsonSerializer.serializeMaterialList(res, true);

@@ -60,11 +60,9 @@ public class T_Material {
     }
 
     @Test
-    public void should_return_true_when_adding_material_to_materials_list(){
-
+    public void should_succeed_when_adding_material_to_materials_list(){
         Material dummy = new Material();
-        Assertions.assertTrue(materials.addMaterial(dummy));
-
+        materials.addMaterial(dummy);
     }
 
     @Test

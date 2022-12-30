@@ -11,9 +11,10 @@ import reserve.util.Logger;
 
 public class UserController {
 	
-    // TODO TEST THIS
-	public static final String USER_ID_FORMAT = "[0-9]+"; // TODO change regexes to match specs
-	public static final String PASSWORD_FORMAT = "[a-zA-Z]+";
+	public static final String USER_ID_FORMAT = "[0-9]{7}";
+	public static final String USER_PASSWORD_FORMAT = "\\w{8,256}";
+	public static final String USER_NAME_FORMAT = "\\w{1,30}";
+	public static final String USER_MAIL_FORMAT = "[^@\\s]+@[^@\\s]+\\.[^@\\s]+";
 	
 	public static Logger logger = Main.LOGGER_FACTORY.getLogger("users", Logger.LEVEL_DEBUG);
 	
@@ -73,8 +74,8 @@ public class UserController {
 
 	public String getNextUserId() {
 		while(true) {
-			int uid = (int) (Math.random() * 1E9);
-			String generated = String.format("%09d", uid);
+			int uid = (int) (Math.random() * 1E7);
+			String generated = String.format("%07d", uid);
 			if(users.stream().map(User::getId).allMatch(id->generated.equals(id)))
 				continue;
 			if(!generated.matches(USER_ID_FORMAT))

@@ -41,15 +41,15 @@ public class TkEditUser implements Take {
 		}
 		
 		boolean isAdmin = FormUtils.getParamBool(form, "is-admin", false);
-		String firstName = FormUtils.getParamString(form, "first-name", ".*", false); // TODO add regex to match specs
-		String lastName = FormUtils.getParamString(form, "last-name", ".*", false);
+		String firstName = FormUtils.getParamString(form, "first-name", UserController.USER_NAME_FORMAT, false);
+		String lastName = FormUtils.getParamString(form, "last-name", UserController.USER_NAME_FORMAT, false);
 //		String phone = FormUtils.getParamString(form, "phone", ".*", false);
 		String phone = "-"; // not implemented on the front end
-		String mail = FormUtils.getParamString(form, "mail", ".*", false);
+		String mail = FormUtils.getParamString(form, "mail", UserController.USER_MAIL_FORMAT, false);
 		
 		if(editedUserId == null) {
 			// create a new user
-			String password = FormUtils.getParamString(form, "password", ".*", false);
+			String password = FormUtils.getParamString(form, "password", UserController.USER_PASSWORD_FORMAT, false);
 			String newId = users.getNextUserId();
 			User user = new User(isAdmin, firstName, lastName, phone, newId, mail, password);
 			try {

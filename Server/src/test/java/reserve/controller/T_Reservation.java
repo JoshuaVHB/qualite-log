@@ -81,7 +81,7 @@ public class T_Reservation {
         });
 
         // -- Undo
-        reservations.closeReservation(admin, reservation); // TODO : How to prevent logs ?
+        reservations.closeReservation(admin, reservation);
 
     }
 
