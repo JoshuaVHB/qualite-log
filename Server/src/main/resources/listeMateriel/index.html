@@ -257,11 +257,14 @@ function populateItemsTable(items) {
         element.querySelector('#t-reference').textContent = item.numref;
         element.querySelector('#t-reservation').textContent = item.reservation ? item.reservation.userName + ' jusqu\'au ' + item.reservation.upToDate : '-';
         element.querySelector('#profil_item').value = item.id;
+        element.querySelector('#details-btn').id += item.id;
         element.querySelector('#profilItem').action += item.id;
         let deleteBtn = element.querySelector('#t-delete-btn');
         if(deleteBtn) deleteBtn.onclick = () => deleteMaterial(it);
 
+		let machin = element.querySelector('#t-delete-btn');
         element.querySelectorAll('[id]').forEach((el) => el.removeAttribute('id'));
+        if(machin) machin.id += item.id;
         let selectionCheckbox = element.querySelector('input[type=checkbox]');
         selectionCheckbox.addEventListener('change', (e) => {
             setReserved(it, !isReserved(it));
