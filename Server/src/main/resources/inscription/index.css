@@ -1,3 +1,10 @@
+:root {
+  --color1: #E3EBD0;
+  --color2:#C7DDC5;
+  --color3:#4c9f7c;
+  --color4:black;
+  --color5:#70a07a;
+}
 @font-face {
     font-family: "Questrial";
     src: url(https://fonts.gstatic.com/s/questrial/v9/QdVUSTchPBm7nuUeVf70viFluW44JQ.woff2);
@@ -9,7 +16,7 @@ body {
 }
 a:link{
 	font-size: 20px;
-	color: #FFFFFF;
+	color: var(--color1);
 	font-family: monospace;
 	font-weight: bold;
 	text-decoration: none;
@@ -17,7 +24,7 @@ a:link{
 }
 a:visited{
 	font-size: 20px;
-	color: #FFFFFF;
+	color: var(--color1);
 	font-family: monospace;
 	font-weight: bold;
 	text-decoration: none;
@@ -26,7 +33,7 @@ a:visited{
 div.div1{
 	height:30px;
 	width:100%;
-	background-color:black;
+	background-color:var(--color4);
 }
 li.test{
 	text-align:right;
@@ -37,7 +44,7 @@ li.test{
 h1 {
   font-size: 40px;
   text-align: center;
-  color: #8ADECD;
+  color: var(--color3);
   font-family: monospace;
   font-weight: bold;
   margin-top:30px;
@@ -46,7 +53,7 @@ h1 {
 #container {
 	display: flex;
 	padding-bottom: 15px;
-	background-color: #8ADECD;
+	background-color:var(--color2);
 	border-radius: 30px;
 	margin-left: auto;
 	margin-right: auto;
@@ -55,7 +62,7 @@ h1 {
 label.lab1{
 	
 	font-size: 22px;
-	color: #FFFFFF;
+	color: var(--color3);
 	font-family: monospace;
 	font-weight: bold;
 	padding-left:60px;
@@ -64,9 +71,9 @@ label.lab1{
 	display:inline-block;
 }
 .connectButt {
-  background-color: white;
+  background-color: var(--color5);
   border-radius: 300px;
-  color: rgb(46, 164, 140 );
+  color: var(--color1);
   cursor: pointer;
   display: inline-block;
   font-family: monospace;

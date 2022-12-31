@@ -1,3 +1,10 @@
+:root {
+  --color1: #E3EBD0;
+  --color2:#C7DDC5;
+  --color3:#4c9f7c;
+  --color4:black;
+  --color5:#70a07a;
+}
 .form {
 	width: 50%;
 	max-width: 330px;
@@ -8,7 +15,7 @@
 h1 {
   font-size: 40px;
   text-align: center;
-  color: white;
+  color: var(--color3);
   font-family: monospace;
   font-weight: bold;
   margin-top:5px;
@@ -16,16 +23,16 @@ h1 {
 }
 .t2 {
 	font-size: 20px;
-	color: white;
+  color: var(--color3);
 	font-weight: bold;
 	font-family: monospace;
 	justify-content: center;
 	align-items: center;
 }
 .connectButt {
-  background-color: white;
+   background-color: var(--color1);
   border-radius: 300px;
-  color: rgb(46, 164, 140 );
+  color: var(--color5);
   cursor: pointer;
   display: inline-block;
   font-family: monospace;
@@ -53,6 +60,6 @@ h1 {
 	margin:20%;
 	margin-top:10%;
 	height: 50vh;
-	background-color:#8ADECD;
+	background-color:var(--color2);
 	border-radius:30px;
 }

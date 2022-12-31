@@ -1,3 +1,10 @@
+:root {
+  --color1: #E3EBD0;
+  --color2:#C7DDC5;
+  --color3:#4c9f7c;
+  --color4:black;
+  --color5:#70a07a;
+}
 @font-face {
     font-family: "Questrial";
     src: url(https://fonts.gstatic.com/s/questrial/v9/QdVUSTchPBm7nuUeVf70viFluW44JQ.woff2);
@@ -9,7 +16,7 @@ body {
 }
 a:link{
 	font-size: 20px;
-	color: #FFFFFF;
+	color: var(--color1);
 	font-family: monospace;
 	font-weight: bold;
 	text-decoration: none;
@@ -17,7 +24,7 @@ a:link{
 }
 a:visited{
 	font-size: 20px;
-	color: #FFFFFF;
+	color: var(--color1);
 	font-family: monospace;
 	font-weight: bold;
 	text-decoration: none;
@@ -26,7 +33,7 @@ a:visited{
 div.div1{
 	height:30px;
 	width:100%;
-	background-color:black;
+	background-color:var(--color4);
 }
 li.test{
 	text-align:right;
@@ -37,7 +44,7 @@ li.test{
 h1 {
   font-size: 25px;
   text-align: center;
-  color: #8ADECD;
+  color: var(--color3);
   font-family: monospace;
   font-weight: bold;
   margin-top:30px;
@@ -47,7 +54,7 @@ h1 {
 	display: block;
 	min-height:50px;
 	height: auto;
-	background-color:#8ADECD;
+	background-color:var(--color2);
 	border-radius:10px;
 	width:90%;
 	margin-left: auto;
@@ -59,7 +66,7 @@ h1 {
 	display: block;
 	min-height:100px;
 	height:auto;
-	background-color:#8ADECD;
+	background-color:var(--color2);
 	border-radius:10px;
 	width:90%;
 	margin-left: auto;
@@ -72,7 +79,7 @@ template.content{
 	display: block;
 	height: auto;
 	min-height:50px;
-	background-color:white;
+	background-color:var(--color2);
 	border-radius:10px;
 	width:98%;
 	margin-left: auto;
@@ -85,7 +92,7 @@ template.content{
 label.lab2{
 	
 	font-size: 20px;
-	color: #FFFFFF;
+	color: var(--color5);
 	font-family: monospace;
 	font-weight: bold;
 	padding-left:15px;
@@ -94,9 +101,9 @@ label.lab2{
 }
 
 .reserverButt {
-  background-color: rgb(46, 164, 140 );
+  background-color: var(--color1);
   border-radius: 300px;
-  color: white;
+  color: var(--color5);
   cursor: pointer;
   display: inline-block;
   font-family: monospace;
@@ -116,9 +123,9 @@ label.lab2{
   margin-left:50px;
 }
 .buttButt {
-  background-color: rgb(46, 164, 140 );
+  background-color: var(--color1);
   border-radius: 300px;
-  color: white;
+  color: var(--color5);
   cursor: pointer;
   display: inline-block;
   font-family: monospace;
@@ -135,6 +142,7 @@ label.lab2{
   height:auto;
   margin-top: 5px;
   margin-bottom:5px;
+  margin-left:30px;
 }
 
 select{
@@ -147,35 +155,6 @@ input{
 	outline:0;
 	border-color:transparent;
 }
-th{
-	font-size: 20px;
-	font-family: monospace;
-	font-weight: bold;
-	padding-left:30px;
-	display:flow;
-	padding-right:30px;
-	padding-top:10px;
-	padding-bottom:10px;
-}
-th.void{
-	background-color:#8ADECD;
-	padding-left:5px;
-	padding-right:5px;
-	display:flow;
-	padding-bottom:10px;
-	padding-top:10px;
-}
-td.text{
-	font-family: monospace;
-	font-weight: bold;
-	text-align:center;
-	padding-left:60px;
-	padding-bottom:5px;
-	padding-top:5px;
-	display:flow;
-	padding-right:60px;
-	color:black;
-}
 td.late{
 	font-family: monospace;
 	font-weight: bold;
@@ -186,43 +165,71 @@ td.late{
 	display:flow;
 	padding-right:0px;
 	color:red;
-	background-color:#8ADECD;
+	background-color:var(--color2);
+}
+
+th{
+	font-size: 15px;
+	font-family: monospace;
+	font-weight: bold;
+	padding-left:30px;
+	display:flow;
+	padding-right:30px;
+	padding-top:10px;
+	padding-bottom:10px;
+}
+th.void{
+	background-color:transparent;
+	padding-left:5px;
+	padding-right:10px;
+	display:flow;
+	padding-bottom:10px;
+	padding-top:5px;
+}
+td.text{
+	font-family: monospace;
+	font-weight: bold;
+	text-align:center;
+	padding-left:60px;
+	padding-bottom:5px;
+	padding-top:5px;
+	display:flow;
+	padding-right:60px;
 }
 td.check{
 	text-align:center;
-	padding-bottom:10px;
-	padding-top:10px;
-	background-color:#8ADECD;
+	padding-bottom:5px;
+	padding-top:5px;
+	background-color:var(--color2);
 }
 td.button{
 	text-align:left;
 	padding-bottom:0px;
 	padding-top:0px;
-	padding-left:10px;
-	padding-right:0px;
-	background-color:#8ADECD;
+	background-color:var(--color2);
+	padding-right:40px;
 }
 td.void{
-	background-color:#8ADECD;
-	padding-left:5px;
-	padding-right:5px;
+	background-color:var(--color2);
+	padding-left:10px;
+	padding-right:10px;
 	display:flow;
 	padding-bottom:5px;
 	padding-top:5px;
 }
 tr.content{
-	font-size: 17px;
+	font-size: 15px;
 	font-family: monospace;
 	font-weight: bold;
 	text-align:center;
 	background-color:white;
 	border-radius:20px;
-	height: 10px;
+	height: 15px;
 	width:100px;
 	
 }
 tr.list{
-	color: #FFFFFF;
+	color: var(--color5);
 }
 
 
