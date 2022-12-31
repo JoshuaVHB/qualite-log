@@ -1,8 +1,16 @@
 const popupFrame = document.getElementById('popup-frame');
+const popupContent = document.getElementById('popup-message');
 
-function promptError(err) {
+function popupValid(string) {
+    popupFrame.hidden = false;
+    popupFrame.querySelector('#popup-title').innerText = string;
+    popupFrame.querySelector('button').setAttribute("onClick", "window.location.href = '/accueil'");
+}
+
+function promptError(err, message=null) {
     console.error(err);
     popupFrame.hidden = false;
+    if(popupContent && message) popupContent.innerHTML = message;
     popupFrame.querySelector('#popup-title').innerText = err.toString();
 }
 

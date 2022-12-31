@@ -14,11 +14,13 @@
     <header>
         <div id="user-tab">
             <div class="div div1">
-				<nav>
-					<li class="test"><a href="/accueil/">Page d'accueil</a>
-					<a href="?logout">Déconnexion   <i class="fa-solid fa-arrow-right-from-bracket"></i></a></li>
-				</nav>
-			</div>
+                <nav>
+                    <li class="test">
+                        <a href="/accueil/">Page d'accueil</a>
+                        <a href="?logout">Déconnexion   <i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+                    </li>
+                </nav>
+            </div>
         </div>
     </header>
     <div>
@@ -49,7 +51,7 @@
                 Version <input class="input" type="text" name="version" id="version" placeholder="10.2" required><br>
             </label>
             <label class="label lab1">
-                Référence <input class="input" type="text" name="ref" id="reference" placeholder="63416345" required><br>
+                Référence <input class="input" type="text" name="ref" id="reference" placeholder="111" required><br>
             </label>
 
             <div>
@@ -58,11 +60,11 @@
                 </button>
             </div>
         </form>
-        <div id="popup-frame" hidden>
-            <div id="popup">
-                <h5 id="popup-title"></h5>
-                <button onclick="popupFrame.hidden = true;">Ok</button>
-            </div>
+    </div>
+    <div id="popup-frame" hidden>
+        <div id="popup">
+            <h5 id="popup-title"></h5>
+            <button onclick="popupFrame.hidden = true;">Ok</button>
         </div>
     </div>
 </body>
@@ -82,10 +84,11 @@ function sendForm() {
     xhr.onload = () => {
         if (xhr.status == 200) {
             console.log("Response =", xhr.responseText);
-            // TODO prompt with a success popup
+            popupValid("Le matériel a été créé avec succès");
         } else {
-            throw new Error("Could not create a material: " + xhr.responseText);
-            // TODO prompt with an error popup
+            //throw new Error("Could not create a material: " + xhr.responseText);
+            let err = new Error("Could not create a material: " + xhr.responseText);
+            promptError(err);
         }
     };
 }

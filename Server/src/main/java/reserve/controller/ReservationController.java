@@ -27,8 +27,6 @@ public class ReservationController {
      * This method makes sure that the dates are coherent, and stores it in the right list.
      */
     public void addReservation(Reservation reservation) throws IllegalStateException {
-
-        // ------ ERROR CHECKING ------ //
     	LocalDate from = reservation.getBeginning();
     	LocalDate to = reservation.getEnding();
 
@@ -36,13 +34,10 @@ public class ReservationController {
         LocalDate today = LocalDate.now();
 
         // Makes sure the reservation end date is coherent
-        if (to.compareTo(today) < 0) {
+        if (to.compareTo(today) < 0)
             throw new IllegalStateException("Reservation end date is before current day !");
-        }
-        
-    	if (reservation.getMaterial().getReservation() != null) { // The object is already owned
-    		throw new IllegalStateException("The material asked for is already owned.");
-    	}
+        if(getAllReservations().stream().anyMatch(r -> r.getMaterial().equals(reservation.getMaterial()) && r.overlap(reservation)))
+    		throw new IllegalStateException("The material asked for is already reserved on this period.");
 
         // ------ CODE ------- //
 
@@ -56,16 +51,15 @@ public class ReservationController {
     }
 
     /**
-     * @brief Checks that the incoming reservations have not started yet.
+     * Checks that the incoming reservations have not started yet.
+     * 
      * This method has to be called before any operations on reservations.
      */
     public void recalculateReservations() {
-
         // Loop through incoming reservation and compare to today's date.
         for (Reservation reservation : incoming) {
 
-            if (reservation.getBeginning().compareTo(LocalDate.now()) <= 0)
-            {
+            if (reservation.getBeginning().compareTo(LocalDate.now()) <= 0) {
                 // Move the reservation to the current
                 reservation.getMaterial().setReservation(reservation); // FIX : i forgot this
                 current.add(reservation);
@@ -76,18 +70,15 @@ public class ReservationController {
         for (Reservation reservation : current) {
             incoming.remove(reservation);
         }
-
     }
 
     /**
-     * @brief This method is to be called by an admin to close a reservation.
+     * This method is to be called by an admin to close a reservation.
      * // TODO semantically it does not make much sense to call this method w/ a user object
      * // the check should be done by the caller, also currently a user cannot close one of
      * // their reservations
-     * @param admin
-     * @param reservation
-     * @throws IllegalArgumentException {@code user is not admin OR reservation is not in the lists}
-     * @throws NullPointerException {@code admin or reservation is null}
+     * @throws IllegalArgumentException {@code user} is not admin OR {@code reservation} is not known
+     * @throws NullPointerException {@code admin} or {@code reservation} is null
      */
     public void closeReservation(User admin, Reservation reservation) throws IllegalArgumentException {
 
@@ -110,7 +101,6 @@ public class ReservationController {
     	logger.debug("Closed reservation " + reservation);
     }
 
-
     public List<Reservation> getIncomingReservation() { return incoming; }
     public List<Reservation> getCurrentReservation() { return current; }
 	public List<Reservation> getAllReservations() {
@@ -127,5 +117,9 @@ public class ReservationController {
 				.filter(r -> r.getBeginning().equals(fromDate))
 				.findAny().orElse(null);
 	}
+
+    public int getNumberOfReservations() {
+        return current.size() + incoming.size();
+    }
 
 }

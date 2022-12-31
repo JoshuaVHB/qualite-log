@@ -105,7 +105,7 @@
                         <td class="td check"><input type="checkbox" /></td>
                         <!--{{ADMIN}}
                         <td class="td button">
-                            <form class="forminscription" method="GET" action="/modifieMateriel">
+                            <form class="forminscription" method="GET" id="profilItem" action="/modifieMateriel?id=">
                                 <input type="hidden" id="profil_item" name="id" value="">
                                 <p class="p butt"><button class="buttButt" id="details-btn">Modifier</button></p>
                             </form>
@@ -121,6 +121,7 @@
     <div id="popup-frame" hidden>
         <div id="popup">
             <h5 id="popup-title"></h5>
+            <p id="popup-message"></p>
             <button onclick="popupFrame.hidden = true;">Ok</button>
         </div>
     </div>
@@ -249,20 +250,27 @@ function populateItemsTable(items) {
         let element = document.importNode(itemTemplate.content, true).firstElementChild;
         let it = {
             id: item.id,
-            element: element
+            name: item.name,
+            element: element,
         };
         element.querySelector('#t-os').textContent = item.os;
         element.querySelector('#t-type').textContent = item.type + ' ' + item.version;
         element.querySelector('#t-name').textContent = item.name;
         element.querySelector('#t-reference').textContent = item.numref;
-        element.querySelector('#t-reservation').textContent = item.reservation ? item.reservation.userName + ' jusqu\'au ' + item.reservation.upToDate : '-';
-        let profilItem = element.querySelector('#profil_item');
-        if(profilItem) profilItem.value = item.id;
+        element.querySelector('#t-reservation').textContent = item.reservation ? item.reservation.userName + ' jusqu\'au ' + dateToString(item.reservation.upToDate) : '-';
+        let profileItem = element.querySelector('#profil_item');
+        if(profileItem) profileItem.value = item.id;
+        let detailsBtn = element.querySelector('#details-btn');
+        if(detailsBtn) detailsBtn.id += item.id;
+        let profilItem = element.querySelector('#profilItem');
+        if(profilItem) profilItem.action += item.id;
         let deleteBtn = element.querySelector('#t-delete-btn');
+        let selectionCheckbox = element.querySelector('input[type=checkbox]');
         if(deleteBtn) deleteBtn.onclick = () => deleteMaterial(it);
 
         element.querySelectorAll('[id]').forEach((el) => el.removeAttribute('id'));
-        let selectionCheckbox = element.querySelector('input[type=checkbox]');
+        if(deleteBtn) deleteBtn.id += item.id;
+        selectionCheckbox.id = "cbox-" + it.id;
         selectionCheckbox.addEventListener('change', (e) => {
             setReserved(it, !isReserved(it));
         });
@@ -323,23 +331,26 @@ function fetchItemsLater() {
 
 function reserveSelectedItems() {
     fetch('/api/reserve_items', {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            items: reservedItemIds,
+        method: 'POST',
+        body: encodeFormOptions({
+            items: Array.from(reservedItemIds),
             from: inputReservationFrom.value,
             to: inputReservationTo.value
-        })
+        }),
     }).then((response) => {
         if (response.status != 200) {
-            console.log(`Error ${response.status}: ${response.statusText}`);
-            // TODO prompt user with error
+            promptError(`Error ${response.status}: ${response.statusText}`);
         } else {
             response.json().then((data) => {
                 console.log(data);
-                // TODO prompt user with popup
+                let message = '';
+                for(let id in data) {
+                    let item = currentItems.find((i) => i.id == id);
+                    if (item)
+                        message += `${item.name} : ${data[id]}<br>`;
+                }
+                promptError("Reservation", message); // not an actual error
+                fetchItems();
             });
         }
     }).catch(promptError);

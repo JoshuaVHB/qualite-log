@@ -87,7 +87,9 @@
             if (response.ok)
                 window.location.href = '/listeMateriel/';
             else
-                throw new Error('Could not update item: ' + response.text());
+                response.text().then((text) => {
+                    promptError('Could not update item: ' + text);
+                });
         }).catch(promptError);
 
         return false;
