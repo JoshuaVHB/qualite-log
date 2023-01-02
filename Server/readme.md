@@ -25,3 +25,9 @@ There is no password encryption, forms are sent in POST requests and it is assum
 server will run over a secure connection using https. In the backend passwords are stored as
 plain text so the host should not be accessible by non-admin users. If that is not enough for
 you you may edit `UserController#authentifyUser` and `AppStorage#(write|read)ApplicationData`.
+
+Currently output is printed using ANSI color codes, if this is not supported on your end you
+may change `Main.LOGGER_FACTORY` to `Logger::new`.
+
+During development server errors are reported as-is (with stacktrace) to the front-end, to
+disable this behavior set `WebServer.MASK_INTERNAL_ERRORS` to `true`.
