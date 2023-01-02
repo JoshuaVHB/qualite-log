@@ -1,19 +1,9 @@
-Notes
------
-L'interface est en français et le backend en anglais.
-
-Nous avons choisi d'utiliser Java pour le backend car nous sommes plus à l'aise avec ce langage, après coup il aurait été plus simple d'utiliser php ou javascript pour permettre du server side rendering.
-
-Nous avons choisi html/css/js pour le frontend car nous avons peu d'experience avec les frameworks js et cela permettait à tout le monde de participer.
-
-En terme d'organisation nous nous sommes distribué les tâches sur le fil de l'eau, en faisant spécifs, front et back en parallèle.
-
-
 Installation
 ------------
 Required versions:
 * Java JRE (tested with version 13)
 * Apache Maven
+* Tested with Eclipse and IntelliJ, project files have been stripped from the repository
 
 Running:
 * Install maven dependencies
@@ -24,3 +14,14 @@ Running:
 Testing:
 * Dependencies are in the `lib/` folder, you will need a selenium driver.
 * Tests can be run using JUnit.
+
+
+Dev notes
+---------
+Storage files are only updated whenever the server closes, to do that you can type anything
+in the console and press `<enter>` or `<ctrl>+D`.
+
+There is no password encryption, forms are sent in POST requests and it is assumed that the
+server will run over a secure connection using https. In the backend passwords are stored as
+plain text so the host should not be accessible by non-admin users. If that is not enough for
+you you may edit `UserController#authentifyUser` and `AppStorage#(write|read)ApplicationData`.
